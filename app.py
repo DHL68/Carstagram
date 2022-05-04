@@ -10,14 +10,19 @@ data = requests.get('https://movie.naver.com/movie/sdb/rank/rmovie.naver?sel=pnt
 
 soup = BeautifulSoup(data.text, 'html.parser')
 
-#
+
 
 from flask import Flask, render_template, jsonify, request
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/main')
 def home():
-    return render_template('index.html')
+    return render_template('main.html')
+
+@app.route('/user')
+def user():
+    return render_template('personal.html')
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
+
