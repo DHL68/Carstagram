@@ -30,7 +30,7 @@
      style="position: fixed; display: flex; flex-direction: row; width: 100%; border-bottom: solid 1px #dbdbdb; background-color: #ffffff;z-index: 1;">
     <div class="container-fluid" style="justify-content: space-between; flex-wrap: nowrap; max-width: 940px;">
         <!--        instagram 이미지-------------------------------------------------------------------------------->
-        <a class="navbar-brand" href="/main"><img style="width: 100px;"
+        <a class="navbar-brand" href="/"><img style="width: 100px;"
                                                                        src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png">
         </a>
         <!--            검색창-------------------------------------------------------------------------------------->
@@ -492,6 +492,28 @@
         <button id="close-modal" class="close-area" style="background-color: white; border: none; border-radius: 10px;">
             취소
         </button>
+    </div>
+</div>
+
+<!-- 게시글 작성 버튼 클릭시 일기장 작성 팝업 -->
+<div style="position: absolute;" >
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1>나홀로일기장</h1>
+            <div class="posting-box">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="file">
+                    <label class="custom-file-label" for="file">사진 선택하기</label>
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="title" placeholder="사진 제목">
+                </div>
+                <div class="form-group">
+                    <textarea placeholder="내용 입력" class="form-control" id="content" rows="3"></textarea>
+                </div>
+                <button onclick="update_profile()" type="submit" class="btn btn-primary">저장하기</button>
+            </div>
+        </div>
     </div>
 </div>
 
