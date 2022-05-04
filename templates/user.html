@@ -15,7 +15,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <!--    css 스타일-->
         <!--    flask 경로 해석으로 불러오는 기능 url_for  -->
-<!--    <link rel="stylesheet" href="{{ url_for('static', filename ='style/selfstyle.css') }}" type="text/css">-->
+{#<!--    <link rel="stylesheet" href="{{ url_for('static', filename ='style/selfstyle.css') }}" type="text/css">-->#}
     <link rel="stylesheet" href="../static/style/selfstyle.css" type="text/css">
 
 
@@ -28,7 +28,7 @@
      style="position: fixed; display: flex; flex-direction: row; width: 100%; border-bottom: solid 1px #dbdbdb; background-color: #ffffff;z-index: 1;">
     <div class="container-fluid" style="justify-content: space-between; flex-wrap: nowrap; max-width: 940px;">
         <!--        instagram 이미지-------------------------------------------------------------------------------->
-        <a class="navbar-brand" href="/main"><img style="width: 100px;"
+        <a class="navbar-brand" href="/"><img style="width: 100px;"
                                                       src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png">
         </a>
         <!--            검색창-------------------------------------------------------------------------------------->
@@ -36,14 +36,14 @@
                aria-label="Search">
         <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
             <!--            아이콘---------------------------------------------------------------------------------->
-            <a href="/main"><span style="margin: 6px 12px 0 12px;"
+            <a href="/"><span style="margin: 6px 12px 0 12px;"
                                       class="material-icons">home</span></a>
             <span style="margin: 0 12px 0 12px;" class="material-icons-outlined">send</span>
             <span style="margin: 0 12px 0 12px;" class="material-icons-outlined">add_box</span>
             <span style="margin: 0 12px 0 12px;" class="material-icons-outlined">explore</span>
             <span style="margin: 0 12px 0 12px;" class="material-icons-outlined">favorite_border</span>
             <div class="mini-profile" style="float: right; margin-left: 10px;">
-                <a href="personal.html"><img class="profile" style="margin-bottom: 6px;"
+                <a href="/user"><img class="profile" style="margin-bottom: 6px;"
                                                                 src="https://file2.nocutnews.co.kr/newsroom/image/2021/08/12/202108121210585928_12.jpg"></a>
             </div>
         </div>

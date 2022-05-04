@@ -30,7 +30,7 @@
      style="position: fixed; display: flex; flex-direction: row; width: 100%; border-bottom: solid 1px #dbdbdb; background-color: #ffffff;z-index: 1;">
     <div class="container-fluid" style="justify-content: space-between; flex-wrap: nowrap; max-width: 940px;">
         <!--        instagram 이미지-------------------------------------------------------------------------------->
-        <a class="navbar-brand" href="/main"><img style="width: 100px;"
+        <a class="navbar-brand" href="/"><img style="width: 100px;"
                                                                        src="https://www.instagram.com/static/images/web/mobile_nav_type_logo.png/735145cfe0a4.png">
         </a>
         <!--            검색창-------------------------------------------------------------------------------------->
@@ -38,12 +38,16 @@
                aria-label="Search">
         <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
             <!--            아이콘---------------------------------------------------------------------------------->
-            <a href="/main"><span style="margin: 6px 12px 0 12px;"
+            <a href="/"><span style="margin: 6px 12px 0 12px;"
                                                        class="material-icons">home</span></a>
             <span style="margin: 0 12px 0 12px;" class="material-icons-outlined">send</span>
-            <span style="margin: 0 12px 0 12px;" class="material-icons-outlined">add_box</span>
+            <button  onclick="q2()" style="background-color: white; border: none; margin-top: 7px;">
+                <span style="margin: 0 12px 0 12px;" class="material-icons-outlined">add_box</span>
+            </button>
             <span style="margin: 0 12px 0 12px;" class="material-icons-outlined">explore</span>
-            <span style="margin: 0 12px 0 12px;" class="material-icons-outlined">favorite_border</span>
+            <button style="background-color: white; border: none; margin-top: 7px;">
+                <span style="margin: 0 12px 0 12px;" class="material-icons-outlined">favorite_border</span>
+            </button>
             <div class="mini-profile" style="float: right; margin-left: 10px;">
                 <a href="/user"><img class="profile" style="margin-bottom: 6px;"
                                              src="https://file2.nocutnews.co.kr/newsroom/image/2021/08/12/202108121210585928_12.jpg"></a>
@@ -54,7 +58,7 @@
 <!------------------------중앙레이아웃-------------------------------------------------------------------------------->
 <div style="display: flex; flex-direction: row; position: relative; justify-content: center; top: 85px;">
     <!----------------왼 쪽메인화면창--------------------------------------------------------------------------------->
-    <div class="cLayer"
+    <div class="cLayer" id = "feed"
          style="max-width: 600px; width: 100%; max-height: 3000px; height: 100%; position: relative; font-size: 13px; font-weight: bold;">
         <!------------    왼쪽 스토리창------------------------------------------------------------------------------->
 <!------------------------        스토리 박스 ------------------------------------------------------------------------>
@@ -117,7 +121,7 @@
                     <!--            위에다가 링크이미지 삽입-->
                 </div>
         <!--            첫번째 피드!------------------------------------------------------------------------------------>
-        <div class="feed-box">
+        <div class="feed-box" id = "feed_box">
             <!--                상단의 이미지와 이름 그리고 ''' 아이콘-------------------------------------------------->
             <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 2%; margin-left: 1%; margin-bottom: 2%;">
                 <div style="display: flex; align-items: center">
@@ -178,24 +182,27 @@
                 <!--                좋아요-->
                 <div>좋아요 23,232개</div>
                 <!--                    게시자 글-->
-                <div>BoYoung <span style="font-weight: lighter; color: dodgerblue;">#스파르타 #내일배움캠프 #파이팅</span><b
-                        style="font-weight: lighter"> 오늘도 공부 열심히 하세요 !</b></div>
+                <div>
+                    <p><a href='#' class="name">eenooyos</a> 어쩌구저쩌구 <span>더보기</span></p>
+                </div>
                 <!--                댓글모두보기-->
-                <div style="font-weight: lighter; color: grey">댓글 3,243개 모두보기</div>
+                <!--<div style="font-weight: lighter; color: grey">댓글 3,243개 모두보기</div>-->
                 <!--                댓글-->
-                <div>kyumin_1020 <span style="font-weight: lighter">보영누나 너무 이뻐요 ㅠㅠ 열심히 할게요 ㅠ</span></div>
+                <div id="comment-q1">
+
+                </div>
                 <!--                몇일,시간,분전-->
                 <div style="font-weight: lighter; font-size: 10px;">3시간전</div>
                 <!--                댓글달기-->
                 <div style="display:flex; flex-direction: row; justify-content: center; margin-left: -10px; margin-top: 10px; border-top: solid 1px #dbdbdb;">
                     <span style="margin-left: 8px; margin-top: 7px;" class="material-symbols-outlined">mood</span>
-                    <input type="email" class="form-control"
+                    <input type="text" class="form-control"
                            style="box-shadow: none; border: none; border-radius: 0px;" id="exampleFormControlInput1"
-                           placeholder="댓글 달기 ...">
-                    <a href="#"
-                       style="width: 50px; margin-right: 8px; margin-top: 7px; text-decoration: none; color: cornflowerblue; font-weight: bold">
+                           placeholder="댓글 달기 ..."/>
+                    <button onclick = "add_comment()"
+                       style="background-color: white; border: none; width: 50px; margin-right: 8px; text-decoration: none; color: cornflowerblue; font-weight: bold">
                         게시
-                    </a>
+                    </button>
                 </div>
             </div>
         </div>
@@ -495,6 +502,6 @@
     </div>
 </div>
 
-<script src="/scripts/mainscripts.js" rel="stylesheet" type="text/javascript"></script>
+<script src="../static/scripts/mainscripts.js" rel="stylesheet" type="text/javascript"></script>
 </body>
 </html>
