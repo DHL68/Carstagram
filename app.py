@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 # 홈페이지 불러오기
 @app.route('/')
-def home():
+def main():
     return render_template('index.html')
 
 # 개인페이지 불러오기
@@ -38,7 +38,7 @@ def new_post():
     return jsonify({'msg':'작성완료!'})
 
 
-@app.route("/main/comment", methods=["POST"])
+@app.route("/comment", methods=["POST"])
 def new_comment():
     comment_receive = request.form['comment_give']
 
@@ -50,7 +50,7 @@ def new_comment():
     return jsonify({'msg':'댓글작성완료!'})
 
 
-@app.route("/main/comment", methods=["GET"])
+@app.route("/comment", methods=["GET"])
 def comment():
     comment_list = list(db.comments.find({}, {'_id': False}))
     return jsonify({'comments':comment_list})

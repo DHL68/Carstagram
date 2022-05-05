@@ -5,7 +5,6 @@ body {
 }
 
 
-
 /*메뉴바 우측 상단 미니프로필*/
 .mini-profile {
     width: 24px;
@@ -119,11 +118,29 @@ input:focus {
     margin-top: 2px;
 }
 
+/*팔로우 버튼*/
+.follow-btn {
+    background: none;
+    border: none;
+    color: cornflowerblue;
+}
+/*하트 아이콘 호버*/
+.like-btn:hover {
+    background-color: deeppink;
+}
+.like-btn {
+    background-color: white;
+    border: none;
+    margin: -1px -4px -3px -3px;
+}
+
+/*a태그*/
 a {
     text-decoration: none;
     color: black;
 }
 
+/*신고 모달창*/
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -162,61 +179,40 @@ a {
     background-color: white;
 }
 
-@keyframes showText1 {
-    from {
-        transform: translateX(0px);
-        opacity: 0;
-    }
+/*@keyframes showText1 {*/
+/*    from {*/
+/*        transform: translateX(0px);*/
+/*        opacity: 0;*/
+/*    }*/
 
-    to {
-        transform: translateX(0px);
-        opacity: 1;
-    }
-}
+/*    to {*/
+/*        transform: translateX(0px);*/
+/*        opacity: 1;*/
+/*    }*/
+/*}*/
 
 @media screen and (max-width: 640px) {
 
-    html {
-        /*background: red;*/
-
-    }
-
     .aLayer {
-        /*padding: 1.0em;*/
         display: none;
-
     }
 
 }
 
 @media screen and (max-width: 1000px) {
 
-    html {
-        /*background: red;*/
-
-    }
-
     .bLayer {
-        /*padding: 1.0em;*/
         display: none;
-
     }
 
 }
 
 @media screen and (max-width: 640px) {
 
-    html {
-        /*background: red;*/
-
-    }
-
     .cLayer {
         width: 90%;
         height: 60%;
         overflow: hidden;
-
-
     }
 
 }
