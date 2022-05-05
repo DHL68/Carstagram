@@ -73,7 +73,7 @@ function show_comment() {
         success: function (response) {
             let rows = response['comments']
             for (let i = 0; i < rows.length; i++) {
-                let comment = rows[i]['comment']
+                let comment = rows[i]['comments']
 
                 let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">Car_sta</span> ${comment}</p>`
 
