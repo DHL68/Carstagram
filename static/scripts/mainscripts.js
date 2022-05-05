@@ -13,20 +13,18 @@ $(function () {
 });
 
 // 팔로우 버튼 클릭시 팔로잉 변경
-$(function() {
-  $('.follow-btn').click( function() {
-    if( $(this).html() == '팔로우' ) {
-      $(this).html('팔로잉');
-    }
-    else {
-      $(this).html('팔로우');
-    }
-  });
+$(function () {
+    $('.follow-btn').click(function () {
+        if ($(this).html() == '팔로우') {
+            $(this).html('팔로잉');
+        } else {
+            $(this).html('팔로우');
+        }
+    });
 });
 
-function like() {
-    alert('좋아요 완료!')
-}
+
+
 // function q2() {
 //     let post = $('#feed_box')
 //     $('#feed').append(post)
@@ -77,7 +75,7 @@ function show_comment() {
             for (let i = 0; i < rows.length; i++) {
                 let comment = rows[i]['comment']
 
-                let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">Kang_Jun</span> ${comment}</p>`
+                let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">Car_sta</span> ${comment}</p>`
 
                 $('.comment-box').append(temp_html)
             }
