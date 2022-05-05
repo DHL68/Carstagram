@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e460cede-cc6a-4bda-87ad-b974937e4ba5" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/scripts/mainscripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/scripts/mainscripts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/style/mainstyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/style/mainstyle.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/style/selfstyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/style/selfstyle.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/templates/user.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/user.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -116,7 +113,7 @@
       <option name="presentableId" value="Default" />
       <updated>1651643119397</updated>
       <workItem from="1651643129063" duration="27375000" />
-      <workItem from="1651725101678" duration="17605000" />
+      <workItem from="1651725101678" duration="18633000" />
     </task>
     <servers />
   </component>

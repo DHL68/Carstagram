@@ -27,6 +27,11 @@ body {
     object-fit: cover;
 }
 
+.my-posts {
+    margin-top: 10px;
+
+}
+
 .modal-overlay {
     position: absolute;
     top: 0;
@@ -76,7 +81,8 @@ body {
     width: 273px;
     height: 273px;
     object-fit: cover;
-    margin: 20px 0;
+    margin: 9px 0;
+    border-radius: 5px;
 
 }
 
