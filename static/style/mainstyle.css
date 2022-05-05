@@ -125,7 +125,7 @@ a {
 }
 
 .modal-overlay {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -133,11 +133,11 @@ a {
     display: none;
     z-index: 1;
     background-color: rgba(0, 0, 0, 0.4);
-    animation: showText1 0.5s;
+    /*animation: showText1 0.5s;*/
 }
 
 .modal_body {
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     width: 400px;

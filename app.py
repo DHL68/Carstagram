@@ -37,23 +37,26 @@ def new_post():
     db.posts.insert_one(doc)
     return jsonify({'msg':'작성완료!'})
 
-# 게시글에 댓글 작성
-@app.route("/main/post", methods=["POST"])
+
+@app.route("/main/comment", methods=["POST"])
 def new_comment():
     comment_receive = request.form['comment_give']
 
     doc = {
-        'post_comment': comment_receive
+        'comment': comment_receive
     }
 
-    db.posts.insert_one(doc)
+    db.comments.insert_one(doc)
     return jsonify({'msg':'댓글작성완료!'})
 
 
-@app.route("/main/post", methods=["GET"])
-def post_comment():
-    comment_list = list(db.posts.find({}, {'_id': False}))
+@app.route("/main/comment", methods=["GET"])
+def comment():
+    comment_list = list(db.comments.find({}, {'_id': False}))
     return jsonify({'comments':comment_list})
+
+
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
