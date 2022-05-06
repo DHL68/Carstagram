@@ -1,23 +1,76 @@
-// 모달 열기
-    const modal = document.getElementById("modal-option");
-    const buttonOpenModal = document.getElementById("open-modal");
-    buttonOpenModal.addEventListener("click", e => {
-        modal.style.top = window.pageYOffset + 'px'; // 모달띄울시, 스크롤이 내려가면 창이 뜨는 위치 수정
-        modal.style.display = "flex";  // 모달 나타나게하기
-        document.body.style.overflowY = "hidden"; // 모달 띄웠을때 스크롤안되게하기
+// 모달
+$(document).on('click',function () {
+// 모달 띄우기
+    $(".btn-open-popup").click(function () {
+        $(".modal-overlay").fadeIn();
+        $('body').css("overflow", "hidden");
+    });
+// 모달 닫기
+    $(".close-area").click(function () {
+        $(".modal-overlay").fadeOut();
+        $('body').css("overflow", "scroll");
+    });
+});
 
-    });
-    // 모달 취소 눌러 닫기
-    const buttonCloseModal = document.getElementById("close-modal");
-    buttonCloseModal.addEventListener("click", e => {
-        modal.style.display = "none";
-        document.body.style.overflowY = "visible";
-    });
-    // 모달 아닌곳 눌러 닫기
-    modal.addEventListener("click", e => {
-        const evTarget = e.target
-        if (evTarget.classList.contains("modal-overlay")) {
-            modal.style.display = "none";
-            document.body.style.overflowY = "visible";
+// 팔로우 버튼 클릭시 팔로잉 변경
+$(document).on('click',function () {
+    $('.follow-btn').click(function () {
+        if ($(this).html() == '팔로우') {
+            $(this).html('팔로잉');
+        } else {
+            $(this).html('팔로우');
         }
     });
+});
+
+
+
+// 댓글 달기
+// 수정 필요 ready
+$(window).ready(function () {
+    // 500s 시간 지연
+    setTimeout(function(){ show_comment(); }, 500);
+    // show_comment();
+});
+
+function add_comment(post_id) {
+    let comment = $(`#${post_id}`).val()
+    $.ajax({
+        type: 'POST',
+        url: '/comment',
+        data: {comment_give: comment, post_give: post_id},
+        success: function (response) {
+            alert(response['msg'])
+            window.location.reload()
+        }
+    })
+}
+
+// 동기 비동기 콜에 대해서 연구
+// 렌더링 한 다음의 호출 방법에 대해서 연구(메소드)
+function show_comment() {
+    $.ajax({
+        type: "GET",
+        url: "/comment",
+        data: {},
+        success: function (response) {
+            // console.log(response['comments'])
+            let rows = response['comments']
+
+            for (let i = 0; i < rows.length; i++) {
+                let comment = rows[i]['comments']
+                let post_id = rows[i]['post_id']
+
+                let temp_html = `
+                <p style="font-weight: lighter">
+                <span style="font-weight: bold">
+                Car_sta
+                </span>${comment}
+                </p>`
+                // console.log(`.${post_id}`)
+                // console.log(temp_html)
+                $(`.${post_id}`).append(temp_html)
+            }
+        }
+    });
+}
