@@ -1,5 +1,5 @@
 // 모달
-$(document).on('click',function () {
+$(document).on('click', function () {
 // 모달 띄우기
     $(".btn-open-popup").click(function () {
         $(".modal-overlay").fadeIn();
@@ -13,7 +13,7 @@ $(document).on('click',function () {
 });
 
 // 팔로우 버튼 클릭시 팔로잉 변경
-$(document).on('click',function () {
+$(document).on('click', function () {
     $('.follow-btn').click(function () {
         if ($(this).html() == '팔로우') {
             $(this).html('팔로잉');
@@ -24,13 +24,13 @@ $(document).on('click',function () {
 });
 
 
-
 // 댓글 달기
 // 수정 필요 ready
 $(document).ready(function () {
-    setTimeout(function(){ show_comment(); }, 500);
+    setTimeout(function () {
+        show_comment();
+    }, 500);
 });
-
 
 
 function add_comment(post_id) {
