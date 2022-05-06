@@ -1,5 +1,5 @@
 // 모달
-$(function () {
+$(document).on('click',function () {
 // 모달 띄우기
     $(".btn-open-popup").click(function () {
         $(".modal-overlay").fadeIn();
@@ -13,7 +13,7 @@ $(function () {
 });
 
 // 팔로우 버튼 클릭시 팔로잉 변경
-$(function () {
+$(document).on('click',function () {
     $('.follow-btn').click(function () {
         if ($(this).html() == '팔로우') {
             $(this).html('팔로잉');
@@ -25,31 +25,10 @@ $(function () {
 
 
 
-// function q2() {
-//     let post = $('#feed_box')
-//     $('#feed').append(post)
-// }
-
-// 댓글 달기, 게시글 추가하기
-$(document).ready(function () {
+// 댓글 달기
+$(document).on("click","comment-1",function () {
     show_comment()
 });
-
-
-// function save_post() {
-//     let posting_picture = $('#posting_picture').val()
-//     let posting_comment = $('#posting_comment').val()
-//
-//     $.ajax({
-//         type: 'POST',
-//         url: '/main',
-//         data: {posting_picture_give: posting_picture, posting_comment_give: posting_comment},
-//         success: function (response) {
-//             alert(response['msg'])
-//             window.location.reload()
-//         }
-//     })
-// }
 
 function add_comment() {
     let comment = $('#exampleFormControlInput1').val()
@@ -77,7 +56,7 @@ function show_comment() {
 
                 let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">Car_sta</span> ${comment}</p>`
 
-                $('.comment-box').append(temp_html)
+                $('#comment-q1').append(temp_html)
             }
         }
     });

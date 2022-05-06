@@ -1,3 +1,20 @@
+$(document).on('click',function () {
+// 모달 띄우기
+    $("#open-post-modal").click(function () {
+        $(".modal-overlay2").fadeIn();
+        $('body').css("overflow", "hidden");
+    });
+});
+
+$(document).on('click',function (e) {
+    if( $(".modal-overlay2").is(e.target)) {
+        $(".modal-overlay2").fadeOut();
+        $('body').css("overflow", "scroll");
+    };
+});
+
+
+
 $(document).ready(function () {
     // 페이지 로드 시 post_listing 에 대한 값을 불러온다
     // bsCustomFileInput.init()
@@ -96,7 +113,7 @@ function post_listing() {
                                         <input type="text" class="form-control"
                                                style="box-shadow: none; border: none; border-radius: 0px;" id="exampleFormControlInput1"
                                                placeholder="댓글 달기 ..."/>
-                                        <button onclick="add_comment()"
+                                        <button id = "comment-1"onclick="add_comment()"
                                                 style="background-color: white; border: none; width: 50px; margin-right: 8px; text-decoration: none; color: cornflowerblue; font-weight: bold">
                                             게시
                                         </button>
