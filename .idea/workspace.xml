@@ -2,17 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="715c6ea1-3e88-4276-a932-a6d9708dbddc" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/static/img/background.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/scripts/login.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/scripts/sign_up.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/static/style/login_style.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/templates/main.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/scripts/sign_up_js.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index/main.html" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index/sign_up.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/sign_up.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/scripts/sign_up.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/scripts/sign_up.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/login.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +51,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/templates" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../sparta/pythonprac" />
     <property name="list.type.of.created.stylesheet" value="CSS" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
@@ -127,7 +120,8 @@
       <updated>1651660286603</updated>
       <workItem from="1651660293292" duration="2692000" />
       <workItem from="1651723976225" duration="14254000" />
-      <workItem from="1651747627400" duration="9855000" />
+      <workItem from="1651747627400" duration="10578000" />
+      <workItem from="1651795610667" duration="13700000" />
     </task>
     <servers />
   </component>
@@ -146,6 +140,6 @@
     </option>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Carstagram$app.coverage" NAME="app Coverage Results" MODIFIED="1651759326893" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Carstagram$app.coverage" NAME="app Coverage Results" MODIFIED="1651816176542" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

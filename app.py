@@ -44,7 +44,7 @@ def home():
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 @app.route('/main')
-def login():
+def main():
     msg = request.args.get("msg")
     return render_template('main.html', msg=msg)
 
@@ -69,27 +69,27 @@ def sign_up_page():
 # [회원가입 API]
 # id, pw, nickname을 받아서, mongoDB에 저장합니다.
 # 저장하기 전에, pw를 sha256 방법(=단방향 암호화. 풀어볼 수 없음)으로 암호화해서 저장합니다.
-@app.route('/sign_up', methods=['POST'])
-def register():
-    id_receive = request.form['id_give']
-    pw_receive = request.form['pw_give']
-    nickname_receive = request.form['nickname_give']
-    email_receive = request.form['email_give']
-
-    pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
-    doc = {'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive, 'email': email_receive}
-
-    db.users.insert_one(doc)
-
-    return jsonify({'result': 'success'})
+# @app.route('/sign_up', methods=['POST'])
+# def register():
+#     id_receive = request.form['id_give']
+#     pw_receive = request.form['pw_give']
+#     nickname_receive = request.form['nickname_give']
+#     email_receive = request.form['email_give']
+#
+#     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
+#     doc = {'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive, 'email': email_receive}
+#
+#     db.users.insert_one(doc)
+#
+#     return jsonify({'result': 'success'})
 
 
 # 아이디 중복확인 서버
-# @app.route('/sign_up/check_dup', methods=['POST'])
-# def check_dup():
-#     username_receive = request.form['username_give']
-#     exists = bool(db.users.find_one({"username": username_receive}))
-#     return jsonify({'result': 'success', 'exists': exists})
+@app.route('/sign_up/check_dup', methods=['POST'])
+def check_dup():
+    userid_receive = request.form['userid_give']
+    exists = bool(db.users.find_one({"userid": userid_receive}))
+    return jsonify({'result': 'success', 'exists': exists})
 
 
 # [로그인 API]
@@ -155,13 +155,13 @@ def api_valid():
 # 회원가입 서버
 @app.route('/sign_up/save', methods=['POST'])
 def sign_up():
-    username_receive = request.form['username_give']
-    password_receive = request.form['password_give']
-    password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    userid_receive = request.form['userid_give']
+    pw_receive = request.form['pw_give']
+    pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
     doc = {
-        "username": username_receive,  # 아이디
-        "password": password_hash,  # 비밀번호
-        "profile_name": username_receive,  # 프로필 이름 기본값은 아이디
+        "userid": userid_receive,  # 아이디
+        "pw": pw_hash,  # 비밀번호
+        "profile_name": userid_receive,  # 프로필 이름 기본값은 아이디
         "profile_pic": "",  # 프로필 사진 파일 이름
         "profile_pic_real": "profile_pics/profile_placeholder.png",  # 프로필 사진 기본 이미지
         "profile_info": ""  # 프로필 한 마디
@@ -170,19 +170,74 @@ def sign_up():
     return jsonify({'result': 'success'})
 
 
+# 회원가입(POST) API
+@app.route('/sign_up', methods=['POST'])
+def user_infor():
+    id_receive = request.form['id_give']
+    email_receive = request.form['email_give']
+    pw_receive = request.form['pw_give']
+    nickname_receive = request.form['nickname_give']
+    pwcf_receive = request.form['pwcf_give']
+
+    res = db.users.find({}, {'_id': False})
+
+    # 최초 DB가 없을때도 실행하기 위해 추가함
+    if id_receive == '' or email_receive == '' or pw_receive == '' or pwcf_receive == '' or nickname_receive == '':
+        return jsonify({'ans': 'fail', 'msg': '공백이 있습니다'})
+    elif '@' not in email_receive or '.' not in email_receive:
+        return jsonify({'ans': 'fail', 'msg': '이메일 형식이 아닙니다.'})
+    elif pwcf_receive != pw_receive:
+        return jsonify({'ans': 'fail', 'msg': '비밀번호가 다릅니다'})
+    elif nickname_receive != nickname_receive:
+        return jsonify({'ans': 'fail', 'msg': '닉네임이 다릅니다'})
+
+
+    for list in res:
+        # 공백 처리, 해당 부분에서 약간의 오류를 발생시키면 html 스크립트 공백체크가 작동한다..
+        if id_receive == '' or email_receive == '' or pw_receive == '' or pwcf_receive == '' or nickname_receive == '':
+            return jsonify({'ans': 'fail', 'msg': '공백이 있습니다'})
+        # 이메일 형식 체크 @, '.' 포함 여부 확인
+        elif '@' not in email_receive or '.' not in email_receive:
+            return jsonify({'ans': 'fail', 'msg': '이메일 형식이 아닙니다.'})
+        # 회원가입 시 중복 ID, Email 처리
+        elif list['name'] == id_receive or list['email'] == email_receive or list['nickname'] == nickname_receive:
+            return jsonify({'ans': 'fail', 'msg': '아이디 또는 이름 또는 이메일 중복!'})
+        # 2차 비밀번호 체크
+        elif pwcf_receive != pw_receive:
+            return jsonify({'ans': 'fail', 'msg': '비밀번호가 다릅니다'})
+
+    PW = hashlib.sha256(pw_receive.encode()).hexdigest()
+    PW2 = hashlib.sha256(pwcf_receive.encode()).hexdigest()
+    print(PW)
+    print(PW2)
+    doc = {
+        'id': id_receive,
+        'email': email_receive,
+        'pw': PW,
+        'pwcf': PW2,
+        'nickname': nickname_receive
+    }
+    db.users.insert_one(doc)
+
+    return jsonify({'ans': 'success', 'msg': '가입완료'})
+
+
+
+
+
 # 로그인서버
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
     # 로그인
-    username_receive = request.form['username_give']
-    password_receive = request.form['password_give']
+    userid_receive = request.form['userid_give']
+    pw_receive = request.form['pw_give']
 
-    pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
-    result = db.users.find_one({'username': username_receive, 'password': pw_hash})
+    pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
+    result = db.users.find_one({'username': userid_receive, 'password': pw_hash})
 
     if result is not None:
         payload = {
-            'id': username_receive,
+            'id': userid_receive,
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
