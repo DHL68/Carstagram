@@ -34,10 +34,12 @@ def user():
 def new_comment():
     comment_receive = request.form['comment_give']
     post_receive = request.form['post_give']
+    # id_receive = request.form['id_give']
 
     doc = {
         'comments': comment_receive,
         'post_id' : post_receive
+        # 'user_id' : id_receive
     }
     db.comments.insert_one(doc)
 

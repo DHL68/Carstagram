@@ -27,12 +27,16 @@ $(document).on('click',function () {
 
 // 댓글 달기
 // 수정 필요 ready
+// $(document).ready(function () {
+//     show_comment()
+// });
+
 $(document).on('click',function () {
     show_comment()
 });
 
 function add_comment(post_id) {
-    let comment = $('#exampleFormControlInput1').val()
+    let comment = $(`#${post_id}`).val()
 
     $.ajax({
         type: 'POST',
@@ -46,7 +50,7 @@ function add_comment(post_id) {
 }
 
 function show_comment() {
-    $('.${post_id}').empty();
+
     $.ajax({
         type: "GET",
         url: "/comment",
@@ -55,11 +59,13 @@ function show_comment() {
             let rows = response['comments']
             for (let i = 0; i < rows.length; i++) {
                 let comment = rows[i]['comments']
+                let post_id = rows[i]['post_id']
+                // let user_id = rows[i]['user_id']
+                console.log(post_id)
 
+                let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">${post_id}</span> ${comment}</p>`
 
-                let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">Car_sta</span> ${comment}</p>`
-
-                $('.${post_id}').append(temp_html)
+                $(`.${post_id}`).append(temp_html)
             }
         }
     });

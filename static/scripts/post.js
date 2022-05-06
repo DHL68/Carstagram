@@ -1,3 +1,5 @@
+
+
 $(document).on('click',function () {
 // 모달 띄우기
     $("#open-post-modal").click(function () {
@@ -50,7 +52,7 @@ function post_listing() {
                                                             src="http://kaihuastudio.com/common/img/default_profile.png"></a>
                                         </div>
                                         <div style="margin-left: 10px">
-                                            ${post_id}
+                                            user_id
                                         </div>
                                     </div>
                                     <div>
@@ -106,7 +108,7 @@ function post_listing() {
                                     <!--                댓글모두보기-->
                                     <!--<div style="font-weight: lighter; color: grey">댓글 3,243개 모두보기</div>-->
                                     <!--                댓글-->
-                                    <div id="${post_id}" class="${post_id}">
+                                    <div id="" class="${post_id}">
                     
                                     </div>
                                     <!--                몇일,시간,분전-->
@@ -115,7 +117,7 @@ function post_listing() {
                                     <div style="display:flex; flex-direction: row; justify-content: center; margin-left: -10px; margin-top: 10px; border-top: solid 1px #dbdbdb;">
                                         <span style="margin-left: 8px; margin-top: 7px;" class="material-symbols-outlined">mood</span>
                                         <input type="text" class="form-control"
-                                               style="box-shadow: none; border: none; border-radius: 0px;" id="exampleFormControlInput1"
+                                               style="box-shadow: none; border: none; border-radius: 0px;" id="${post_id}"
                                                placeholder="댓글 달기 ..."/>
                                         <button id = "comment-1"onclick="add_comment('${post_id}')"
                                                 style="background-color: white; border: none; width: 50px; margin-right: 8px; text-decoration: none; color: cornflowerblue; font-weight: bold">
