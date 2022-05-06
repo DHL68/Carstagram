@@ -1,12 +1,15 @@
 from flask import Flask, render_template, jsonify, request
+app = Flask(__name__)
+
 from datetime import datetime
-from pymongo import MongoClient
-from bson.json_util import dumps
 
 import requests
 from bs4 import BeautifulSoup
 
-app = Flask(__name__)
+from pymongo import MongoClient
+
+from bson.json_util import dumps
+
 
 client = MongoClient('localhost', 27017)
 db = client.Carstagram
