@@ -26,17 +26,18 @@ $(document).on('click',function () {
 
 
 // 댓글 달기
+// 수정 필요 ready
 $(document).on('click',function () {
     show_comment()
 });
 
-function add_comment() {
+function add_comment(post_id) {
     let comment = $('#exampleFormControlInput1').val()
 
     $.ajax({
         type: 'POST',
         url: '/comment',
-        data: {comment_give: comment},
+        data: {comment_give: comment, post_give: post_id},
         success: function (response) {
             alert(response['msg'])
             window.location.reload()
@@ -45,7 +46,7 @@ function add_comment() {
 }
 
 function show_comment() {
-    $('.comment-box').empty();
+    $('.${post_id}').empty();
     $.ajax({
         type: "GET",
         url: "/comment",
@@ -55,9 +56,10 @@ function show_comment() {
             for (let i = 0; i < rows.length; i++) {
                 let comment = rows[i]['comments']
 
+
                 let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">Car_sta</span> ${comment}</p>`
 
-                $('.comment-box').append(temp_html)
+                $('.${post_id}').append(temp_html)
             }
         }
     });

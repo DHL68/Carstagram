@@ -30,11 +30,15 @@ function post_listing() {
         url: "/listing",
         data: {},
         success: function (response) {
-            let posts = response['posts']
+            let posts = JSON.parse(response['posts'])
+
             for (let i = 0; i < posts.length; i++) {
+                console.log(posts)
                 let post_picture = posts[i]['post_pictures']
                 let post_comment = posts[i]['post_comments']
                 let post_pic = posts[i]['post_pic']
+                let post_id = posts[i]['_id']['$oid']
+                console.log(post_id)
 
                 let temp_html =`
                             <div class="feed-box" id="feed_box">
@@ -46,7 +50,7 @@ function post_listing() {
                                                             src="http://kaihuastudio.com/common/img/default_profile.png"></a>
                                         </div>
                                         <div style="margin-left: 10px">
-                                            IlikeCar
+                                            ${post_id}
                                         </div>
                                     </div>
                                     <div>
@@ -102,7 +106,7 @@ function post_listing() {
                                     <!--                댓글모두보기-->
                                     <!--<div style="font-weight: lighter; color: grey">댓글 3,243개 모두보기</div>-->
                                     <!--                댓글-->
-                                    <div id="comment-q1" class="comment-box">
+                                    <div id="${post_id}" class="${post_id}">
                     
                                     </div>
                                     <!--                몇일,시간,분전-->
@@ -113,10 +117,11 @@ function post_listing() {
                                         <input type="text" class="form-control"
                                                style="box-shadow: none; border: none; border-radius: 0px;" id="exampleFormControlInput1"
                                                placeholder="댓글 달기 ..."/>
-                                        <button id = "comment-1"onclick="add_comment()"
+                                        <button id = "comment-1"onclick="add_comment('${post_id}')"
                                                 style="background-color: white; border: none; width: 50px; margin-right: 8px; text-decoration: none; color: cornflowerblue; font-weight: bold">
                                             게시
                                         </button>
+                                    <!--  -->
                                     </div>
                                 </div>`
                 $('#post-feed-box').append(temp_html)
