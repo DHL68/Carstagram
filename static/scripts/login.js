@@ -11,7 +11,7 @@ function login() {
                 $.cookie('mytoken', response['token']);
 
                 alert('로그인 완료!')
-                window.location.href = '/'
+                // window.location.href = '/'
             } else {
                 // 로그인이 안되면 에러메시지를 띄웁니다.
                 alert(response['msg'])
@@ -20,23 +20,23 @@ function login() {
     })
 }
 
-
 // 로그인 클라이언트
 function sign_in() {
-    let username = $("#input-username").val()
-    let password = $("#input-password").val()
+    let username = $("#useremail").val()
+    let password = $("#userpw").val()
+    console.log(username)
 
     if (username == "") {
-        $("#help-id-login").text("아이디를 입력해주세요.")
-        $("#input-username").focus()
+        $("#help-email-login").text("아이디를 입력해주세요.")
+        $("#useremail").focus()
         return;
     } else {
-        $("#help-id-login").text("")
+        $("#help-email-login").text("")
     }
 
     if (password == "") {
         $("#help-password-login").text("비밀번호를 입력해주세요.")
-        $("#input-password").focus()
+        $("#userpw").focus()
         return;
     } else {
         $("#help-password-login").text("")
@@ -45,7 +45,7 @@ function sign_in() {
         type: "POST",
         url: "/sign_in",
         data: {
-            username_give: username,
+            useremail_give: useremail,
             password_give: password
         },
         success: function (response) {
