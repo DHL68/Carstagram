@@ -6,10 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e460cede-cc6a-4bda-87ad-b974937e4ba5" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/app.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/scripts/mainscripts.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/scripts/mainscripts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/scripts/post.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/scripts/post.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -138,7 +135,7 @@
       <workItem from="1651760753100" duration="1771000" />
       <workItem from="1651793250778" duration="595000" />
       <workItem from="1651795324620" duration="6272000" />
-      <workItem from="1651806709057" duration="7148000" />
+      <workItem from="1651806709057" duration="7793000" />
     </task>
     <servers />
   </component>
@@ -162,6 +159,6 @@
     <SUITE FILE_PATH="coverage/t_KTLO_Carstagram$Carstagram.coverage" NAME="Carstagram 커버리지 결과" MODIFIED="1651754474184" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/Carstagram$app.coverage" NAME="app Coverage Results" MODIFIED="1651759326893" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/t_KTLO_Carstagram$cli.coverage" NAME="cli 커버리지 결과" MODIFIED="1651757695088" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/venv/Lib/site-packages/flask" />
-    <SUITE FILE_PATH="coverage/Carstagram$Flask__app_py_.coverage" NAME="Flask (app.py) 커버리지 결과" MODIFIED="1651814147577" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Carstagram$Flask__app_py_.coverage" NAME="Flask (app.py) 커버리지 결과" MODIFIED="1651816518138" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

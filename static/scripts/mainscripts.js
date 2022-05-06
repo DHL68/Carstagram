@@ -27,13 +27,11 @@ $(document).on('click',function () {
 
 // 댓글 달기
 // 수정 필요 ready
-// $(document).ready(function () {
-//     show_comment()
-// });
-
-$(document).on('click',function () {
-    show_comment()
+$(document).ready(function () {
+    setTimeout(function(){ show_comment(); }, 500);
 });
+
+
 
 function add_comment(post_id) {
     let comment = $(`#${post_id}`).val()
