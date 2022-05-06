@@ -18,8 +18,8 @@ $(document).on('click',function (e) {
 $(document).ready(function () {
     // 페이지 로드 시 post_listing 에 대한 값을 불러온다
     // bsCustomFileInput.init()
-    post_listing('bs-custom-file-input')
-    alert('안녕')
+    post_listing('bs-custom-file-input');
+    alert('안녕');
 })
 
 
@@ -106,7 +106,7 @@ function post_listing() {
                                     <!--                댓글모두보기-->
                                     <!--<div style="font-weight: lighter; color: grey">댓글 3,243개 모두보기</div>-->
                                     <!--                댓글-->
-                                    <div id="${post_id}" class="${post_id}">
+                                    <div class="${post_id}">
                     
                                     </div>
                                     <!--                몇일,시간,분전-->
@@ -115,9 +115,9 @@ function post_listing() {
                                     <div style="display:flex; flex-direction: row; justify-content: center; margin-left: -10px; margin-top: 10px; border-top: solid 1px #dbdbdb;">
                                         <span style="margin-left: 8px; margin-top: 7px;" class="material-symbols-outlined">mood</span>
                                         <input type="text" class="form-control"
-                                               style="box-shadow: none; border: none; border-radius: 0px;" id="exampleFormControlInput1"
+                                               style="box-shadow: none; border: none; border-radius: 0px;" id="${post_id}"
                                                placeholder="댓글 달기 ..."/>
-                                        <button id = "comment-1"onclick="add_comment('${post_id}')"
+                                        <button id = "comment-1" onclick="add_comment('${post_id}')"
                                                 style="background-color: white; border: none; width: 50px; margin-right: 8px; text-decoration: none; color: cornflowerblue; font-weight: bold">
                                             게시
                                         </button>

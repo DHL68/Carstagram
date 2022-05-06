@@ -27,13 +27,14 @@ $(document).on('click',function () {
 
 // 댓글 달기
 // 수정 필요 ready
-$(document).on('click',function () {
-    show_comment()
+$(window).ready(function () {
+    // 500s 시간 지연
+    setTimeout(function(){ show_comment(); }, 500);
+    // show_comment();
 });
 
 function add_comment(post_id) {
-    let comment = $('#exampleFormControlInput1').val()
-
+    let comment = $(`#${post_id}`).val()
     $.ajax({
         type: 'POST',
         url: '/comment',
@@ -45,21 +46,30 @@ function add_comment(post_id) {
     })
 }
 
+// 동기 비동기 콜에 대해서 연구
+// 렌더링 한 다음의 호출 방법에 대해서 연구(메소드)
 function show_comment() {
-    $('.${post_id}').empty();
     $.ajax({
         type: "GET",
         url: "/comment",
         data: {},
         success: function (response) {
+            // console.log(response['comments'])
             let rows = response['comments']
+
             for (let i = 0; i < rows.length; i++) {
                 let comment = rows[i]['comments']
+                let post_id = rows[i]['post_id']
 
-
-                let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">Car_sta</span> ${comment}</p>`
-
-                $('.${post_id}').append(temp_html)
+                let temp_html = `
+                <p style="font-weight: lighter">
+                <span style="font-weight: bold">
+                Car_sta
+                </span>${comment}
+                </p>`
+                // console.log(`.${post_id}`)
+                // console.log(temp_html)
+                $(`.${post_id}`).append(temp_html)
             }
         }
     });
