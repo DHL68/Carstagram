@@ -35,12 +35,11 @@ function post_listing() {
             let posts = JSON.parse(response['posts'])
 
             for (let i = 0; i < posts.length; i++) {
-                console.log(posts)
                 let post_picture = posts[i]['post_pictures']
                 let post_comment = posts[i]['post_comments']
                 let post_pic = posts[i]['post_pic']
                 let post_id = posts[i]['_id']['$oid']
-                console.log(post_id)
+
 
                 let temp_html =`
                             <div class="feed-box" id="feed_box">
@@ -149,8 +148,6 @@ function post_posting() {
     $.ajax({
         type: "POST",
         url: "/posting",
-        // data: {sample_give: let 변수},
-        // data: {picture_give:picture, comment_give:comment},
         data: form_data,
         cache: false,
         contentType: false,

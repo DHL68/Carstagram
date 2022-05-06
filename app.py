@@ -18,17 +18,20 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 
 
-# 홈페이지 불러오기
+# 메인페이지 불러오기
+
 @app.route('/')
 def main():
     return render_template('index.html')
 
 
 # 개인페이지 불러오기
+
 @app.route('/user')
 def user():
-    return render_template('user.html')
+    return render_template('self.html')
 
+#post 댓글작성
 
 @app.route("/comment", methods=["POST"])
 def new_comment():
@@ -38,13 +41,14 @@ def new_comment():
 
     doc = {
         'comments': comment_receive,
-        'post_id' : post_receive
+        'post_id': post_receive
         # 'user_id' : id_receive
     }
     db.comments.insert_one(doc)
 
     return jsonify({'msg': '댓글작성완료!'})
 
+#get 댓글 불러오기
 
 @app.route("/comment", methods=["GET"])
 def comment():
