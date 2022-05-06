@@ -26,7 +26,7 @@ $(document).on('click',function () {
 
 
 // 댓글 달기
-$(document).on("click","comment-1",function () {
+$(document).on('click',function () {
     show_comment()
 });
 
@@ -45,6 +45,7 @@ function add_comment() {
 }
 
 function show_comment() {
+    $('.comment-box').empty();
     $.ajax({
         type: "GET",
         url: "/comment",
@@ -56,7 +57,7 @@ function show_comment() {
 
                 let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">Car_sta</span> ${comment}</p>`
 
-                $('#comment-q1').append(temp_html)
+                $('.comment-box').append(temp_html)
             }
         }
     });
