@@ -35,7 +35,7 @@ def home():
         # 암호화되어있는 token의 값을 우리가 사용할 수 있도록 디코딩(암호화 풀기)해줍니다!
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.user.find_one({"id": payload['id']})
-        return render_template('index.html', nickname=user_info["nick"])
+        return render_template('main.html', nickname=user_info["nick"])
     # 만약 해당 token의 로그인 시간이 만료되었다면, 아래와 같은 코드를 실행합니다.
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
@@ -43,17 +43,21 @@ def home():
         # 만약 해당 token이 올바르게 디코딩되지 않는다면, 아래와 같은 코드를 실행합니다.
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
+
 @app.route('/main')
 def main():
     msg = request.args.get("msg")
     return render_template('main.html', msg=msg)
-
 
 @app.route('/login')
 def login():
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
 
+@app.route('/login2')
+def login_2():
+    msg = request.args.get("msg")
+    return render_template('main.html', msg=msg)
 
 @app.route('/sign_up')
 def sign_up_page():
@@ -69,19 +73,19 @@ def sign_up_page():
 # [회원가입 API]
 # id, pw, nickname을 받아서, mongoDB에 저장합니다.
 # 저장하기 전에, pw를 sha256 방법(=단방향 암호화. 풀어볼 수 없음)으로 암호화해서 저장합니다.
-# @app.route('/sign_up', methods=['POST'])
-# def register():
-#     id_receive = request.form['id_give']
-#     pw_receive = request.form['pw_give']
-#     nickname_receive = request.form['nickname_give']
-#     email_receive = request.form['email_give']
-#
-#     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
-#     doc = {'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive, 'email': email_receive}
-#
-#     db.users.insert_one(doc)
-#
-#     return jsonify({'result': 'success'})
+
+@app.route('/sign_up', methods=['POST'])
+def register():
+    id_receive = request.form['id_give']
+    pw_receive = request.form['pw_give']
+    nickname_receive = request.form['nickname_give']
+    email_receive = request.form['email_give']
+    pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
+    doc = {'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive, 'email': email_receive}
+
+    db.users.insert_one(doc)
+
+    return jsonify({'result': 'success'})
 
 
 # 아이디 중복확인 서버
@@ -96,14 +100,14 @@ def check_dup():
 # id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
 @app.route('/api/login', methods=['POST'])
 def api_login():
-    id_receive = request.form['id_give']
-    pw_receive = request.form['pw_give']
+    id_receive = request.form['useremail_give']
+    pw_receive = request.form['password_give']
 
     # 회원가입 때와 같은 방법으로 pw를 암호화합니다.
-    pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
+    # pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
 
     # id, 암호화된pw을 가지고 해당 유저를 찾습니다.
-    result = db.user.find_one({'id': id_receive, 'pw': pw_hash})
+    result = db.user.find_one({'id': id_receive, 'pw': pw_receive})
 
     # 찾으면 JWT 토큰을 만들어 발급합니다.
     if result is not None:

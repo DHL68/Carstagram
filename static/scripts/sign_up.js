@@ -22,15 +22,8 @@ function sign_up() {
         }
     })
 }
-// 이 클래스를 로그인 화면에서 숨겨야하는 요소
-// function toggle_sign_up() {
-//     $("#sign-up-box").toggleClass("is-hidden")
-//     $("#div-sign-in-or-up").toggleClass("is-hidden")
-//     $("#btn-check-dup").toggleClass("is-hidden")
-//     $("#help-id").toggleClass("is-hidden")
-//     $("#help-password").toggleClass("is-hidden")
-//     $("#help-password2").toggleClass("is-hidden")
-// }
+
+
 // 아아디 정규표현식
 function is_nickname(asValue) {
     var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;
@@ -43,7 +36,9 @@ function is_password(asValue) {
 }
 // 아이디 중복확인 클라이언트
 function check_dup() {
+
     let userid = $("#input-username").val()
+
     console.log(username)
     if (userid == "") {
         $("#help-id").text("아이디를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
