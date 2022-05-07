@@ -12,11 +12,11 @@
     <!-- Jquery -->
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <!-- CSS -->
-    <link rel="stylesheet" href="/style/login_style.css" type="text/css">
+    <link rel="stylesheet" href="../static/style/login_style.css" type="text/css">
     <!-- @media 나중에 -->
     <link rel="stylesheet" media="screen and (max-width: 768px)" href="/style/login_style.css"/>
     <!-- JS -->
-    <script src="../static/script/login.js"></script>
+<!--    <script src="../static/script/login.js"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
@@ -47,13 +47,15 @@
                 type: "POST",
                 url: "/sign_in",
                 data: {
-                    username_give: username,
+                    useremail_give: username,
                     password_give: password
                 },
+
                 success: function (response) {
                     if (response['result'] == 'success') {
                         $.cookie('mytoken', response['token'], {path: '/'});
-                        window.location.replace("/")
+                        console.log(response)
+                        window.location.replace('/login2')
                     } else {
                         alert(response['msg'])
                     }
@@ -88,9 +90,7 @@
                 <p id="help-password-login"></p>
             </div>
         </div>
-        <button id="" class="btn btn-primary" style="width: 258px; height: 36px; padding: 4px 10px" onclick="sign_in()">
-            로그인
-        </button>
+        <button id="" class="btn btn-primary" style="width: 258px; height: 36px; padding: 4px 10px" onclick="sign_in()">로그인</button>
     </div>
     <div style="padding: 20px ;text-align: center; width: 300px; height: 65px; margin-top: 30px; opacity:0.8; background: white">
         <div> 계정이 없으신가요? <a href="/sign_up">회원가입</a></div>

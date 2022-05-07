@@ -48,6 +48,10 @@ def login():
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
 
+@app.route('/login2')
+def login_2():
+    msg = request.args.get("msg")
+    return render_template('main.html', msg=msg)
 
 @app.route('/sign_up')
 def sign_up_page():
@@ -70,8 +74,8 @@ def register():
     nickname_receive = request.form['nickname_give']
     email_receive = request.form['email_give']
 
-    pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
-    doc = {'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive, 'email': email_receive}
+    # pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
+    doc = {'id': id_receive, 'pw': pw_receive, 'nick': nickname_receive, 'email': email_receive}
 
     db.users.insert_one(doc)
 
@@ -93,12 +97,11 @@ def api_login():
     id_receive = request.form['useremail_give']
     pw_receive = request.form['password_give']
 
-
     # 회원가입 때와 같은 방법으로 pw를 암호화합니다.
-    pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
+    # pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
 
     # id, 암호화된pw을 가지고 해당 유저를 찾습니다.
-    result = db.user.find_one({'id': id_receive, 'pw': pw_hash})
+    result = db.user.find_one({'id': id_receive, 'pw': pw_receive})
 
     # 찾으면 JWT 토큰을 만들어 발급합니다.
     if result is not None:
@@ -169,16 +172,18 @@ def sign_up():
 @app.route('/sign_in', methods=['POST'])
 def sign_in():
     # 로그인
-    username_receive = request.form['useremail_give']
-    password_receive = request.form['password_give']
-    print(username_receive)
 
-    pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
-    result = db.users.find_one({'username': username_receive, 'password': pw_hash})
+    useremail_receive = request.form['useremail_give']
+    password_receive = request.form['password_give']
+    print(useremail_receive, password_receive)
+
+    # pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    # result = db.user.find_one({'useremail': useremail_receive, 'password': password_receive})
+    result = db.user.find({})
 
     if result is not None:
         payload = {
-            'id': username_receive,
+            'id': useremail_receive,
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')

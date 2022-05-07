@@ -35,6 +35,7 @@ function is_password(asValue) {
 }
 // 아이디 중복확인 클라이언트
 function check_dup() {
+    console.log("check_dup")
     let username = $("#input-username").val()
     console.log(username)
     if (username == "") {
