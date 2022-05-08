@@ -7,6 +7,10 @@
     <list default="true" id="e460cede-cc6a-4bda-87ad-b974937e4ba5" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/scripts/mainscript.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/scripts/mainscript.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/scripts/selfscript.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/scripts/selfscript.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/style/mainstyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/style/mainstyle.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/style/selfstyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/style/selfstyle.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/templates/self.html" beforeDir="false" afterPath="$PROJECT_DIR$/templates/self.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,11 +75,14 @@
       <recent name="C:\github\Carstagram\templates\index" />
     </key>
   </component>
-  <component name="RunManager" selected="Flask 서버.Flask (app.py)">
+  <component name="RunManager" selected="JavaScript 디버그.self.html">
     <configuration name="index.html (1)" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/t-KTLO-Carstagram/templates/index.html" useBuiltInWebServerPort="true">
       <method v="2" />
     </configuration>
     <configuration name="index.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Carstagram/templates/index.html" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
+    <configuration name="self.html" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/Carstagram/templates/self.html" useBuiltInWebServerPort="true">
       <method v="2" />
     </configuration>
     <configuration name="Carstagram" type="PythonConfigurationType" factoryName="Python">
@@ -117,6 +124,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JavaScript 디버그.self.html" />
         <item itemvalue="Flask 서버.Flask (app.py)" />
         <item itemvalue="JavaScript 디버그.index.html" />
         <item itemvalue="JavaScript 디버그.index.html (1)" />
@@ -139,7 +147,8 @@
       <workItem from="1651806709057" duration="8563000" />
       <workItem from="1651823730074" duration="6798000" />
       <workItem from="1651832120233" duration="43000" />
-      <workItem from="1651832555528" duration="3893000" />
+      <workItem from="1651832555528" duration="3905000" />
+      <workItem from="1652001113476" duration="4660000" />
     </task>
     <servers />
   </component>
@@ -163,6 +172,6 @@
     <SUITE FILE_PATH="coverage/t_KTLO_Carstagram$Carstagram.coverage" NAME="Carstagram 커버리지 결과" MODIFIED="1651754474184" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/Carstagram$app.coverage" NAME="app Coverage Results" MODIFIED="1651759326893" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/t_KTLO_Carstagram$cli.coverage" NAME="cli 커버리지 결과" MODIFIED="1651757695088" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/venv/Lib/site-packages/flask" />
-    <SUITE FILE_PATH="coverage/Carstagram$Flask__app_py_.coverage" NAME="Flask (app.py) 커버리지 결과" MODIFIED="1651823816119" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Carstagram$Flask__app_py_.coverage" NAME="Flask (app.py) 커버리지 결과" MODIFIED="1652002950383" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

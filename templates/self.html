@@ -11,11 +11,13 @@
     <!--    구글 머터리얼 아이콘   -->
     <link href="https://fonts.googleapis.com/css?family=Material+Icons|Material+Icons+Outlined|Material+Icons+Two+Tone|Material+Icons+Round|Material+Icons+Sharp"
           rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://fonts.sandbox.google.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
     <!--    jQuery-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <!--    css 스타일-->
-        <!--    flask 경로 해석으로 불러오는 기능 url_for  -->
-<!--    <link rel="stylesheet" href="{{ url_for('static', filename ='style/selfstyle.css') }}" type="text/css">-->
+    <!--    flask 경로 해석으로 불러오는 기능 url_for  -->
+    <!--    <link rel="stylesheet" href="{{ url_for('static', filename ='style/selfstyle.css') }}" type="text/css">-->
     <link rel="stylesheet" href="../static/style/selfstyle.css" type="text/css">
 
 
@@ -29,7 +31,7 @@
     <div class="container-fluid" style="justify-content: space-between; flex-wrap: nowrap; max-width: 940px;">
         <!--        instagram 이미지-------------------------------------------------------------------------------->
         <a class="navbar-brand" href="/"><img style="width: 100px;"
-                                                      src="../static/image/Carstagram_rogo4.png">
+                                              src="../static/image/Carstagram_rogo4.png">
         </a>
         <!--            검색창-------------------------------------------------------------------------------------->
         <input class="form-control me-2" style="max-width: 300px;" type="search" placeholder="검색"
@@ -37,14 +39,16 @@
         <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
             <!--            아이콘---------------------------------------------------------------------------------->
             <a href="/"><span style="margin: 6px 12px 0 12px;"
-                                      class="material-icons">home</span></a>
+                              class="material-icons">home</span></a>
             <span style="margin: 0 12px 0 12px;" class="material-icons-outlined">send</span>
-            <span style="margin: 0 12px 0 12px;" class="material-icons-outlined">add_box</span>
+            <button id="open-post-modal" style="background-color: #c7c7c7; border: none; margin-top: 7px;">
+                <span style="margin: 0 12px 0 12px;" class="material-icons-outlined">add_box</span>
+            </button>
             <span style="margin: 0 12px 0 12px;" class="material-icons-outlined">explore</span>
             <span style="margin: 0 12px 0 12px;" class="material-icons-outlined">favorite_border</span>
             <div class="mini-profile" style="float: right; margin-left: 10px;">
                 <a href="/user"><img class="profile" style="margin-bottom: 6px;"
-                                                                src="http://kaihuastudio.com/common/img/default_profile.png"></a>
+                                     src="http://kaihuastudio.com/common/img/default_profile.png"></a>
             </div>
         </div>
     </div>
@@ -97,7 +101,7 @@
     <div style="display: flex; flex-direction: row; justify-content: center; color: #fafafa;">
         <span class="material-icons-outlined" style="margin: 10px 0 0 20px;">grid_on</span>
         <div style="font-size: 12px; margin-top: 12px; margin-left: 5px;">
-            <button style="background: none; border: none";><span style="color: #fafafa">게시물</span></button>
+            <button style="background: none; border: none" ;><span style="color: #fafafa">게시물</span></button>
         </div>
         <span class="material-icons-outlined" style="margin: 10px 0 0 40px;">bookmark_border</span>
         <div style="font-size: 12px; margin-top: 12px; margin-left: 5px;">
@@ -110,16 +114,13 @@
     </div>
     <!------------------     게시글---------------------------------------------------------------------------------------->
     <div class="my-posts">
-        <button id="open-modal" style=" border: none; background: none;">
+        <button class="open-modal" style=" border: none; background: none;">
             <img class="profilepage-image" src="https://cdn.nbnnews.co.kr/news/photo/202111/632351_631208_3045.jpg">
         </button>
-        <button id="open-modal" style=" border: none; background: none;">
+        <button class="open-modal" style=" border: none; background: none;">
             <img class="profilepage-image" src="https://cdn.nbnnews.co.kr/news/photo/202111/632351_631208_3045.jpg">
         </button>
-        <button id="open-modal" style=" border: none; background: none;">
-            <img class="profilepage-image" src="https://cdn.nbnnews.co.kr/news/photo/202111/632351_631208_3045.jpg">
-        </button>
-        <button id="open-modal" style=" border: none; background: none;">
+        <button class="open-modal" style=" border: none; background: none;">
             <img class="profilepage-image" src="https://cdn.nbnnews.co.kr/news/photo/202111/632351_631208_3045.jpg">
         </button>
     </div>
@@ -146,17 +147,83 @@
                     </div>
                 </div>
                 <!--                댓글창 상단 아래 피드설명란-->
-                <div style="display: flex; flex-direction: row; justify-content: space-between; width: 450px; height: 55px;">
+
+                <!--                댓글들-->
+                <div style="background-color: white; display: flex; flex-direction: column; justify-content: space-between; width: 450px; max-height: 675px; overflow-y: scroll; overflow-x: none;">
                     <div style="display: flex; flex-direction: row;">
                         <a href=""><img class="box-profile"
                                         src="https://file2.nocutnews.co.kr/newsroom/image/2021/08/12/202108121210585928_12.jpg"></a>
                         <p style="margin-left: 10px;">Kang_Jun</p>
-                        <p style="margin-left: 5px;"><span style="font-weight: lighter; color: dodgerblue;">#스파르타 #내일배움캠프 #파이팅 #고양이</span>
+                        <p style="margin-left: 5px; text-align: left"><span style="font-weight: lighter; color: dodgerblue;">#스파르타 #내일배움캠프 #파이팅 #고양이</span><br>
+                        흠 어렵구만
                         </p>
                     </div>
-                </div>
-                <!--                댓글들-->
-                <div style="display: flex; flex-direction: row; justify-content: space-between; width: 450px; height: 620px;">
+                    <div style="display: flex; flex-direction: row;">
+                        <a href=""><img class="box-profile"
+                                        src="https://blog.kakaocdn.net/dn/b0ZMMh/btq4eKTyBG4/aVgQqfsq543UByfJSaK0cK/img.jpg"></a>
+                        <p style="margin-left: 10px;">BoYoung</p>
+                        <p style="font-weight: lighter; margin-left: 10px;">내일배움 캠퍼 모두 파이팅 !!</p>
+                    </div>
+                    <div style="display: flex; flex-direction: row;">
+                        <a href=""><img class="box-profile"
+                                        src="https://blog.kakaocdn.net/dn/b0ZMMh/btq4eKTyBG4/aVgQqfsq543UByfJSaK0cK/img.jpg"></a>
+                        <p style="margin-left: 10px;">BoYoung</p>
+                        <p style="font-weight: lighter; margin-left: 10px;">내일배움 캠퍼 모두 파이팅 !!</p>
+                    </div>
+                    <div style="display: flex; flex-direction: row;">
+                        <a href=""><img class="box-profile"
+                                        src="https://blog.kakaocdn.net/dn/b0ZMMh/btq4eKTyBG4/aVgQqfsq543UByfJSaK0cK/img.jpg"></a>
+                        <p style="margin-left: 10px;">BoYoung</p>
+                        <p style="font-weight: lighter; margin-left: 10px;">내일배움 캠퍼 모두 파이팅 !!</p>
+                    </div>
+                    <div style="display: flex; flex-direction: row;">
+                        <a href=""><img class="box-profile"
+                                        src="https://blog.kakaocdn.net/dn/b0ZMMh/btq4eKTyBG4/aVgQqfsq543UByfJSaK0cK/img.jpg"></a>
+                        <p style="margin-left: 10px;">BoYoung</p>
+                        <p style="font-weight: lighter; margin-left: 10px;">내일배움 캠퍼 모두 파이팅 !!</p>
+                    </div>
+                    <div style="display: flex; flex-direction: row;">
+                        <a href=""><img class="box-profile"
+                                        src="https://blog.kakaocdn.net/dn/b0ZMMh/btq4eKTyBG4/aVgQqfsq543UByfJSaK0cK/img.jpg"></a>
+                        <p style="margin-left: 10px;">BoYoung</p>
+                        <p style="font-weight: lighter; margin-left: 10px;">내일배움 캠퍼 모두 파이팅 !!</p>
+                    </div>
+                    <div style="display: flex; flex-direction: row;">
+                        <a href=""><img class="box-profile"
+                                        src="https://blog.kakaocdn.net/dn/b0ZMMh/btq4eKTyBG4/aVgQqfsq543UByfJSaK0cK/img.jpg"></a>
+                        <p style="margin-left: 10px;">BoYoung</p>
+                        <p style="font-weight: lighter; margin-left: 10px;">내일배움 캠퍼 모두 파이팅 !!</p>
+                    </div>
+                    <div style="display: flex; flex-direction: row;">
+                        <a href=""><img class="box-profile"
+                                        src="https://blog.kakaocdn.net/dn/b0ZMMh/btq4eKTyBG4/aVgQqfsq543UByfJSaK0cK/img.jpg"></a>
+                        <p style="margin-left: 10px;">BoYoung</p>
+                        <p style="font-weight: lighter; margin-left: 10px;">내일배움 캠퍼 모두 파이팅 !!</p>
+                    </div>
+                    <div style="display: flex; flex-direction: row;">
+                        <a href=""><img class="box-profile"
+                                        src="https://blog.kakaocdn.net/dn/b0ZMMh/btq4eKTyBG4/aVgQqfsq543UByfJSaK0cK/img.jpg"></a>
+                        <p style="margin-left: 10px;">BoYoung</p>
+                        <p style="font-weight: lighter; margin-left: 10px;">내일배움 캠퍼 모두 파이팅 !!</p>
+                    </div>
+                    <div style="display: flex; flex-direction: row;">
+                        <a href=""><img class="box-profile"
+                                        src="https://blog.kakaocdn.net/dn/b0ZMMh/btq4eKTyBG4/aVgQqfsq543UByfJSaK0cK/img.jpg"></a>
+                        <p style="margin-left: 10px;">BoYoung</p>
+                        <p style="font-weight: lighter; margin-left: 10px;">내일배움 캠퍼 모두 파이팅 !!</p>
+                    </div>
+                    <div style="display: flex; flex-direction: row;">
+                        <a href=""><img class="box-profile"
+                                        src="https://blog.kakaocdn.net/dn/b0ZMMh/btq4eKTyBG4/aVgQqfsq543UByfJSaK0cK/img.jpg"></a>
+                        <p style="margin-left: 10px;">BoYoung</p>
+                        <p style="font-weight: lighter; margin-left: 10px;">내일배움 캠퍼 모두 파이팅 !!</p>
+                    </div>
+                    <div style="display: flex; flex-direction: row;">
+                        <a href=""><img class="box-profile"
+                                        src="https://blog.kakaocdn.net/dn/b0ZMMh/btq4eKTyBG4/aVgQqfsq543UByfJSaK0cK/img.jpg"></a>
+                        <p style="margin-left: 10px;">BoYoung</p>
+                        <p style="font-weight: lighter; margin-left: 10px;">내일배움 캠퍼 모두 파이팅 !!</p>
+                    </div>
                     <div style="display: flex; flex-direction: row;">
                         <a href=""><img class="box-profile"
                                         src="https://blog.kakaocdn.net/dn/b0ZMMh/btq4eKTyBG4/aVgQqfsq543UByfJSaK0cK/img.jpg"></a>
@@ -165,8 +232,8 @@
                     </div>
                 </div>
                 <!--                하단 댓글창-->
-                <div style="">
-                    <div style="margin-top: 2%; display: flex; flex-direction: row; justify-content: space-between; border-top: 1px solid #edebeb; height: 30px;">
+                <div>
+                    <div style="display: flex; flex-direction: row; justify-content: space-between; border-top: 1px solid #edebeb; height: 30px;">
                         <div style="margin-left: 10px;">
                             <span class="material-icons-outlined">favorite_border</span>
                             <span class="material-icons-outlined">mode_comment</span>
@@ -180,19 +247,21 @@
                         <span style="font-weight: bold">외 62,364명</span>이 좋아합니다
                     </div>
                     <div style="font-weight: lighter; font-size: 10px; text-align: left; margin-left: 10px;">1일전</div>
-                    <div style="margin-top: 10px; border-top: solid 1px #dbdbdb;">
-                        <input type="email" class="form-control"
-                               style="box-shadow: none; border: none; border-radius: 0px;" id="exampleFormControlInput1"
-                               placeholder="댓글 달기 ...">
+                    <!--댓글달기-->
+                    <div style="display:flex; flex-direction: row; align-items: center; height: 45px; margin-top: 10px; border-top: solid 1px #dbdbdb;">
+                        <span style="margin-left: 8px; margin-top: 7px;" class="material-symbols-outlined">mood</span>
+                        <input type="text" class="form-control"
+                               style="box-shadow: none; border: none; border-radius: 0px;  height: 45px; margin-top: 1px;" id="${post_id}"
+                               placeholder="댓글 달기 ..."/>
+                        <button id="comment-1" onclick="add_comment('${post_id}')"
+                                style="background-color: white; border: none; width: 50px;  height: 39px; margin-right: 8px; text-decoration: none; color: cornflowerblue; font-weight: bold;">
+                            <p>게시</p>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<button id="close-modal" class="close-area">
-    X
-</button>
 </div>
 <script src="../static/scripts/selfscript.js" rel="stylesheet" type="text/javascript"></script>
 </body>

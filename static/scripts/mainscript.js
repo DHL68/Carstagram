@@ -8,8 +8,14 @@ $(document).on('click', function () {
 // 모달 닫기
     $(".close-area").click(function () {
         $(".modal-overlay").fadeOut();
-        $('body').css("overflow", "scroll");
+        $('body').css("overflowY", "scroll");
     });
+});
+$(document).on('click', function (e) {
+    if ($(".modal-overlay").is(e.target)) {
+        $(".modal-overlay").fadeOut();
+        $('body').css("overflowY", "scroll");
+    };
 });
 
 // 팔로우 버튼 클릭시 팔로잉 변경
