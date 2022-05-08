@@ -51,7 +51,7 @@ function show_comment() {
                 console.log(post_id)
 
                 let temp_html = `
-                            <div class = "${post_id}"style="display: flex; flex-direction: row;">
+                            <div class = ""style="display: flex; flex-direction: row;">
                                 <a href=""><img class="box-profile"
                                                 src="https://blog.kakaocdn.net/dn/b0ZMMh/btq4eKTyBG4/aVgQqfsq543UByfJSaK0cK/img.jpg"></a>
                                 <p style="margin-left: 10px;">${post_id}</p>

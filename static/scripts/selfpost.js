@@ -1,10 +1,11 @@
-$(document).on('click', function () {
+// 게시글 업로드 모달
+
 // 모달 띄우기
-    $("#open-post-modal").click(function () {
-        $(".modal-overlay2").fadeIn();
-        $('body').css("overflow", "hidden");
-    });
+$("#open-post-modal").on('click', function () {
+    $(".modal-overlay2").fadeIn();
+    $('body').css("overflow", "hidden");
 });
+
 
 $(document).on('click', function (e) {
     if ($(".modal-overlay2").is(e.target)) {
@@ -14,51 +15,51 @@ $(document).on('click', function (e) {
     ;
 });
 
-$(document).on('click', function () {
+
 // 게시글 상세 모달 띄우기
+$(document).on('click', function () {
     $(".open-modal").click(function () {
         $(".comment-modal").fadeIn();
         $('body').css("overflow", "hidden");
     });
 });
+
 //모달 닫기
-$(document).on('click', function (e) {
-    if ($(".comment-modal").is(e.target)) {
-        $(".comment-modal").fadeOut();
-        $('body').css("overflowY", "scroll");
-    };
-});
+    $(document).on('click', function (e) {
+        if ($(".comment-modal").is(e.target)) {
+            $(".comment-modal").fadeOut();
+            $('body').css("overflowY", "scroll");
+        }
+        ;
+    });
 
 
-$(document).ready(function () {
-    // 페이지 로드 시 post_listing 에 대한 값을 불러온다
-    // bsCustomFileInput.init()
-    post_listing('bs-custom-file-input')
-    alert('안녕')
-})
+    $(document).ready(function () {
+        // 페이지 로드 시 post_listing 에 대한 값을 불러온다
+        // bsCustomFileInput.init()
+        post_listing()
+        alert('안녕')
+    })
 
 
-/* GET 요청 ajax 코드 */
-function post_listing() {
-    $.ajax({
-        type: "GET",
-        url: "/listing",
-        data: {},
-        success: function (response) {
-            let posts = JSON.parse(response['posts'])
+    /* GET 요청 ajax 코드 */
+    function post_listing() {
+        $.ajax({
+            type: "GET", url: "/listing", data: {}, success: function (response) {
+                let posts = JSON.parse(response['posts'])
 
-            for (let i = 0; i < posts.length; i++) {
-                let post_picture = posts[i]['post_pictures']
-                let post_comment = posts[i]['post_comments']
-                let post_pic = posts[i]['post_pic']
-                let post_id = posts[i]['_id']['$oid']
+                for (let i = 0; i < posts.length; i++) {
+                    let post_picture = posts[i]['post_pictures']
+                    let post_comment = posts[i]['post_comments']
+                    let post_pic = posts[i]['post_pic']
+                    let post_id = posts[i]['_id']['$oid']
 
 
-                let temp_html = `<button class="open-modal" style=" border: none; background: none;">
+                    let temp_html = `<button class="open-modal" id="" onclick="" style=" border: none; background: none;">
                                  <img class="profilepage-image" src="../static/${post_pic}">
                                  </button>`
-                let temp2_html = `
-                            <div id="modal-option" class="modal-overlay" style="">
+                    let temp2_html = `
+                            <div class="modal-overlay">
                                 <div id="modal-script" class="modal_body" style="">
                                     <div style="display: flex; flex-direction: row;">
                                         <img class="modal-image" src="../static/${post_pic}">
@@ -128,37 +129,36 @@ function post_listing() {
                                     </div>
                                 </div>
                             </div>`
-                $('.my-posts').append(temp_html)
-                $('.comment-modal').append(temp2_html)
+                    $('.my-posts').append(temp_html)
+                    $('.comment-modal').append(temp2_html)
+                }
             }
-        }
-    })
-}
+        })
+    }
 
 
-/* POST 요청 ajax 코드 */
-function post_posting() {
-    // 고유 id let 함수로 정의
-    let picture = $('#post_picture').val()
-    let comment = $('#post_comment').val()
+    /* POST 요청 ajax 코드 */
+    function post_posting() {
+        // 고유 id let 함수로 정의
+        let picture = $('#post_picture').val()
+        let comment = $('#post_comment').val()
+        let pic = $('#customFile')[0].files[0]
+        let form_data = new FormData()
 
-    let pic = $('#customFile')[0].files[0]
-    let form_data = new FormData()
+        form_data.append("picture_give", picture)
+        form_data.append("pic_give", pic)
+        form_data.append("comment_give", comment)
 
-    form_data.append("picture_give", picture)
-    form_data.append("pic_give", pic)
-    form_data.append("comment_give", comment)
-
-    $.ajax({
-        type: "POST",
-        url: "/posting",
-        data: form_data,
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            alert(response['msg'])
-            window.location.reload()
-        }
-    })
-}
+        $.ajax({
+            type: "POST",
+            url: "/posting",
+            data: form_data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (response) {
+                alert(response['msg'])
+                window.location.reload()
+            }
+        })
+    }

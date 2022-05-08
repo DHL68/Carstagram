@@ -1,17 +1,14 @@
 
-
-$(document).on('click',function () {
-// 모달 띄우기
-    $("#open-post-modal").click(function () {
-        $(".modal-overlay2").fadeIn();
-        $('body').css("overflow", "hidden");
-    });
+// 게시글 업로드 모달
+$("#open-post-modal").on('click', function () {
+    $(".modal-overlay2").fadeIn();
+    $('body').css("overflow", "hidden");
 });
 
 $(document).on('click',function (e) {
     if( $(".modal-overlay2").is(e.target)) {
         $(".modal-overlay2").fadeOut();
-        $('body').css("overflow", "scroll");
+        $('body').css("overflowY", "scroll");
     };
 });
 
