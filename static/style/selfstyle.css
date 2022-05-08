@@ -76,6 +76,21 @@ body {
 
 }
 
+.comment-area {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 450px;
+    max-height: 675px;
+    overflow-y: scroll;
+    -ms-overflow-style: none;
+}
+
+.comment-area::-webkit-scrollbar {
+    display: none;
+}
+
 .profilepage-image {
     width: 273px;
     height: 273px;
