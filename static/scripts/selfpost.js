@@ -80,7 +80,7 @@ function post_listing() {
                                             <!--                댓글창 상단 아래 피드설명란-->
                             
                                             <!--                댓글들-->
-                                            <div class="comment-area" style="display: flex; flex-direction: column;">
+                                            <div class="comment-area ${post_id}" style="display: flex; flex-direction: column;">
                                                 <div style="display: flex; flex-direction: row;">
                                                     <a href=""><img class="box-profile"
                                                                     src="https://file2.nocutnews.co.kr/newsroom/image/2021/08/12/202108121210585928_12.jpg"></a>
@@ -89,7 +89,7 @@ function post_listing() {
                                                     ${post_comment}
                                                     </p>
                                                 </div>
-                                                <div class = "${post_id}"style="display: flex; flex-direction: row;">
+                                                <div class = ""style="display: flex; flex-direction: row;">
                                                     <a href=""><img class="box-profile"
                                                                     src="https://blog.kakaocdn.net/dn/b0ZMMh/btq4eKTyBG4/aVgQqfsq543UByfJSaK0cK/img.jpg"></a>
                                                     <p style="margin-left: 10px;">user_id</p>

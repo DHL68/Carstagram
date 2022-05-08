@@ -77,7 +77,7 @@ body {
 
 .comment-area {
     background-color: white;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
     width: 450px;
     height: 675px;
     overflow-y: scroll;
