@@ -169,15 +169,20 @@ def register():
     return jsonify({'result': 'success'})
 
 
-@app.route('/check_dup', methods=['POST'])
-def check_info():
-    nickname_receive = request.form['nickname_give']
+@app.route('/check_email', methods=['POST'])
+def check_dub1():
     email_receive = request.form['email_give']
-
-    exists = bool(db.users.find_one({"nick": nickname_receive}))
     exist = bool(db.users.find_one({"email": email_receive}))
 
-    return jsonify({'result': 'success', 'exists': exists, 'exist': exist})
+    return jsonify({'result': 'success','exist': exist})
+
+
+@app.route('/check_nick', methods=['POST'])
+def check_dub2():
+    nickname_receive = request.form['nickname_give']
+    exists = bool(db.users.find_one({"nick": nickname_receive}))
+
+    return jsonify({'result': 'success', 'exists': exists})
 
 
 # [로그인 API]
