@@ -25,40 +25,40 @@ $(document).on('click', function () {
 });
 
 //모달 닫기
-    $(document).on('click', function (e) {
-        if ($(".comment-modal").is(e.target)) {
-            $(".comment-modal").fadeOut();
-            $('body').css("overflowY", "scroll");
-        }
-        ;
-    });
+$(document).on('click', function (e) {
+    if ($(".comment-modal").is(e.target)) {
+        $(".comment-modal").fadeOut();
+        $('body').css("overflowY", "scroll");
+    }
+    ;
+});
 
 
-    $(document).ready(function () {
-        // 페이지 로드 시 post_listing 에 대한 값을 불러온다
-        // bsCustomFileInput.init()
-        post_listing()
-        alert('안녕')
-    })
+$(document).ready(function () {
+    // 페이지 로드 시 post_listing 에 대한 값을 불러온다
+    // bsCustomFileInput.init()
+    post_listing()
+    alert('안녕')
+})
 
 
-    /* GET 요청 ajax 코드 */
-    function post_listing() {
-        $.ajax({
-            type: "GET", url: "/listing", data: {}, success: function (response) {
-                let posts = JSON.parse(response['posts'])
+/* GET 요청 ajax 코드 */
+function post_listing() {
+    $.ajax({
+        type: "GET", url: "/listing", data: {}, success: function (response) {
+            let posts = JSON.parse(response['posts'])
 
-                for (let i = 0; i < posts.length; i++) {
-                    let post_picture = posts[i]['post_pictures']
-                    let post_comment = posts[i]['post_comments']
-                    let post_pic = posts[i]['post_pic']
-                    let post_id = posts[i]['_id']['$oid']
+            for (let i = 0; i < posts.length; i++) {
+                let post_picture = posts[i]['post_pictures']
+                let post_comment = posts[i]['post_comments']
+                let post_pic = posts[i]['post_pic']
+                let post_id = posts[i]['_id']['$oid']
 
 
-                    let temp_html = `<button class="open-modal" id="" onclick="" style=" border: none; background: none;">
+                let temp_html = `<button class="open-modal" id="" onclick="" style=" border: none; background: none;">
                                  <img class="profilepage-image" src="../static/${post_pic}">
                                  </button>`
-                    let temp2_html = `
+                let temp2_html = `
                             <div class="modal-overlay">
                                 <div id="modal-script" class="modal_body" style="">
                                     <div style="display: flex; flex-direction: row;">
@@ -68,8 +68,8 @@ $(document).on('click', function () {
                                             <div style="display: flex; flex-direction: row; justify-content: space-between; width: 450px; height: 55px;border-bottom: 1px solid #edebeb">
                                                 <div style="display: flex; flex-direction: row;">
                                                     <a href=""><img class="box-profile"
-                                                                    src="https://file2.nocutnews.co.kr/newsroom/image/2021/08/12/202108121210585928_12.jpg"></a>
-                                                    <p style="margin-left: 10px;">Kang_Jun</p>
+                                                                    src="http://kaihuastudio.com/common/img/default_profile.png"></a>
+                                                    <p style="margin-left: 10px;">user_id</p>
                                                 </div>
                                                 <div>
                                                     <button id="" class="btn-open-popup"
@@ -84,17 +84,11 @@ $(document).on('click', function () {
                                             <div class="comment-area ${post_id}" style="display: flex; flex-direction: column;">
                                                 <div style="display: flex; flex-direction: row;">
                                                     <a href=""><img class="box-profile"
-                                                                    src="https://file2.nocutnews.co.kr/newsroom/image/2021/08/12/202108121210585928_12.jpg"></a>
-                                                    <p style="margin-left: 10px;">Kang_Jun</p>
+                                                                    src="http://kaihuastudio.com/common/img/default_profile.png"></a>
+                                                    <p style="margin-left: 10px;">user_id</p>
                                                     <p style="margin-left: 5px; text-align: left"><span style="font-weight: lighter; color: dodgerblue;">${post_picture}</span><br>
                                                     ${post_comment}
                                                     </p>
-                                                </div>
-                                                <div class = ""style="display: flex; flex-direction: row;">
-                                                    <a href=""><img class="box-profile"
-                                                                    src="https://blog.kakaocdn.net/dn/b0ZMMh/btq4eKTyBG4/aVgQqfsq543UByfJSaK0cK/img.jpg"></a>
-                                                    <p style="margin-left: 10px;">user_id</p>
-                                                    <p style="font-weight: lighter; margin-left: 10px;">내일배움 캠퍼 모두 파이팅 !!</p>
                                                 </div>
                                             </div>
                                             <!--                하단 댓글창-->
@@ -129,36 +123,36 @@ $(document).on('click', function () {
                                     </div>
                                 </div>
                             </div>`
-                    $('.my-posts').append(temp_html)
-                    $('.comment-modal').append(temp2_html)
-                }
+                $('.my-posts').append(temp_html)
+                $('.comment-modal').append(temp2_html)
             }
-        })
-    }
+        }
+    })
+}
 
 
-    /* POST 요청 ajax 코드 */
-    function post_posting() {
-        // 고유 id let 함수로 정의
-        let picture = $('#post_picture').val()
-        let comment = $('#post_comment').val()
-        let pic = $('#customFile')[0].files[0]
-        let form_data = new FormData()
+/* POST 요청 ajax 코드 */
+function post_posting() {
+    // 고유 id let 함수로 정의
+    let picture = $('#post_picture').val()
+    let comment = $('#post_comment').val()
+    let pic = $('#customFile')[0].files[0]
+    let form_data = new FormData()
 
-        form_data.append("picture_give", picture)
-        form_data.append("pic_give", pic)
-        form_data.append("comment_give", comment)
+    form_data.append("picture_give", picture)
+    form_data.append("pic_give", pic)
+    form_data.append("comment_give", comment)
 
-        $.ajax({
-            type: "POST",
-            url: "/posting",
-            data: form_data,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function (response) {
-                alert(response['msg'])
-                window.location.reload()
-            }
-        })
-    }
+    $.ajax({
+        type: "POST",
+        url: "/posting",
+        data: form_data,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            alert(response['msg'])
+            window.location.reload()
+        }
+    })
+}

@@ -62,7 +62,7 @@ def comment():
 #
 @app.route('/listing', methods=['GET'])
 def post_listing():
-    posts = dumps(list(db.post.find({})))
+    posts = dumps(list(db.posts.find({})))
 
     return jsonify({'posts': posts})
 
@@ -95,7 +95,7 @@ def post_posting():
         'post_comments': comment_receive,
         'post_pic': f'{filename}.{extension}'
     }
-    db.post.insert_one(doc)
+    db.posts.insert_one(doc)
 
     return jsonify({'msg': '업로드 완료!'})
 
