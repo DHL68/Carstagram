@@ -8,20 +8,16 @@ function sign_up() {
     let userpw = $("#userpw").val()
 
     if (useremail == "") {
-        $("#help-email-exist").text("이메일을 입력해주세요.")
-        $("#useremail").focus()
+        alert("이메일을 입력해주세요.")
         return;
     } else if (username == "") {
-        $("#help-name-exist").text("이름을 입력해주세요.")
-        $("#username").focus()
+        alert("이름을 입력해주세요.")
         return;
     } else if (usernick == "") {
-        $("#help-nick-exist").text("닉네임을 입력해주세요.")
-        $("#usernick").focus()
+        alert("닉네임을 입력해주세요.")
         return;
     } else if (userpw == "") {
-        $("#help-pw-exist").text("비밀번호를 입력해주세요.")
-        $("#userpw").focus()
+        alert("비밀번호를 입력해주세요.")
         return;
     }
 
@@ -54,6 +50,7 @@ function sign_up() {
     })
 }
 
+<<<<<<< HEAD
 // function remove_dup() {
 //     if ($("#help-email-exist").text == "중복된 닉네임입니다.") {
 //         // $("#help-email-exist").remove();
@@ -78,26 +75,26 @@ function check_dup() {
     }
     $("#help-id").addClass("is-loading")
 =======
+=======
+>>>>>>> origin/personal_branch
 // 아이디 중복확인 클라이언트
-function check_dup() {
+function check_email() {
 
+    let useremail = $("#useremail").val()
 
 >>>>>>> personal_branch
     $.ajax({
         type: "POST",
-        url: "/check_dup",
+        url: "/check_email",
         data: {
-            nickname_give: $('#usernick').val(),
-            email_give: $('#useremail').val()
+            email_give: useremail
         },
         success: function (response) {
-
+        console.log(response)
             if (response["exist"]) {
-                $("#help-email-exist").text("중복된 이메일입니다.");
-                $("#useremail").focus()
-            } else if (response["exists"]) {
-                $("#help-nick-exist").text("중복된 닉네임입니다.")
-                $("#usernick").focus()
+                alert("중복된 이메일입니다.")
+            } else if (useremail == "") {
+                alert("이메일을 입력해주세요.")
             } else {
                 alert("사용가능한 정보입니다.")
             }
@@ -160,6 +157,7 @@ function sign_up() {
 }
 =======
 
+<<<<<<< HEAD
 // // 회원가입 클라이언트
 //     function sign_up_save() {
 //         let useremail = $("#input-useremail").val()
@@ -210,3 +208,33 @@ function sign_up() {
 //
 //     }
 >>>>>>> personal_branch
+=======
+function check_nick() {
+
+    let usernick = $("#usernick").val()
+
+    $.ajax({
+        type: "POST",
+        url: "/check_nick",
+        data: {
+            nickname_give: usernick
+        },
+        success: function (response) {
+
+            if (response["exists"]) {
+                alert("중복된 닉네임입니다.")
+            } else if (usernick == "") {
+                alert("닉네임을 입력해주세요.")
+            } else {
+                alert("사용가능한 정보입니다.")
+            }
+        }
+    });
+}
+// $("#help-email-exist").text("중복된 이메일입니다.");
+//                 $("#useremail").focus()
+// $("#help-nick-exist").text("중복된 닉네임입니다.")
+//                 $("#usernick").focus()
+
+
+>>>>>>> origin/personal_branch

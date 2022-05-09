@@ -177,6 +177,7 @@ def register():
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 
 # 아이디 중복확인 서버
@@ -189,13 +190,27 @@ def check_dup():
 @app.route('/check_dup', methods=['POST'])
 def check_info():
     nickname_receive = request.form['nickname_give']
+=======
+@app.route('/check_email', methods=['POST'])
+def check_dub1():
+>>>>>>> origin/personal_branch
     email_receive = request.form['email_give']
-
-    exists = bool(db.users.find_one({"nick": nickname_receive}))
     exist = bool(db.users.find_one({"email": email_receive}))
 
+<<<<<<< HEAD
     return jsonify({'result': 'success', 'exists': exists, 'exist': exist})
 >>>>>>> personal_branch
+=======
+    return jsonify({'result': 'success','exist': exist})
+
+
+@app.route('/check_nick', methods=['POST'])
+def check_dub2():
+    nickname_receive = request.form['nickname_give']
+    exists = bool(db.users.find_one({"nick": nickname_receive}))
+
+    return jsonify({'result': 'success', 'exists': exists})
+>>>>>>> origin/personal_branch
 
 
 # [로그인 API]
@@ -212,11 +227,17 @@ def api_login():
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
     # id, 암호화된pw을 가지고 해당 유저를 찾습니다.
 <<<<<<< HEAD
+<<<<<<< HEAD
     result = db.users.find_one({'id': name_receive, 'pw': pw_hash})
 
 =======
     result = db.users.find_one({'email': email_receive, 'pw': pw_hash})
 >>>>>>> personal_branch
+=======
+
+    result = db.users.find_one({'email': email_receive, 'pw': pw_hash})
+
+>>>>>>> origin/personal_branch
     # 찾으면 JWT 토큰을 만들어 발급합니다.
 
     if result is not None:
@@ -318,3 +339,4 @@ def api_valid():
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
+

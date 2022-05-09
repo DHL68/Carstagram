@@ -44,11 +44,11 @@
                 <div class="form-floating mb-3 field has-addons">
                     <input type="email" class="form-control"
                            style="font-size: 14px; height: 24px; width: 188px;"
-                           id="useremail"
+                           id="useremail" onclick="remove_dup()"
                            placeholder="name@example.com">
                     <label for="useremail" style="font-size: 14px;padding: 4px 10px">이메일 주소</label>
                     <div id="btn-check-dup" class="control">
-                        <button class="button is-sparta" style="height: 34px;" onclick="check_dup()">중복확인</button>
+                        <button class="button is-sparta" style="height: 34px;" onclick="check_email()">중복확인</button>
                     </div>
                 </div>
                 <p class="help-email" id="help-email-exist"></p>
@@ -59,7 +59,7 @@
                            placeholder="nickname..">
                     <label for="usernick" style="font-size: 14px;padding: 4px 10px">닉네임</label>
                     <div id="btn-check-dup" class="control">
-                        <button class="button is-sparta" style="height: 34px;" onclick="check_dup()">중복확인</button>
+                        <button class="button is-sparta" style="height: 34px;" onclick="check_nick()">중복확인</button>
                     </div>
                 </div>
                 <p class="help-nick" id="help-nick-exist"></p>
