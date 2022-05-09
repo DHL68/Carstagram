@@ -22,12 +22,6 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 
 
-
-
-
-
-
-
 #post 댓글작성
 
 @app.route("/comment", methods=["POST"])
@@ -114,6 +108,7 @@ def home():
         # 암호화되어있는 token의 값을 우리가 사용할 수 있도록 디코딩(암호화 풀기)해줍니다!
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({"id": payload['id']})
+
         return render_template('main.html', nickname=user_info["nick"])
     # 만약 해당 token의 로그인 시간이 만료되었다면, 아래와 같은 코드를 실행합니다.
     except jwt.ExpiredSignatureError:
@@ -181,14 +176,12 @@ def register():
 def api_login():
     id_receive = request.form['useremail_give']
     pw_receive = request.form['password_give']
-
     # 회원가입 때와 같은 방법으로 pw를 암호화합니다.
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
-
     # id, 암호화된pw을 가지고 해당 유저를 찾습니다.
     result = db.users.find_one({'id': id_receive, 'pw': pw_hash})
-
     # 찾으면 JWT 토큰을 만들어 발급합니다.
+
     if result is not None:
         # JWT 토큰에는, payload와 시크릿키가 필요합니다.
         # 시크릿키가 있어야 토큰을 디코딩(=암호화 풀기)해서 payload 값을 볼 수 있습니다.
@@ -233,7 +226,6 @@ def api_valid():
         return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
     except jwt.exceptions.DecodeError:
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
-
 
 # 회원가입 서버
 @app.route('/sign_up/save', methods=['POST'])

@@ -16,12 +16,19 @@
     <!-- @media 나중에 -->
     <link rel="stylesheet" media="screen and (max-width: 768px)" href="/style/login_style.css"/>
     <!-- JS -->
-<!--    <script src="../static/script/login.js"></script>-->
+    <!--    <script src="../static/script/login.js"></script>-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <title>Carstagram</title>
     <script>
+        // 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
+        function logout() {
+            $.removeCookie('mytoken');
+            alert('로그아웃!')
+            window.location.href = '/login'
+        }
+
         // 로그인 클라이언트
         function sign_in() {
             let useremail = $("#useremail").val()
@@ -44,7 +51,7 @@
             }
             $.ajax({
                 type: "POST",
-                url: "/sign_in",
+                url: "/api/login",
                 data: {
                     useremail_give: useremail,
                     password_give: password
@@ -68,14 +75,14 @@
 <div style="display: flex; flex-direction: column; align-items: center; width: 100%; animation: showText 2s;">
     <div style="padding: 20px ;text-align: center; width: 350px; height: 400px; margin-top: 200px; opacity:0.8; background: white">
         <div style="padding-top: 30px; padding-bottom: 40px"><img style="width: 190px; height: 70px"
-                                                                  src="/static/image/Carstagram_logo.png">
+                                                                  src="/static/image/Carstagram_rogo.png">
         </div>
         <!--로그인 폼 레이아웃-->
         <div style="font-weight: bold; color: gray;padding-bottom: 20px"> 친구들의 사진과 동영상을 보려면 로그인하세요.</div>
         <div>
             <div class="form-floating mb-3">
                 <input type="email" class="form-control" style="font-size: 14px; width: 258px; height: 36px; "
-                       id="useremail" placeholder="name@example.com">
+                       id="useremail">
                 <label for="useremail" style="font-size: 14px;padding: 4px 10px">이메일 주소</label>
                 <p class="help-email-login" id="help-email-login"></p>
             </div>
@@ -83,19 +90,21 @@
         <div>
             <div class="form-floating mb-3">
                 <input type="password" class="form-control" style="font-size: 14px; width: 258px; height: 36px;"
-                       id="userpw"
-                       placeholder="name@example.com">
+                       id="userpw">
                 <label for="userpw" style="font-size: 14px;padding: 4px 10px">비밀번호</label>
                 <p class="help-password-login" id="help-password-login"></p>
             </div>
         </div>
-        <button id="" class="btn btn-primary" style="width: 258px; height: 36px; padding: 4px 10px" onclick="sign_in()">로그인</button>
+        <button id="" class="btn btn-primary" style="width: 258px; height: 36px; padding: 4px 10px" onclick="sign_in()">
+            로그인
+        </button>
     </div>
     <div style="padding: 20px ;text-align: center; width: 350px; height: 65px; margin-top: 30px; opacity:0.8; background: white">
         <div> 계정이 없으신가요? <a href="/sign_up">회원가입</a></div>
     </div>
-
 </div>
+
+
 <!-- Optional JavaScript; choose one of the two! -->
 <!--<script>-->
 <!--    $('#login_button').click(function () {-->
