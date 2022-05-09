@@ -3,7 +3,7 @@ from pymongo import MongoClient
 # JWT 패키지를 사용합니다. (설치해야할 패키지 이름: PyJWT)
 import jwt
 # 토큰에 만료시간을 줘야하기 때문에, datetime 모듈도 사용합니다.
-import datetime
+from datetime import datetime
 # 회원가입 시엔, 비밀번호를 암호화하여 DB에 저장해두는 게 좋습니다.
 # 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 import hashlib
@@ -17,6 +17,8 @@ app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 
 client = MongoClient('localhost', 27017)
 db = client.Carstagram
+
+SECRET_KEY = 'SPARTA'
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
@@ -63,36 +65,39 @@ def post_listing():
 #
 @app.route('/posting', methods=['POST'])
 def post_posting():
-    picture_receive = request.form["picture_give"]
-    comment_receive = request.form["comment_give"]
+    token_receive = request.cookies.get('mytoken')
+    try:
+        picture_receive = request.form["picture_give"]
+        comment_receive = request.form["comment_give"]
 
-    post_pic = request.files["pic_give"]
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"username": payload["id"]})
 
-    # 새로운 날짜 이름 만들기
-    today = datetime.now()
-    mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
+        post_pic = request.files["pic_give"]
 
-    filename = f'post_pic-{mytime}'
+        # 새로운 날짜 이름 만들기
+        today = datetime.now()
+        mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
 
-    # 확장자 뺴기
-    extension = post_pic.filename.split('.')[-1]
+        filename = f'post_pic-{mytime}'
 
-    # 새로운 이름으로 저장하기
-    save_to = f'static/{filename}.{extension}'
-    post_pic.save(save_to)
+        # 확장자 뺴기
+        extension = post_pic.filename.split('.')[-1]
 
-    doc = {
-        'post_pictures': picture_receive,
-        'post_comments': comment_receive,
-        'post_pic': f'{filename}.{extension}'
-    }
-    db.posts.insert_one(doc)
+        # 새로운 이름으로 저장하기
+        save_to = f'static/{filename}.{extension}'
+        post_pic.save(save_to)
 
-    return jsonify({'msg': '업로드 완료!'})
-
-
-
-SECRET_KEY = 'SPARTA'
+        doc = {
+            'post_username': user_info["id"],
+            'post_pictures': picture_receive,
+            'post_comments': comment_receive,
+            'post_pic': f'{filename}.{extension}'
+        }
+        db.posts.insert_one(doc)
+        return jsonify({"result": "success", 'msg': '포스팅 성공'})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return jsonify({'msg': '업로드 완료!'})
 
 
 #################################
@@ -223,6 +228,41 @@ def api_valid():
         return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
     except jwt.exceptions.DecodeError:
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
+
+
+
+#
+# 좋아요요
+#
+@app.route('/update_like', methods=['POST'])
+def update_like():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 좋아요 수 변경
+
+        # DB에 저장할 때는 1) 누가 2) 어떤 포스트에 3) 어떤 반응을 남겼는지 세 정보만 넣으면 되고,
+        # 좋아요인지, 취소인지에 따라 해당 도큐먼트를 insert_one()을 할지 delete_one()을 할지 결정해주어야합니다.
+        user_info = db.posts.find_one({"id": payload["id"]})
+        post_id_receive = request.form["post_id_give"]
+        type_receive = request.form["type_give"]
+        action_receive = request.form["action_give"]
+        doc = {
+            "post_id": post_id_receive,
+            "username": user_info["username"],
+            "type": type_receive
+        }
+        if action_receive == "like":
+            db.likes.insert_one(doc)
+        else:
+            db.likes.delete_one(doc)
+
+        # 좋아요 컬렉션을 업데이트한 이후에는 해당 포스트에 해당 타입의 반응이 몇 개인지를 세서 보내주어야합니다.
+        count = db.likes.count_documents({"post_id": post_id_receive, "type": type_receive})
+        return jsonify({"result": "success", 'msg': 'updated', "count": count})
+
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 
 if __name__ == '__main__':

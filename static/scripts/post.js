@@ -18,7 +18,7 @@ $(document).ready(function () {
     // 페이지 로드 시 post_listing 에 대한 값을 불러온다
     // bsCustomFileInput.init()
     post_listing('bs-custom-file-input');
-    alert('안녕');
+    // alert('안녕');
 })
 
 
@@ -36,10 +36,11 @@ function post_listing() {
                 let post_comment = posts[i]['post_comments']
                 let post_pic = posts[i]['post_pic']
                 let post_id = posts[i]['_id']['$oid']
+                let class_heart = posts[i]['heart_by_me'] ? "fa-heart" : "fa-heart-o"
 
 
                 let temp_html =`
-                            <div class="feed-box" id="feed_box">
+                            <div class="feed-box" id="${post_id["_id"]}">
                                 <!--                상단의 이미지와 이름 그리고 ''' 아이콘-------------------------------------------------->
                                 <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 2%; margin-left: 1%; margin-bottom: 2%;">
                                     <div style="display: flex; align-items: center">
@@ -79,11 +80,21 @@ function post_listing() {
                                 </div>
                                 <!--                사진 아래 아이콘--------------------------------------------------------------------->
                                 <div style="margin-top: 2%; display: flex; flex-direction: row; justify-content: space-between;">
-                                    <div style="margin-left: 10px;">
-                                        <button class="like-btn" onclick="like()"><span class="material-icons-outlined">favorite_border</span></button>
-                                        <span class="material-icons-outlined">mode_comment</span>
-                                        <span class="material-icons-outlined">send</span>
-                                    </div>
+<!--                                    <div style="margin-left: 10px;">-->
+<!--                                        <button class="like-btn" onclick="like()"><span class="material-icons-outlined">favorite_border</span></button>-->
+<!--                                        <span class="material-icons-outlined">mode_comment</span>-->
+<!--                                        <span class="material-icons-outlined">send</span>-->
+<!--                                    </div>-->
+<!--                                    좋아요 기능 -->
+<!--                                    <nav class="level is-mobile">-->
+                                        <div class="level-left">
+                                            <a class="level-item is-sparta" aria-label="heart" onclick="toggle_like('${post_id['_id']}', 'heart')">
+                                                <span class="icon is-small"><i class="fa ${class_heart}"
+                                                aria-hidden="true"></i></span>&nbsp;<span class="like-num">${num2str(post_id["count_heart"])}</span>
+                                            </a>
+                                        </div>
+<!--                                    </nav>-->
+                                    
                                     <div style="margin-right: 10px;">
                                         <span class="material-icons-outlined">bookmark_border</span>
                                     </div>
@@ -104,12 +115,7 @@ function post_listing() {
                                     <!--                댓글모두보기-->
                                     <!--<div style="font-weight: lighter; color: grey">댓글 3,243개 모두보기</div>-->
                                     <!--                댓글-->
-<<<<<<< HEAD
                                     <div class="${post_id}">
-=======
-                                    <div id="" class="${post_id}">
->>>>>>> origin/personal_branch
-                    
                                     </div>
                                     <!--                몇일,시간,분전-->
                                     <div style="font-weight: lighter; font-size: 10px;">3시간전</div>
@@ -158,4 +164,63 @@ function post_posting() {
             window.location.reload()
         }
     })
+}
+
+//
+// 좋아요
+//
+function toggle_like(post_id, type) {
+    console.log(post_id, type)
+    let $a_like = $(`#${post_id} a[aria-label='${type}']`)
+    let $i_like = $a_like.find("i")
+    let class_s = {"heart": "fa-heart"}
+    let class_o = {"heart": "fa-heart-o"}
+    if ($i_like.hasClass(class_s[type])) {
+        $.ajax({
+            type: "POST",
+            url: "/update_like",
+            data: {
+                post_id_give: post_id,
+                type_give: type,
+                action_give: "unlike"
+            },
+            success: function (response) {
+                console.log("unlike")
+                $i_like.addClass(class_o[type]).removeClass(class_s[type])
+                $a_like.find("span.like-num").text(num2str(response["count"]))
+            }
+        })
+    } else {
+        $.ajax({
+            type: "POST",
+            url: "/update_like",
+            data: {
+                post_id_give: post_id,
+                type_give: type,
+                action_give: "like"
+            },
+            success: function (response) {
+                console.log("like")
+                $i_like.addClass(class_s[type]).removeClass(class_o[type])
+                $a_like.find("span.like-num").text(num2str(response["count"]))
+            }
+        })
+
+    }
+}
+
+//
+// 좋아요 제한
+//
+function num2str(count) {
+    if (count > 10000) {
+        return parseInt(count / 1000) + "k"
+    }
+    if (count > 500) {
+        return parseInt(count / 100) / 10 + "k"
+    }
+    if (count == 0) {
+        return ""
+    }
+    return count
 }
