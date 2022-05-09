@@ -34,7 +34,7 @@ def home():
     try:
         # 암호화되어있는 token의 값을 우리가 사용할 수 있도록 디코딩(암호화 풀기)해줍니다!
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.user.find_one({"id": payload['id']})
+        user_info = db.users.find_one({"id": payload['id']})
         return render_template('main.html', nickname=user_info["nick"])
     # 만약 해당 token의 로그인 시간이 만료되었다면, 아래와 같은 코드를 실행합니다.
     except jwt.ExpiredSignatureError:
@@ -48,8 +48,8 @@ def login():
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
 
-@app.route('/login2')
-def login_main():
+@app.route('/main')
+def main():
     msg = request.args.get("msg")
     return render_template('main.html', msg=msg)
 
@@ -77,7 +77,7 @@ def register():
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
     doc = {'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive, 'email': email_receive}
 
-    db.user.insert_one(doc)
+    db.users.insert_one(doc)
 
     return jsonify({'result': 'success'})
 
@@ -101,7 +101,7 @@ def api_login():
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
 
     # id, 암호화된pw을 가지고 해당 유저를 찾습니다.
-    result = db.user.find_one({'id': id_receive, 'pw': pw_hash})
+    result = db.users.find_one({'id': id_receive, 'pw': pw_hash})
 
     # 찾으면 JWT 토큰을 만들어 발급합니다.
     if result is not None:
@@ -141,7 +141,7 @@ def api_valid():
 
         # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
         # 여기에선 그 예로 닉네임을 보내주겠습니다.
-        userinfo = db.user.find_one({'id': payload['id']}, {'_id': 0})
+        userinfo = db.users.find_one({'id': payload['id']}, {'_id': 0})
         return jsonify({'result': 'success', 'nickname': userinfo['nick']})
     except jwt.ExpiredSignatureError:
         # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
@@ -164,7 +164,7 @@ def sign_up():
         "profile_pic_real": "profile_pics/profile_placeholder.png",  # 프로필 사진 기본 이미지
         "profile_info": ""  # 프로필 한 마디
     }
-    db.user.insert_one(doc)
+    db.users.insert_one(doc)
     return jsonify({'result': 'success'})
 
 
@@ -178,7 +178,7 @@ def sign_in():
     print(useremail_receive)
 
     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
-    result = db.user.find_one({'useremail': useremail_receive, 'password': pw_hash})
+    result = db.users.find_one({'useremail': useremail_receive, 'password': pw_hash})
     # result = db.user.find({})
 
     if result is not None:

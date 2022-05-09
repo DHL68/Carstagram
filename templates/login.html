@@ -26,7 +26,6 @@
         function sign_in() {
             let useremail = $("#useremail").val()
             let password = $("#userpw").val()
-            console.log(useremail)
 
             if (useremail == "") {
                 $("#help-email-login").text("아이디를 입력해주세요.")
@@ -55,7 +54,7 @@
                     if (response['result'] == 'success') {
                         $.cookie('mytoken', response['token'], {path: '/'});
                         console.log(response)
-                        window.location.replace('/login_main')
+                        window.location.replace('/main')
                     } else {
                         alert(response['msg'])
                     }
