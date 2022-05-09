@@ -15,7 +15,8 @@ $(document).on('click', function (e) {
     if ($(".modal-overlay").is(e.target)) {
         $(".modal-overlay").fadeOut();
         $('body').css("overflowY", "scroll");
-    };
+    }
+    ;
 });
 
 // 팔로우 버튼 클릭시 팔로잉 변경
@@ -63,8 +64,19 @@ function add_comment(post_id) {
     })
 }
 
+<<<<<<< HEAD
 // 동기 비동기 콜에 대해서 연구
 // 렌더링 한 다음의 호출 방법에 대해서 연구(메소드)
+=======
+// 로그아웃 함수
+// 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
+function logout() {
+    $.removeCookie('mytoken');
+    alert('로그아웃!')
+    window.location.href = '/login'
+}
+
+>>>>>>> develop_branch
 function show_comment() {
 <<<<<<< HEAD:static/scripts/mainscripts.js
 =======
