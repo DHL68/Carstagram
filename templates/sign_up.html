@@ -12,9 +12,9 @@
     <!-- Jquery -->
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <!--    CSS-->
-    <link href="/static/style/sign_up_style.css" rel="stylesheet">
+    <link href="../static/style/sign_up_style.css" rel="stylesheet">
     <!-- @media 나중에 -->
-    <link rel="stylesheet" media="screen and (max-width: 768px)" href="/static/style/sign_up_style.css"/>
+    <link rel="stylesheet" media="screen and (max-width: 768px)" href="../static/style/sign_up_style.css"/>
     <!-- JS -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
@@ -22,18 +22,16 @@
     <title>회원 가입</title>
 </head>
 <!--바디 레이아웃-->
-<body style="background-image: linear-gradient(70deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)), url(/static/img/backgroundimg.jpg);">
+<body style="background-image: linear-gradient(70deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)), url(/static/image/backgroundimg.jpg);">
 
 
-<div style="display: flex; flex-direction: column; align-items: center; width: 100%;">
+<div style="display: flex; flex-direction: column; align-items: center; width: 100%; animation: showText 2s;">
     <div style="display: flex; flex-direction: row; padding: 10%; margin-right: 8%;">
         <!--회원가입 레이아웃-->
         <div>
             <!--        회원가인 폼 박스-->
-            <div
-                    style="padding: 20px ;text-align: center; width: 350px; height: 500px; margin-top: -20%;background-color: white; opacity: 0.8;">
-                <div style="padding-top: 30px;padding-bottom: 40px"><img style="width: 190px; height:70px"
-                                                                         src="/static/img/Carstagram_logo.png">
+            <div style="padding: 20px ;text-align: center; width: 350px; height: 500px; margin-top: -10%; margin-left: 100px; background-color: white; opacity: 0.8;">
+                <div style="padding-top: 30px;padding-bottom: 40px"><img style="width: 190px; height:70px" src="/static/image/Carstagram_logo.png">
                 </div>
 
                 <div style="font-weight: bold; color: gray;padding-bottom: 20px"> 친구들의 사진과 동영상을 보려면 가입하세요.</div>
@@ -80,60 +78,16 @@
             </div>
             <!--    로그인 페이지 이동 박스-->
             <div
-                    style="padding: 20px ;text-align: center; width: 350px; height: 70px; margin-top: 30px; background:white;opacity: 0.8;">
+                    style="padding: 20px ;text-align: center; width: 350px; height: 70px; margin-top: 30px; margin-left: 100px; background:white;opacity: 0.8;">
                 <div> 계정이 있으신가요? <a href="/login">로그인</a></div>
             </div>
         </div>
     </div>
 </div>
 
-
-<!--&lt;!&ndash; Optional JavaScript; choose one of the two! &ndash;&gt;-->
-<!--<script>-->
-<!--    $('#join_button').click(function () {-->
-
-<!--        let email = $('#input_email').val();-->
-<!--        let password = $('#input_password').val();-->
-<!--        let nickname = $('#input_nickname').val();-->
-<!--        let name = $('#input_name').val();-->
-
-<!--        console.log(email, password, nickname, name);-->
-
-<!--        $.ajax({-->
-<!--            url: "/user/join",-->
-<!--            data: {-->
-<!--                email: email,-->
-<!--                password: password,-->
-<!--                nickname: nickname,-->
-<!--                name: name-->
-<!--            },-->
-<!--            method: "POST",-->
-<!--            success: function (data) {-->
-<!--                console.log("성공");-->
-<!--                alert("회원가입 성공했습니다. 로그인해주세요.");-->
-<!--                location.replace('/user/login');-->
-
-<!--            },-->
-<!--            error: function (request, status, error) {-->
-<!--                console.log("에러");-->
-<!--            },-->
-<!--            complete: function () {-->
-<!--                console.log("완료");-->
-<!--            }-->
-<!--        });-->
-<!--    });-->
-<!--</script>-->
-
-
 <!-- Option 1: Bootstrap Bundle with Popper -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
         crossorigin="anonymous"></script>
-
-<!-- Option 2: Separate Popper and Bootstrap JS -->
-<!--
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
--->
 </body>
 </html>

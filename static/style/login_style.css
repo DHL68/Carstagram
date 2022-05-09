@@ -10,3 +10,15 @@
 .help-password-login {
     margin-right: 30px;
 }
+
+@keyframes showText {
+    from {
+        transform: translate(0px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(0px);
+        opacity: 1;
+    }
+}
