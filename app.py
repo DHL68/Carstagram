@@ -8,8 +8,6 @@ import datetime
 # 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 import hashlib
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
-from werkzeug.utils import secure_filename
-from datetime import datetime, timedelta
 from bson.json_util import dumps
 
 app = Flask(__name__)
@@ -22,12 +20,6 @@ db = client.Carstagram
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
-
-
-
-
-
-
 
 
 #post 댓글작성
@@ -183,10 +175,8 @@ def register():
 def api_login():
     id_receive = request.form['useremail_give']
     pw_receive = request.form['password_give']
-
     # 회원가입 때와 같은 방법으로 pw를 암호화합니다.
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
-
     # id, 암호화된pw을 가지고 해당 유저를 찾습니다.
     result = db.users.find_one({'id': id_receive, 'pw': pw_hash})
 
@@ -236,7 +226,6 @@ def api_valid():
     except jwt.exceptions.DecodeError:
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
 
-
 # 회원가입 서버
 @app.route('/sign_up/save', methods=['POST'])
 def sign_up():
@@ -253,33 +242,6 @@ def sign_up():
     }
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
-
-
-# 로그인서버
-@app.route('/sign_in', methods=['POST'])
-def sign_in():
-    # 로그인
-
-    useremail_receive = request.form['useremail_give']
-    password_receive = request.form['password_give']
-    print(useremail_receive)
-
-    pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
-    result = db.users.find_one({'useremail': useremail_receive, 'password': pw_hash})
-    # result = db.user.find({})
-
-    if result is not None:
-        payload = {
-            'id': useremail_receive,
-            'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
-        }
-        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-
-        return jsonify({'result': 'success', 'token': token})
-    # 찾지 못하면
-    else:
-        return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
-
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
