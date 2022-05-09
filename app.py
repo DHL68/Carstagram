@@ -8,8 +8,6 @@ import datetime
 # 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 import hashlib
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
-from werkzeug.utils import secure_filename
-from datetime import datetime, timedelta
 from bson.json_util import dumps
 
 app = Flask(__name__)
@@ -253,32 +251,6 @@ def sign_up():
     }
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
-
-
-# 로그인서버
-@app.route('/sign_in', methods=['POST'])
-def sign_in():
-    # 로그인
-
-    useremail_receive = request.form['useremail_give']
-    password_receive = request.form['password_give']
-    print(useremail_receive)
-
-    pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
-    result = db.users.find_one({'useremail': useremail_receive, 'password': pw_hash})
-    # result = db.user.find({})
-
-    if result is not None:
-        payload = {
-            'id': useremail_receive,
-            'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
-        }
-        token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-
-        return jsonify({'result': 'success', 'token': token})
-    # 찾지 못하면
-    else:
-        return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
 
 if __name__ == '__main__':
