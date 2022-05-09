@@ -16,13 +16,20 @@ $(document).on('click', function (e) {
 });
 
 
-// 게시글 상세 모달 띄우기
-$(document).on('click', function () {
-    $(".open-modal").click(function () {
+// // 게시글 상세 모달 띄우기
+// $(document).on('click', function () {
+//     $(".open-modal").click(function () {
+//         $(".comment-modal").fadeIn();
+//         $('body').css("overflow", "hidden");
+//     });
+// });
+
+function openModal(i) {
+   $(`.open-modal-${i}`).click(function () {
         $(".comment-modal").fadeIn();
         $('body').css("overflow", "hidden");
     });
-});
+}
 
 //모달 닫기
 $(document).on('click', function (e) {
@@ -55,7 +62,7 @@ function post_listing() {
                 let post_id = posts[i]['_id']['$oid']
 
 
-                let temp_html = `<button class="open-modal" id="" onclick="" style=" border: none; background: none;">
+                let temp_html = `<button class="open-modal-${i}" onclick="openModal(${i})" style=" border: none; background: none;">
                                  <img class="profilepage-image" src="../static/${post_pic}">
                                  </button>`
                 let temp2_html = `

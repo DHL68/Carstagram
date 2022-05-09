@@ -1,12 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
 <<<<<<< HEAD
+<<<<<<< HEAD
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.8 (t-KTLO-Carstagram)" project-jdk-type="Python SDK" />
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9" project-jdk-type="Python SDK" />
+=======
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.8 (Carstagram)" project-jdk-type="Python SDK" />
+>>>>>>> 65e27272479942ced88997899c18b47a0390c20d
+=======
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9" project-jdk-type="Python SDK" />
+>>>>>>> 99dd58dea7e75e78771faf62346c3c01cd7cda39
+=======
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.8 (Carstagram)" project-jdk-type="Python SDK" />
+>>>>>>> personal_branch
 =======
 <<<<<<< HEAD
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.8 (Carstagram)" project-jdk-type="Python SDK" />
 =======
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9" project-jdk-type="Python SDK" />
 >>>>>>> origin/sign_login_branch
+<<<<<<< HEAD
 >>>>>>> origin/personal_branch
+=======
+<<<<<<< HEAD
+<<<<<<< HEAD
+>>>>>>> origin/develop_branch
+=======
+>>>>>>> personal_branch
+>>>>>>> c86e313b9f4e7c5f9286bf133ef8c9a82646db17
+=======
+>>>>>>> personal_branch
+>>>>>>> origin/sign_branch
+>>>>>>> personal_branch
 </project>

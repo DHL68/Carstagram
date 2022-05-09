@@ -1,6 +1,12 @@
 // 간단한 회원가입 함수입니다.
 // 아이디, 비밀번호, 닉네임을 받아 DB에 저장합니다.
 function sign_up() {
+
+    if($('#useremail').val() == "" || $('#useremail').val() == "abc") {
+        alert('아이디를 입력해주세요')
+        return
+    }
+
     $.ajax({
         type: "POST",
         url: "/sign_up",
