@@ -2,15 +2,16 @@
     width: 300px;
     height: 400px;
 }
+
 /*회원가입 입력폼*/
-.mb-3{
-    margin-left:24px;
+.mb-3 {
+    margin-left: 24px;
 }
 
 /* 모바일 Device : 0 ~ 400 */
-@media screen and (max-width: 10px){
+@media screen and (max-width: 10px) {
 
-    html{
+    html {
         /*background: red;*/
 
     }
@@ -21,4 +22,16 @@
 
     }
 
+}
+
+@keyframes showText {
+    from {
+        transform: translate(0px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(0px);
+        opacity: 1;
+    }
 }
