@@ -194,7 +194,11 @@ def api_login():
     # 회원가입 때와 같은 방법으로 pw를 암호화합니다.
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
     # id, 암호화된pw을 가지고 해당 유저를 찾습니다.
+<<<<<<< HEAD
     result = db.users.find_one({'email': email_receive, 'pw': pw_hash})
+=======
+    result = db.users.find_one({'email': id_receive, 'pw': pw_hash})
+>>>>>>> origin/login_branch
     # 찾으면 JWT 토큰을 만들어 발급합니다.
 
     if result is not None:
@@ -245,3 +249,4 @@ def api_valid():
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
+
