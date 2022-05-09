@@ -29,11 +29,10 @@ function sign_up() {
         type: "POST",
         url: "/sign_up",
         data: {
-            name_give: $('#username').val(),
-            pw_give: $('#userpw').val(),
-            nickname_give: $('#usernick').val(),
-            email_give: $('#useremail').val()
-
+            name_give: username,
+            pw_give: userpw,
+            nickname_give: usernick,
+            email_give: useremail
         },
         success: function (response) {
             if (response['result'] == 'success') {
@@ -46,8 +45,15 @@ function sign_up() {
     })
 }
 
+// function remove_dup() {
+//     if ($("#help-email-exist").text == "중복된 닉네임입니다.") {
+//         // $("#help-email-exist").remove();
+//     };
+// };
+
 // 아이디 중복확인 클라이언트
 function check_dup() {
+
 
     $.ajax({
         type: "POST",
@@ -58,18 +64,19 @@ function check_dup() {
         },
         success: function (response) {
 
-            if (response["exists"]) {
+            if (response["exist"]) {
+                $("#help-email-exist").text("중복된 이메일입니다.");
+                $("#useremail").focus()
+            } else if (response["exists"]) {
                 $("#help-nick-exist").text("중복된 닉네임입니다.")
                 $("#usernick").focus()
-            } else if (response["exist"]) {
-                $("#help-email-exist").text("중복된 이메일입니다.")
-                $("#useremail").focus()
             } else {
                 alert("사용가능한 정보입니다.")
             }
         }
     });
 }
+
 // // 회원가입 클라이언트
 //     function sign_up_save() {
 //         let useremail = $("#input-useremail").val()
