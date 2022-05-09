@@ -108,6 +108,7 @@ def home():
         # 암호화되어있는 token의 값을 우리가 사용할 수 있도록 디코딩(암호화 풀기)해줍니다!
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({"id": payload['id']})
+        print(user_info)
         return render_template('main.html', nickname=user_info["nick"])
     # 만약 해당 token의 로그인 시간이 만료되었다면, 아래와 같은 코드를 실행합니다.
     except jwt.ExpiredSignatureError:
@@ -243,5 +244,35 @@ def sign_up():
     db.users.insert_one(doc)
     return jsonify({'result': 'success'})
 
+<<<<<<< HEAD
+=======
+
+# # 로그인서버
+# @app.route('/sign_in', methods=['POST'])
+# def sign_in():
+#     # 로그인
+#
+#     useremail_receive = request.form['useremail_give']
+#     password_receive = request.form['password_give']
+#     print(useremail_receive)
+#
+#     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+#     result = db.users.find_one({'useremail': useremail_receive, 'password': pw_hash})
+#     # result = db.user.find({})
+#
+#     if result is not None:
+#         payload = {
+#             'id': useremail_receive,
+#             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
+#         }
+#         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+#
+#         return jsonify({'result': 'success', 'token': token})
+#     # 찾지 못하면
+#     else:
+#         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
+
+
+>>>>>>> origin/sign_branch
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
