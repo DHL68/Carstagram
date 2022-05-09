@@ -2,6 +2,7 @@
 <project version="4">
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9" project-jdk-type="Python SDK" />
 =======
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.8 (Carstagram)" project-jdk-type="Python SDK" />
@@ -9,4 +10,10 @@
 =======
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9" project-jdk-type="Python SDK" />
 >>>>>>> 99dd58dea7e75e78771faf62346c3c01cd7cda39
+=======
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.8 (Carstagram)" project-jdk-type="Python SDK" />
+=======
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9" project-jdk-type="Python SDK" />
+>>>>>>> origin/sign_login_branch
+>>>>>>> personal_branch
 </project>
