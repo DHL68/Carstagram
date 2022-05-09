@@ -1,15 +1,14 @@
-$(document).on('click',function () {
-// 모달 띄우기
-    $("#open-post-modal").click(function () {
-        $(".modal-overlay2").fadeIn();
-        $('body').css("overflow", "hidden");
-    });
+
+// 게시글 업로드 모달
+$("#open-post-modal").on('click', function () {
+    $(".modal-overlay2").fadeIn();
+    $('body').css("overflow", "hidden");
 });
 
 $(document).on('click',function (e) {
     if( $(".modal-overlay2").is(e.target)) {
         $(".modal-overlay2").fadeOut();
-        $('body').css("overflow", "scroll");
+        $('body').css("overflowY", "scroll");
     };
 });
 
@@ -33,12 +32,11 @@ function post_listing() {
             let posts = JSON.parse(response['posts'])
 
             for (let i = 0; i < posts.length; i++) {
-                console.log(posts)
                 let post_picture = posts[i]['post_pictures']
                 let post_comment = posts[i]['post_comments']
                 let post_pic = posts[i]['post_pic']
                 let post_id = posts[i]['_id']['$oid']
-                console.log(post_id)
+
 
                 let temp_html =`
                             <div class="feed-box" id="feed_box">
@@ -50,7 +48,7 @@ function post_listing() {
                                                             src="http://kaihuastudio.com/common/img/default_profile.png"></a>
                                         </div>
                                         <div style="margin-left: 10px">
-                                            ${post_id}
+                                            user_id
                                         </div>
                                     </div>
                                     <div>
@@ -106,7 +104,11 @@ function post_listing() {
                                     <!--                댓글모두보기-->
                                     <!--<div style="font-weight: lighter; color: grey">댓글 3,243개 모두보기</div>-->
                                     <!--                댓글-->
+<<<<<<< HEAD
                                     <div class="${post_id}">
+=======
+                                    <div id="" class="${post_id}">
+>>>>>>> origin/personal_branch
                     
                                     </div>
                                     <!--                몇일,시간,분전-->
@@ -147,8 +149,6 @@ function post_posting() {
     $.ajax({
         type: "POST",
         url: "/posting",
-        // data: {sample_give: let 변수},
-        // data: {picture_give:picture, comment_give:comment},
         data: form_data,
         cache: false,
         contentType: false,

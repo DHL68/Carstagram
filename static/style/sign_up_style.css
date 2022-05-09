@@ -1,0 +1,37 @@
+.sign_up_img {
+    width: 300px;
+    height: 400px;
+}
+
+/*회원가입 입력폼*/
+.mb-3 {
+    margin-left: 24px;
+}
+
+/* 모바일 Device : 0 ~ 400 */
+@media screen and (max-width: 10px) {
+
+    html {
+        /*background: red;*/
+
+    }
+
+    .signimgLayer {
+        /*padding: 1.0em;*/
+        display: none;
+
+    }
+
+}
+
+@keyframes showText {
+    from {
+        transform: translate(0px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(0px);
+        opacity: 1;
+    }
+}
