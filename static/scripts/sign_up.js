@@ -11,13 +11,14 @@ function sign_up() {
         type: "POST",
         url: "/sign_up",
         data: {
-            id_give: $('#userid').val(),
+            name_give: $('#username').val(),
             pw_give: $('#userpw').val(),
             nickname_give: $('#usernick').val(),
             email_give: $('#useremail').val()
 
         },
         success: function (response) {
+
             if (response['result'] == 'success') {
                 alert('회원가입이 완료되었습니다.')
                 window.location.href = '/login'
@@ -29,28 +30,18 @@ function sign_up() {
 }
 
 
-// 아아디 정규표현식
-function is_nickname(asValue) {
-    var regExp = /^(?=.*[a-zA-Z])[-a-zA-Z0-9_.]{2,10}$/;
-    return regExp.test(asValue);
-}
-// 비밀번호 정규표현식
-function is_password(asValue) {
-    var regExp = /^(?=.*\d)(?=.*[a-zA-Z])[0-9a-zA-Z!@#$%^&*]{8,20}$/;
-    return regExp.test(asValue);
-}
+
 // 아이디 중복확인 클라이언트
 function check_dup() {
     console.log("check_dup")
     let useremail = $("#input-useremail").val()
     console.log(useremail)
     if (useremail == "") {
-        $("#help-id").text("아이디를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
-        $("#input-useremail").focus()
+        $("#useremail").text("아이디를 입력해주세요.")
         return;
     }
     if (!is_nickname(useremail)) {
-        $("#help-id").text("아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 2-10자 길이").removeClass("is-safe").addClass("is-danger")
+        $("#useremail").text("아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 2-10자 길이")
         $("#input-useremail").focus()
         return;
     }
@@ -75,29 +66,28 @@ function check_dup() {
     });
 }
 // 회원가입 클라이언트
-function sign_up_save() {
-    let useremail = $("#input-useremail").val()
-    let password = $("#input-password").val()
-    let password2 = $("#input-password2").val()
+function sign_up() {
+    let useremail = $("#useremail").val()
+    let password = $("#password").val()
+    let password2 = $("#password2").val()
     console.log(useremail, password, password2)
 
 
-    if ($("#help-id").hasClass("is-danger")) {
-        alert("아이디를 다시 확인해주세요.")
-        return;
-    } else if (!$("#help-id").hasClass("is-success")) {
-        alert("아이디 중복확인을 해주세요.")
+   if (useremail == "") {
+        $("#useremail").text("아이디를 입력해주세요.")
         return;
     }
-
+     if (!is_nickname(useremail)) {
+        $("#useremail").text("아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 2-10자 길이")
+        $("#input-useremail").focus()
+        return;
+    }
     if (password == "") {
-        $("#help-password").text("비밀번호를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
-        $("#input-password").focus()
+        $("#password").text("비밀번호를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
         return;
     } else if (!is_password(password)) {
-        $("#help-password").text("비밀번호의 형식을 확인해주세요. 영문과 숫자 필수 포함, 특수문자(!@#$%^&*) 사용가능 8-20자").removeClass("is-safe").addClass("is-danger")
-        $("#input-password").focus()
-        return
+        $("#password").text("비밀번호의 형식을 확인해주세요. 영문과 숫자 필수 포함, 특수문자(!@#$%^&*) 사용가능 8-20자")
+        return;
     } else {
         $("#help-password").text("사용할 수 있는 비밀번호입니다.").removeClass("is-danger").addClass("is-success")
     }
@@ -114,10 +104,12 @@ function sign_up_save() {
     }
     $.ajax({
         type: "POST",
-        url: "/sign_up/save",
+        url: "/sign_up",
         data: {
-            useremail_give: useremail,
-            password_give: password
+           name_give: $('#username').val(),
+            pw_give: $('#userpw').val(),
+            nickname_give: $('#usernick').val(),
+            email_give: $('#useremail').val()
         },
         success: function (response) {
             alert("회원가입을 축하드립니다!")
