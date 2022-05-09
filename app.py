@@ -1,3 +1,17 @@
+<<<<<<< HEAD
+from flask import Flask, render_template, jsonify, request
+app = Flask(__name__)
+
+from datetime import datetime
+
+import requests
+from bs4 import BeautifulSoup
+
+from pymongo import MongoClient
+
+from bson.json_util import dumps
+
+=======
 from pymongo import MongoClient
 # JWT 패키지를 사용합니다. (설치해야할 패키지 이름: PyJWT)
 import jwt
@@ -13,10 +27,101 @@ from datetime import datetime, timedelta
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
+>>>>>>> origin/sign_login_branch
 
 client = MongoClient('localhost', 27017)
 db = client.Carstagram
 
+<<<<<<< HEAD
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
+
+
+# 메인페이지 불러오기
+
+@app.route('/')
+def main():
+    return render_template('index.html')
+
+
+# 개인페이지 불러오기
+
+@app.route('/user')
+def user():
+    return render_template('self.html')
+
+#post 댓글작성
+
+@app.route("/comment", methods=["POST"])
+def new_comment():
+    comment_receive = request.form['comment_give']
+    post_receive = request.form['post_give']
+    # id_receive = request.form['id_give']
+
+    doc = {
+        'comments': comment_receive,
+        'post_id': post_receive
+        # 'user_id' : id_receive
+    }
+    db.comments.insert_one(doc)
+
+    return jsonify({'msg': '댓글작성완료!'})
+
+#get 댓글 불러오기
+
+@app.route("/comment", methods=["GET"])
+def comment():
+    comment_list = list(db.comments.find({}, {'_id': False}))
+
+    return jsonify({'comments': comment_list})
+
+
+#
+# post 리스팅 메서드
+#
+@app.route('/listing', methods=['GET'])
+def post_listing():
+    posts = dumps(list(db.posts.find({})))
+
+    return jsonify({'posts': posts})
+
+
+#
+# post 업로드 메서드
+#
+@app.route('/posting', methods=['POST'])
+def post_posting():
+    picture_receive = request.form["picture_give"]
+    comment_receive = request.form["comment_give"]
+
+    post_pic = request.files["pic_give"]
+
+    # 새로운 날짜 이름 만들기
+    today = datetime.now()
+    mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
+
+    filename = f'post_pic-{mytime}'
+
+    # 확장자 뺴기
+    extension = post_pic.filename.split('.')[-1]
+
+    # 새로운 이름으로 저장하기
+    save_to = f'static/{filename}.{extension}'
+    post_pic.save(save_to)
+
+    doc = {
+        'post_pictures': picture_receive,
+        'post_comments': comment_receive,
+        'post_pic': f'{filename}.{extension}'
+    }
+    db.posts.insert_one(doc)
+
+    return jsonify({'msg': '업로드 완료!'})
+
+
+if __name__ == '__main__':
+    app.run('0.0.0.0', port=5500, debug=True)
+=======
 # JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.
 # 이 문자열은 서버만 알고있기 때문에, 내 서버에서만 토큰을 인코딩(=만들기)/디코딩(=풀기) 할 수 있습니다.
 SECRET_KEY = 'SPARTA'
@@ -196,3 +301,4 @@ def sign_in():
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
+>>>>>>> origin/sign_login_branch
