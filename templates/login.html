@@ -24,59 +24,12 @@
     <!-- @media 나중에 -->
     <link rel="stylesheet" media="screen and (max-width: 768px)" href="/style/login_style.css"/>
     <!-- JS -->
-    <!--    <script src="../static/script/login.js"></script>-->
+    <script src="../static/scripts/login.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <title>Carstagram</title>
-    <script>
-        // 로그아웃은 내가 가지고 있는 토큰만 쿠키에서 없애면 됩니다.
-        function logout() {
-            $.removeCookie('mytoken');
-            alert('로그아웃!')
-            window.location.href = '/login'
-        }
 
-        // 로그인 클라이언트
-        function sign_in() {
-            let useremail = $("#useremail").val()
-            let password = $("#userpw").val()
-
-            if (useremail == "") {
-                $("#help-email-login").text("아이디를 입력해주세요.")
-                $("#useremail").focus()
-                return;
-            } else {
-                $("#help-email-login").text("")
-            }
-
-            if (password == "") {
-                $("#help-password-login").text("비밀번호를 입력해주세요.")
-                $("#userpw").focus()
-                return;
-            } else {
-                $("#help-password-login").text("")
-            }
-            $.ajax({
-                type: "POST",
-                url: "/api/login",
-                data: {
-                    useremail_give: useremail,
-                    password_give: password
-                },
-
-                success: function (response) {
-                    if (response['result'] == 'success') {
-                        $.cookie('mytoken', response['token'], {path: '/'});
-                        console.log(response)
-                        window.location.replace('/main')
-                    } else {
-                        alert(response['msg'])
-                    }
-                }
-            });
-        }
-    </script>
 </head>
 <!--body 레이아웃-->
 <body style="background-image: linear-gradient(70deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)),url(/static/image/background.jpg);">

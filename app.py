@@ -1,9 +1,8 @@
-
 from pymongo import MongoClient
 # JWT 패키지를 사용합니다. (설치해야할 패키지 이름: PyJWT)
 import jwt
 # 토큰에 만료시간을 줘야하기 때문에, datetime 모듈도 사용합니다.
-from datetime import datetime
+import datetime
 # 회원가입 시엔, 비밀번호를 암호화하여 DB에 저장해두는 게 좋습니다.
 # 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 import hashlib
@@ -14,7 +13,6 @@ app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 
-
 client = MongoClient('localhost', 27017)
 db = client.Carstagram
 
@@ -24,7 +22,7 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 
 
-#post 댓글작성
+# post 댓글작성
 
 @app.route("/comment", methods=["POST"])
 def new_comment():
@@ -41,7 +39,8 @@ def new_comment():
 
     return jsonify({'msg': '댓글작성완료!'})
 
-#get 댓글 불러오기
+
+# get 댓글 불러오기
 
 @app.route("/comment", methods=["GET"])
 def comment():
@@ -122,21 +121,25 @@ def home():
         # 만약 해당 token이 올바르게 디코딩되지 않는다면, 아래와 같은 코드를 실행합니다.
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
+
 @app.route('/login')
 def login():
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
+
 
 # 메인페이지 불러오기
 @app.route('/main')
 def main():
     return render_template('main.html')
 
+
 # 개인페이지 불러오기
 
 @app.route('/user')
 def user():
     return render_template('self.html')
+
 
 @app.route('/sign_up')
 def sign_up_page():
@@ -170,8 +173,6 @@ def register():
     return jsonify({'result': 'success', 'exists': exists, 'exist': exist})
 
 
-
-
 # [로그인 API]
 # id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
 @app.route('/api/login', methods=['POST'])
@@ -181,7 +182,7 @@ def api_login():
     # 회원가입 때와 같은 방법으로 pw를 암호화합니다.
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
     # id, 암호화된pw을 가지고 해당 유저를 찾습니다.
-    result = db.users.find_one({'id': id_receive, 'pw': pw_hash})
+    result = db.users.find_one({'email': id_receive, 'pw': pw_hash})
     # 찾으면 JWT 토큰을 만들어 발급합니다.
 
     if result is not None:
@@ -228,7 +229,6 @@ def api_valid():
         return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
     except jwt.exceptions.DecodeError:
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
-
 
 
 #
