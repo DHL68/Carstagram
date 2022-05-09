@@ -4,10 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e460cede-cc6a-4bda-87ad-b974937e4ba5" name="변경" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/style/selfstyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/style/selfstyle.css" afterDir="false" />
-    </list>
+    <list default="true" id="e460cede-cc6a-4bda-87ad-b974937e4ba5" name="변경" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -70,6 +67,7 @@
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -78,7 +76,7 @@
       <recent name="C:\github\Carstagram\templates\index" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.Carstagram">
+  <component name="RunManager" selected="Flask 서버.Flask (app.py)">
     <configuration name="index.html (1)" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/t-KTLO-Carstagram/templates/index.html" useBuiltInWebServerPort="true">
       <method v="2" />
     </configuration>
