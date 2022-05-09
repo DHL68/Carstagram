@@ -180,8 +180,8 @@ def api_login():
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
     # id, 암호화된pw을 가지고 해당 유저를 찾습니다.
     result = db.users.find_one({'id': id_receive, 'pw': pw_hash})
-
     # 찾으면 JWT 토큰을 만들어 발급합니다.
+
     if result is not None:
         # JWT 토큰에는, payload와 시크릿키가 필요합니다.
         # 시크릿키가 있어야 토큰을 디코딩(=암호화 풀기)해서 payload 값을 볼 수 있습니다.
