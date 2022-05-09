@@ -16,20 +16,20 @@ $(document).on('click', function (e) {
 });
 
 
-// // 게시글 상세 모달 띄우기
-// $(document).on('click', function () {
-//     $(".open-modal").click(function () {
-//         $(".comment-modal").fadeIn();
-//         $('body').css("overflow", "hidden");
-//     });
-// });
-
-function openModal(i) {
-   $(`.open-modal-${i}`).click(function () {
+// 게시글 상세 모달 띄우기
+$(document).on('click', function () {
+    $(".open-modal").click(function () {
         $(".comment-modal").fadeIn();
         $('body').css("overflow", "hidden");
     });
-}
+});
+
+function openModal(i) {
+    $(`.open-modal-${i}`).click(function () {
+        $(`.modal-overlay-${i}`).fadeIn();
+        $('body').css("overflow", "hidden");
+    });
+};
 
 //모달 닫기
 $(document).on('click', function (e) {
@@ -66,7 +66,7 @@ function post_listing() {
                                  <img class="profilepage-image" src="../static/${post_pic}">
                                  </button>`
                 let temp2_html = `
-                            <div class="modal-overlay">
+                            <div class="modal-overlay-${i} comment-modal" style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;display: none;z-index: 1;background-color: rgba(0, 0, 0, 0.4);">
                                 <div id="modal-script" class="modal_body" style="">
                                     <div style="display: flex; flex-direction: row;">
                                         <img class="modal-image" src="../static/${post_pic}">
@@ -131,7 +131,7 @@ function post_listing() {
                                 </div>
                             </div>`
                 $('.my-posts').append(temp_html)
-                $('.comment-modal').append(temp2_html)
+                $('.modal-post').append(temp2_html)
             }
         }
     })
