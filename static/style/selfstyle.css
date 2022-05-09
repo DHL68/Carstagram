@@ -162,6 +162,9 @@ body {
     object-fit: cover;
     margin: 9px 0;
     border-radius: 5px;
+}
+
+.profilepage-image:hover {
 
 }
 

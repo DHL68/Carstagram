@@ -6,9 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="e460cede-cc6a-4bda-87ad-b974937e4ba5" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/scripts/post.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/scripts/post.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/scripts/selfpost.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/scripts/selfpost.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/scripts/selfscript.js" beforeDir="false" afterPath="$PROJECT_DIR$/static/scripts/selfscript.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/style/selfstyle.css" beforeDir="false" afterPath="$PROJECT_DIR$/static/style/selfstyle.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -153,7 +151,7 @@
       <workItem from="1651823730074" duration="6798000" />
       <workItem from="1651832120233" duration="43000" />
       <workItem from="1651832555528" duration="3905000" />
-      <workItem from="1652001113476" duration="19186000" />
+      <workItem from="1652001113476" duration="20727000" />
     </task>
     <servers />
   </component>
