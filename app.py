@@ -149,25 +149,22 @@ def sign_up_page():
 # 저장하기 전에, pw를 sha256 방법(=단방향 암호화. 풀어볼 수 없음)으로 암호화해서 저장합니다.
 @app.route('/sign_up', methods=['POST'])
 def register():
-    id_receive = request.form['id_give']
+    name_receive = request.form['name_give']
     pw_receive = request.form['pw_give']
     nickname_receive = request.form['nickname_give']
     email_receive = request.form['email_give']
 
+    exists = bool(db.users.find_one({"nick": nickname_receive}))
+    exist = bool(db.users.find_one({"email": email_receive}))
+
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
-    doc = {'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive, 'email': email_receive}
+    doc = {'name': name_receive, 'pw': pw_hash, 'nick': nickname_receive, 'email': email_receive}
 
     db.users.insert_one(doc)
 
-    return jsonify({'result': 'success'})
+    return jsonify({'result': 'success', 'exists': exists, 'exist': exist})
 
 
-# 아이디 중복확인 서버
-# @app.route('/sign_up/check_dup', methods=['POST'])
-# def check_dup():
-#     username_receive = request.form['username_give']
-#     exists = bool(db.users.find_one({"username": username_receive}))
-#     return jsonify({'result': 'success', 'exists': exists})
 
 
 # [로그인 API]
@@ -226,23 +223,6 @@ def api_valid():
         return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
     except jwt.exceptions.DecodeError:
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
-
-# 회원가입 서버
-@app.route('/sign_up/save', methods=['POST'])
-def sign_up():
-    useremail_receive = request.form['useremail_give']
-    password_receive = request.form['password_give']
-    password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
-    doc = {
-        "useremail": useremail_receive,  # 아이디
-        "password": password_hash,  # 비밀번호
-        "profile_name": useremail_receive,  # 프로필 이름 기본값은 아이디
-        "profile_pic": "",  # 프로필 사진 파일 이름
-        "profile_pic_real": "profile_pics/profile_placeholder.png",  # 프로필 사진 기본 이미지
-        "profile_info": ""  # 프로필 한 마디
-    }
-    db.users.insert_one(doc)
-    return jsonify({'result': 'success'})
 
 
 if __name__ == '__main__':
