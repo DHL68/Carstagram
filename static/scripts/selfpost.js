@@ -24,6 +24,13 @@ $(document).on('click', function () {
     });
 });
 
+function openModal(i) {
+    $(`.open-modal-${i}`).click(function () {
+        $(`.modal-overlay-${i}`).fadeIn();
+        $('body').css("overflow", "hidden");
+    });
+};
+
 //모달 닫기
 $(document).on('click', function (e) {
     if ($(".comment-modal").is(e.target)) {
@@ -55,11 +62,11 @@ function post_listing() {
                 let post_id = posts[i]['_id']['$oid']
 
 
-                let temp_html = `<button class="open-modal" id="" onclick="" style=" border: none; background: none;">
+                let temp_html = `<button class="open-modal-${i}" onclick="openModal(${i})" style=" border: none; background: none;">
                                  <img class="profilepage-image" src="../static/${post_pic}">
                                  </button>`
                 let temp2_html = `
-                            <div class="modal-overlay">
+                            <div class="modal-overlay-${i} comment-modal" style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;display: none;z-index: 1;background-color: rgba(0, 0, 0, 0.4);">
                                 <div id="modal-script" class="modal_body" style="">
                                     <div style="display: flex; flex-direction: row;">
                                         <img class="modal-image" src="../static/${post_pic}">
@@ -124,7 +131,7 @@ function post_listing() {
                                 </div>
                             </div>`
                 $('.my-posts').append(temp_html)
-                $('.comment-modal').append(temp2_html)
+                $('.modal-post').append(temp2_html)
             }
         }
     })
