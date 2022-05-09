@@ -36,16 +36,16 @@ function is_password(asValue) {
 // 아이디 중복확인 클라이언트
 function check_dup() {
     console.log("check_dup")
-    let username = $("#input-username").val()
-    console.log(username)
-    if (username == "") {
+    let useremail = $("#input-useremail").val()
+    console.log(useremail)
+    if (useremail == "") {
         $("#help-id").text("아이디를 입력해주세요.").removeClass("is-safe").addClass("is-danger")
-        $("#input-username").focus()
+        $("#input-useremail").focus()
         return;
     }
-    if (!is_nickname(username)) {
+    if (!is_nickname(useremail)) {
         $("#help-id").text("아이디의 형식을 확인해주세요. 영문과 숫자, 일부 특수문자(._-) 사용 가능. 2-10자 길이").removeClass("is-safe").addClass("is-danger")
-        $("#input-username").focus()
+        $("#input-useremail").focus()
         return;
     }
     $("#help-id").addClass("is-loading")
@@ -53,13 +53,13 @@ function check_dup() {
         type: "POST",
         url: "/sign_up/check_dup",
         data: {
-            username_give: username
+            useremail_give: useremail
         },
         success: function (response) {
 
             if (response["exists"]) {
                 $("#help-id").text("이미 존재하는 아이디입니다.").removeClass("is-safe").addClass("is-danger")
-                $("#input-username").focus()
+                $("#input-useremail").focus()
             } else {
                 $("#help-id").text("사용할 수 있는 아이디입니다.").removeClass("is-danger").addClass("is-success")
             }
@@ -70,10 +70,10 @@ function check_dup() {
 }
 // 회원가입 클라이언트
 function sign_up_save() {
-    let username = $("#input-username").val()
+    let useremail = $("#input-useremail").val()
     let password = $("#input-password").val()
     let password2 = $("#input-password2").val()
-    console.log(username, password, password2)
+    console.log(useremail, password, password2)
 
 
     if ($("#help-id").hasClass("is-danger")) {
@@ -110,7 +110,7 @@ function sign_up_save() {
         type: "POST",
         url: "/sign_up/save",
         data: {
-            username_give: username,
+            useremail_give: useremail,
             password_give: password
         },
         success: function (response) {

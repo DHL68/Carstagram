@@ -49,7 +49,7 @@ def login():
     return render_template('login.html', msg=msg)
 
 @app.route('/login2')
-def login_2():
+def login_main():
     msg = request.args.get("msg")
     return render_template('main.html', msg=msg)
 
@@ -74,10 +74,10 @@ def register():
     nickname_receive = request.form['nickname_give']
     email_receive = request.form['email_give']
 
-    # pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
-    doc = {'id': id_receive, 'pw': pw_receive, 'nick': nickname_receive, 'email': email_receive}
+    pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
+    doc = {'id': id_receive, 'pw': pw_hash, 'nick': nickname_receive, 'email': email_receive}
 
-    db.users.insert_one(doc)
+    db.user.insert_one(doc)
 
     return jsonify({'result': 'success'})
 
@@ -98,10 +98,10 @@ def api_login():
     pw_receive = request.form['password_give']
 
     # 회원가입 때와 같은 방법으로 pw를 암호화합니다.
-    # pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
+    pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
 
     # id, 암호화된pw을 가지고 해당 유저를 찾습니다.
-    result = db.user.find_one({'id': id_receive, 'pw': pw_receive})
+    result = db.user.find_one({'id': id_receive, 'pw': pw_hash})
 
     # 찾으면 JWT 토큰을 만들어 발급합니다.
     if result is not None:
@@ -153,18 +153,18 @@ def api_valid():
 # 회원가입 서버
 @app.route('/sign_up/save', methods=['POST'])
 def sign_up():
-    username_receive = request.form['username_give']
+    useremail_receive = request.form['useremail_give']
     password_receive = request.form['password_give']
     password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
     doc = {
-        "username": username_receive,  # 아이디
+        "useremail": useremail_receive,  # 아이디
         "password": password_hash,  # 비밀번호
-        "profile_name": username_receive,  # 프로필 이름 기본값은 아이디
+        "profile_name": useremail_receive,  # 프로필 이름 기본값은 아이디
         "profile_pic": "",  # 프로필 사진 파일 이름
         "profile_pic_real": "profile_pics/profile_placeholder.png",  # 프로필 사진 기본 이미지
         "profile_info": ""  # 프로필 한 마디
     }
-    db.users.insert_one(doc)
+    db.user.insert_one(doc)
     return jsonify({'result': 'success'})
 
 
@@ -175,11 +175,11 @@ def sign_in():
 
     useremail_receive = request.form['useremail_give']
     password_receive = request.form['password_give']
-    print(useremail_receive, password_receive)
+    print(useremail_receive)
 
-    # pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
-    # result = db.user.find_one({'useremail': useremail_receive, 'password': password_receive})
-    result = db.user.find({})
+    pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+    result = db.user.find_one({'useremail': useremail_receive, 'password': pw_hash})
+    # result = db.user.find({})
 
     if result is not None:
         payload = {

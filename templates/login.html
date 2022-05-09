@@ -24,11 +24,11 @@
     <script>
         // 로그인 클라이언트
         function sign_in() {
-            let username = $("#useremail").val()
+            let useremail = $("#useremail").val()
             let password = $("#userpw").val()
-            console.log(username)
+            console.log(useremail)
 
-            if (username == "") {
+            if (useremail == "") {
                 $("#help-email-login").text("아이디를 입력해주세요.")
                 $("#useremail").focus()
                 return;
@@ -47,7 +47,7 @@
                 type: "POST",
                 url: "/sign_in",
                 data: {
-                    useremail_give: username,
+                    useremail_give: useremail,
                     password_give: password
                 },
 
@@ -55,7 +55,7 @@
                     if (response['result'] == 'success') {
                         $.cookie('mytoken', response['token'], {path: '/'});
                         console.log(response)
-                        window.location.replace('/login2')
+                        window.location.replace('/login_main')
                     } else {
                         alert(response['msg'])
                     }
@@ -78,7 +78,7 @@
                 <input type="email" class="form-control" style="font-size: 14px; width: 258px; height: 36px; "
                        id="useremail" placeholder="name@example.com">
                 <label for="useremail" style="font-size: 14px;padding: 4px 10px">이메일 주소</label>
-                <p id="help-email-login"></p>
+                <p class="help-email-login" id="help-email-login"></p>
             </div>
         </div>
         <div>
@@ -87,7 +87,7 @@
                        id="userpw"
                        placeholder="name@example.com">
                 <label for="userpw" style="font-size: 14px;padding: 4px 10px">비밀번호</label>
-                <p id="help-password-login"></p>
+                <p class="help-password-login" id="help-password-login"></p>
             </div>
         </div>
         <button id="" class="btn btn-primary" style="width: 258px; height: 36px; padding: 4px 10px" onclick="sign_in()">로그인</button>
