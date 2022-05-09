@@ -106,10 +106,6 @@ def home():
         # 암호화되어있는 token의 값을 우리가 사용할 수 있도록 디코딩(암호화 풀기)해줍니다!
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({"id": payload['id']})
-<<<<<<< HEAD
-=======
-
->>>>>>> personal_branch
         return render_template('main.html', nickname=user_info["nick"])
     # 만약 해당 token의 로그인 시간이 만료되었다면, 아래와 같은 코드를 실행합니다.
     except jwt.ExpiredSignatureError:
@@ -160,24 +156,20 @@ def register():
     email_receive = request.form['email_give']
 
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
-<<<<<<< HEAD
-    doc = {'id': name_receive, 'pw': pw_hash, 'nick': nickname_receive, 'email': email_receive}
-=======
+
     doc = {
         'name': name_receive,
         'pw': pw_hash,
         'nick': nickname_receive,
         'email': email_receive
     }
->>>>>>> personal_branch
+
 
     db.users.insert_one(doc)
 
     return jsonify({'result': 'success'})
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 
 
 # 아이디 중복확인 서버
@@ -186,21 +178,18 @@ def check_dup():
     username_receive = request.form['username_give']
     exists = bool(db.users.find_one({"username": username_receive}))
     return jsonify({'result': 'success', 'exists': exists})
-=======
+
 @app.route('/check_dup', methods=['POST'])
 def check_info():
     nickname_receive = request.form['nickname_give']
-=======
+
 @app.route('/check_email', methods=['POST'])
 def check_dub1():
->>>>>>> origin/personal_branch
+
     email_receive = request.form['email_give']
     exist = bool(db.users.find_one({"email": email_receive}))
 
-<<<<<<< HEAD
-    return jsonify({'result': 'success', 'exists': exists, 'exist': exist})
->>>>>>> personal_branch
-=======
+
     return jsonify({'result': 'success','exist': exist})
 
 
@@ -210,34 +199,26 @@ def check_dub2():
     exists = bool(db.users.find_one({"nick": nickname_receive}))
 
     return jsonify({'result': 'success', 'exists': exists})
->>>>>>> origin/personal_branch
 
 
 # [로그인 API]
 # id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
 @app.route('/api/login', methods=['POST'])
 def api_login():
-<<<<<<< HEAD
-    name_receive = request.form['useremail_give']
-=======
+
     email_receive = request.form['useremail_give']
->>>>>>> personal_branch
+
     pw_receive = request.form['password_give']
     # 회원가입 때와 같은 방법으로 pw를 암호화합니다.
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
     # id, 암호화된pw을 가지고 해당 유저를 찾습니다.
-<<<<<<< HEAD
-<<<<<<< HEAD
-    result = db.users.find_one({'id': name_receive, 'pw': pw_hash})
 
-=======
-    result = db.users.find_one({'email': email_receive, 'pw': pw_hash})
->>>>>>> personal_branch
-=======
+
+
 
     result = db.users.find_one({'email': email_receive, 'pw': pw_hash})
 
->>>>>>> origin/personal_branch
+
     # 찾으면 JWT 토큰을 만들어 발급합니다.
 
     if result is not None:
@@ -246,11 +227,9 @@ def api_login():
         # 아래에선 id와 exp를 담았습니다. 즉, JWT 토큰을 풀면 유저ID 값을 알 수 있습니다.
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
-<<<<<<< HEAD
-            'id': name_receive,
-=======
+
             'email': email_receive,
->>>>>>> personal_branch
+
             'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=5)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
@@ -289,7 +268,7 @@ def api_valid():
     except jwt.exceptions.DecodeError:
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
 
-<<<<<<< HEAD
+
 #
 # # 회원가입 서버
 # @app.route('/sign_up/save', methods=['POST'])
@@ -334,8 +313,6 @@ def api_valid():
 #     else:
 #         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
-=======
->>>>>>> personal_branch
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
