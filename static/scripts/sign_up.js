@@ -2,35 +2,6 @@
 // 아이디, 비밀번호, 닉네임을 받아 DB에 저장합니다.
 function sign_up() {
 
-    if ($('#useremail').val() == "" || $('#useremail').val() == "abc") {
-        alert('아이디를 입력해주세요')
-        return
-    }
-
-    $.ajax({
-        type: "POST",
-        url: "/sign_up",
-        data: {
-            name_give: $('#username').val(),
-            pw_give: $('#userpw').val(),
-            nickname_give: $('#usernick').val(),
-            email_give: $('#useremail').val()
-
-        },
-        success: function (response) {
-            if (response['result'] == 'success') {
-                alert('회원가입이 완료되었습니다.')
-                window.location.href = '/login'
-            } else {
-                alert(response['msg'])
-            }
-        }
-    })
-}
-
-// 아이디 중복확인 클라이언트
-function check_dup() {
-
     let useremail = $("#useremail").val()
     let username = $("#username").val()
     let usernick = $("#usernick").val()
@@ -62,6 +33,28 @@ function check_dup() {
             pw_give: $('#userpw').val(),
             nickname_give: $('#usernick').val(),
             email_give: $('#useremail').val()
+
+        },
+        success: function (response) {
+            if (response['result'] == 'success') {
+                alert('회원가입이 완료되었습니다.')
+                window.location.href = '/login'
+            } else {
+                alert(response['msg'])
+            }
+        }
+    })
+}
+
+// 아이디 중복확인 클라이언트
+function check_dup() {
+
+    $.ajax({
+        type: "POST",
+        url: "/check_dup",
+        data: {
+            nickname_give: $('#usernick').val(),
+            email_give: $('#useremail').val()
         },
         success: function (response) {
 
@@ -72,8 +65,7 @@ function check_dup() {
                 $("#help-email-exist").text("중복된 이메일입니다.")
                 $("#useremail").focus()
             } else {
-                alert("회원가입을 축하드립니다!")
-                window.location.replace("/login")
+                alert("사용가능한 정보입니다.")
             }
         }
     });

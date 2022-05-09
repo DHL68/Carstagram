@@ -1,4 +1,3 @@
-
 from pymongo import MongoClient
 # JWT 패키지를 사용합니다. (설치해야할 패키지 이름: PyJWT)
 import jwt
@@ -14,7 +13,6 @@ app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 
-
 client = MongoClient('localhost', 27017)
 db = client.Carstagram
 
@@ -22,7 +20,7 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 
 
-#post 댓글작성
+# post 댓글작성
 
 @app.route("/comment", methods=["POST"])
 def new_comment():
@@ -39,7 +37,8 @@ def new_comment():
 
     return jsonify({'msg': '댓글작성완료!'})
 
-#get 댓글 불러오기
+
+# get 댓글 불러오기
 
 @app.route("/comment", methods=["GET"])
 def comment():
@@ -91,7 +90,6 @@ def post_posting():
     return jsonify({'msg': '업로드 완료!'})
 
 
-
 SECRET_KEY = 'SPARTA'
 
 
@@ -117,21 +115,25 @@ def home():
         # 만약 해당 token이 올바르게 디코딩되지 않는다면, 아래와 같은 코드를 실행합니다.
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
+
 @app.route('/login')
 def login():
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
+
 
 # 메인페이지 불러오기
 @app.route('/main')
 def main():
     return render_template('main.html')
 
+
 # 개인페이지 불러오기
 
 @app.route('/user')
 def user():
     return render_template('self.html')
+
 
 @app.route('/sign_up')
 def sign_up_page():
@@ -154,17 +156,28 @@ def register():
     nickname_receive = request.form['nickname_give']
     email_receive = request.form['email_give']
 
-    exists = bool(db.users.find_one({"nick": nickname_receive}))
-    exist = bool(db.users.find_one({"email": email_receive}))
-
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
-    doc = {'name': name_receive, 'pw': pw_hash, 'nick': nickname_receive, 'email': email_receive}
+    doc = {
+        'name': name_receive,
+        'pw': pw_hash,
+        'nick': nickname_receive,
+        'email': email_receive
+    }
 
     db.users.insert_one(doc)
 
+    return jsonify({'result': 'success'})
+
+
+@app.route('/check_dup', methods=['POST'])
+def check_info():
+    nickname_receive = request.form['nickname_give']
+    email_receive = request.form['email_give']
+
+    exists = bool(db.users.find_one({"nick": nickname_receive}))
+    exist = bool(db.users.find_one({"email": email_receive}))
+
     return jsonify({'result': 'success', 'exists': exists, 'exist': exist})
-
-
 
 
 # [로그인 API]
