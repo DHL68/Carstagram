@@ -1,17 +1,4 @@
-<<<<<<< HEAD
-from flask import Flask, render_template, jsonify, request
-app = Flask(__name__)
 
-from datetime import datetime
-
-import requests
-from bs4 import BeautifulSoup
-
-from pymongo import MongoClient
-
-from bson.json_util import dumps
-
-=======
 from pymongo import MongoClient
 # JWT 패키지를 사용합니다. (설치해야할 패키지 이름: PyJWT)
 import jwt
@@ -23,32 +10,25 @@ import hashlib
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 from werkzeug.utils import secure_filename
 from datetime import datetime, timedelta
+from bson.json_util import dumps
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
->>>>>>> origin/sign_login_branch
+
 
 client = MongoClient('localhost', 27017)
 db = client.Carstagram
 
-<<<<<<< HEAD
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 
 
-# 메인페이지 불러오기
-
-@app.route('/')
-def main():
-    return render_template('index.html')
 
 
-# 개인페이지 불러오기
 
-@app.route('/user')
-def user():
-    return render_template('self.html')
+
+
 
 #post 댓글작성
 
@@ -119,11 +99,7 @@ def post_posting():
     return jsonify({'msg': '업로드 완료!'})
 
 
-if __name__ == '__main__':
-    app.run('0.0.0.0', port=5500, debug=True)
-=======
-# JWT 토큰을 만들 때 필요한 비밀문자열입니다. 아무거나 입력해도 괜찮습니다.
-# 이 문자열은 서버만 알고있기 때문에, 내 서버에서만 토큰을 인코딩(=만들기)/디코딩(=풀기) 할 수 있습니다.
+
 SECRET_KEY = 'SPARTA'
 
 
@@ -153,10 +129,16 @@ def login():
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
 
+# 메인페이지 불러오기
 @app.route('/main')
 def main():
-    msg = request.args.get("msg")
-    return render_template('main.html', msg=msg)
+    return render_template('main.html')
+
+# 개인페이지 불러오기
+
+@app.route('/user')
+def user():
+    return render_template('self.html')
 
 @app.route('/sign_up')
 def sign_up_page():
@@ -301,4 +283,3 @@ def sign_in():
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
->>>>>>> origin/sign_login_branch
