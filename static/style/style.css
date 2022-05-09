@@ -182,7 +182,7 @@ body {
     /*padding : 1.0em;*/
 }
 /* 모바일 Device : 0 ~ 640 */
-@media screen and (max-width: 1000px){
+@media screen and (max-width: 640px){
 
     html{
         /*background: red;*/
