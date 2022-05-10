@@ -95,7 +95,7 @@ def register():
     pw_receive = request.form['pw_give']
     nickname_receive = request.form['nickname_give']
     email_receive = request.form['email_give']
-    num_receive = request.form['num_give']
+    date_receive = request.form['date_give']
 
 
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
@@ -104,7 +104,7 @@ def register():
         'pw': pw_hash,
         'nick': nickname_receive,
         'email': email_receive,
-        "num" : num_receive
+        "date" : date_receive
     }
 
     db.users.insert_one(doc)
@@ -185,7 +185,7 @@ def recommend_user():
         user_info = db.users.find_one({"email": payload['email']}, {'_id': False})
 
 
-        user_list = list(db.users.find({}, {'_id': False}).limit(5).sort("num", -1))
+        user_list = list(db.users.find({}, {'_id': False}).limit(5).sort("date", -1))
         print(user_list)
 
 

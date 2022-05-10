@@ -2,12 +2,11 @@
 // 간단한 회원가입 함수입니다.
 // 아이디, 비밀번호, 닉네임을 받아 DB에 저장합니다.
 function sign_up() {
-    let num = 0
     let useremail = $("#useremail").val()
     let username = $("#username").val()
     let usernick = $("#usernick").val()
     let userpw = $("#userpw").val()
-    let number= num+1
+    let today = new Date().toISOString()
 
     if (useremail == "") {
         alert("이메일을 입력해주세요.")
@@ -31,7 +30,7 @@ function sign_up() {
             pw_give: userpw,
             nickname_give: usernick,
             email_give: useremail,
-            num_give: number
+            date_give: today
         },
         success: function (response) {
             if (response['result'] == 'success') {
