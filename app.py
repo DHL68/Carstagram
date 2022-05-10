@@ -8,6 +8,7 @@ import datetime
 import hashlib
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 from bson.json_util import dumps
+from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -66,10 +67,12 @@ def post_listing():
 def post_posting():
     token_receive = request.cookies.get('mytoken')
     try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+
         picture_receive = request.form["picture_give"]
         comment_receive = request.form["comment_give"]
+        date_receive = request.form["date_give"]
 
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({"username": payload["id"]})
 
         post_pic = request.files["pic_give"]
@@ -88,10 +91,11 @@ def post_posting():
         post_pic.save(save_to)
 
         doc = {
-            'post_username': user_info["id"],
-            'post_pictures': picture_receive,
-            'post_comments': comment_receive,
-            'post_pic': f'{filename}.{extension}'
+            "post_username": user_info["id"],
+            "post_pictures": picture_receive,
+            "post_comments": comment_receive,
+            "post_pic": f'{filename}.{extension}',
+            "date": date_receive
         }
         db.posts.insert_one(doc)
         return jsonify({"result": "success", 'msg': '포스팅 성공'})
@@ -192,7 +196,7 @@ def api_login():
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
             'id': id_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=5)
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=10000)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
