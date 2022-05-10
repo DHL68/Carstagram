@@ -247,40 +247,40 @@ def follow_function():
 
     return jsonify({'result': 'success'})
 
-
-@app.route('/follow', methods=['POST'])
-def follow_function():
-    token_receive = request.cookies.get('mytoken')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        # 좋아요 수 변경
-
-        # DB에 저장할 때는 1) 누가 2) 어떤 포스트에 3) 어떤 반응을 남겼는지 세 정보만 넣으면 되고,
-        # 좋아요인지, 취소인지에 따라 해당 도큐먼트를 insert_one()을 할지 delete_one()을 할지 결정해주어야합니다.
-        user_info = db.users.find_one({"email": payload["email"]})
-        user_id_receive = request.form["user_id_give"]
-        type_receive = request.form["type_give"]
-        action_receive = request.form["action_give"]
-        doc = {
-            "post_id": post_id_receive,
-            "usernick": user_info["nick"],
-            "type": type_receive
-        }
-        if action_receive == "like":
-            db.likes.insert_one(doc)
-        else:
-            db.likes.delete_one(doc)
-
-        # 좋아요 컬렉션을 업데이트한 이후에는 해당 포스트에 해당 타입의 반응이 몇 개인지를 세서 보내주어야합니다.
-        count = db.likes.count_documents({"post_id": post_id_receive, "type": type_receive})
-
-        print(count)
-        return jsonify({"result": "success", 'msg': 'updated', "count": count})
-
-    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
-        return redirect(url_for("home"))
-
 #
+# @app.route('/follow', methods=['POST'])
+# def follow_function():
+#     token_receive = request.cookies.get('mytoken')
+#     try:
+#         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+#         # 좋아요 수 변경
+#
+#         # DB에 저장할 때는 1) 누가 2) 어떤 포스트에 3) 어떤 반응을 남겼는지 세 정보만 넣으면 되고,
+#         # 좋아요인지, 취소인지에 따라 해당 도큐먼트를 insert_one()을 할지 delete_one()을 할지 결정해주어야합니다.
+#         user_info = db.users.find_one({"email": payload["email"]})
+#         user_id_receive = request.form["user_id_give"]
+#         type_receive = request.form["type_give"]
+#         action_receive = request.form["action_give"]
+#         doc = {
+#             "post_id": post_id_receive,
+#             "usernick": user_info["nick"],
+#             "type": type_receive
+#         }
+#         if action_receive == "like":
+#             db.likes.insert_one(doc)
+#         else:
+#             db.likes.delete_one(doc)
+#
+#         # 좋아요 컬렉션을 업데이트한 이후에는 해당 포스트에 해당 타입의 반응이 몇 개인지를 세서 보내주어야합니다.
+#         count = db.likes.count_documents({"post_id": post_id_receive, "type": type_receive})
+#
+#         print(count)
+#         return jsonify({"result": "success", 'msg': 'updated', "count": count})
+#
+#     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+#         return redirect(url_for("home"))
+#
+# #
 # # 회원가입 서버
 # @app.route('/sign_up/save', methods=['POST'])
 # def sign_up():
