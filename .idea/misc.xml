@@ -3,6 +3,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9" project-jdk-type="Python SDK" />
 =======
   <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.8 (Carstagram)" project-jdk-type="Python SDK" />
@@ -27,4 +28,7 @@
 =======
 >>>>>>> personal_branch
 >>>>>>> origin/sign_branch
+=======
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.10" project-jdk-type="Python SDK" />
+>>>>>>> 3417c7c36bd9ccb87ebaaf4fb4abf02b0aff6eda
 </project>
