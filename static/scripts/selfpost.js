@@ -96,13 +96,27 @@ function post_posting() {
 }
 
 /* GET 요청 ajax 코드 */
-function post_listing() {
+/* GET 요청 ajax 코드 */
+function post_listing(usernick) {
+    if (usernick == undefined) {
+        usernick = ""
+    }
+    // $("#post-feed-box").empty()
     $.ajax({
         type: "GET",
+<<<<<<< HEAD
         url: "/listing",
         data: {},
         success: function (response) {
             let posts = JSON.parse(response['posts'])
+=======
+        url: `/listing?nickname_give=${usernick}`,
+        data: {},
+        success: function (response) {
+            let posts = response['posts']
+
+            console.log(posts)
+>>>>>>> 2b7893b3799e70a3cdec6f000d481b90fcba8ffb
 
             for (let i = 0; i < posts.length; i++) {
                 let post = posts[i]
