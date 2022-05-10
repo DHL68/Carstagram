@@ -51,14 +51,13 @@ function show_comment() {
             for (let i = 0; i < rows.length; i++) {
                 let comment = rows[i]['comments']
                 let post_id = rows[i]['post_id']
-                // let user_id = rows[i]['user_id']
-                console.log(post_id)
+                let usernick = rows[i]['usernick']
 
                 let temp_html = `
                             <div class = ""style="display: flex; flex-direction: row;">
                                 <a href=""><img class="box-profile"
-                                                src="https://blog.kakaocdn.net/dn/b0ZMMh/btq4eKTyBG4/aVgQqfsq543UByfJSaK0cK/img.jpg"></a>
-                                <p style="margin-left: 10px;">${post_id}</p>
+                                                src="http://kaihuastudio.com/common/img/default_profile.png"></a>
+                                <p style="margin-left: 10px;">${usernick}</p>
                                 <p style="font-weight: lighter; margin-left: 10px;">${comment}</p>
                             </div>`
 

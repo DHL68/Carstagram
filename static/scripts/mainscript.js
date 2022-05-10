@@ -77,10 +77,10 @@ function show_comment() {
             for (let i = 0; i < rows.length; i++) {
                 let comment = rows[i]['comments']
                 let post_id = rows[i]['post_id']
-                // let user_id = rows[i]['user_id']
+                let usernick = rows[i]['usernick']
                 console.log(post_id)
 
-                let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">${post_id}</span> ${comment}</p>`
+                let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">${usernick}</span> ${comment}</p>`
 
                 $(`.${post_id}`).append(temp_html)
             }
@@ -110,9 +110,7 @@ function my_info() {
                                 ${usernick}<br>
                                 <p style="font-size: 13px; color: #dbdbdb; font-weight: lighter;">${username}</p>
                             </div>
-                            <div style="margin-left: 44.1%; font-size: 12px;">
-                                <button style="background: none; border: none; color: cornflowerblue">전환</button>
-                            </div>`
+                            `
 
             $('#user-info').append(temp_html)
         }
