@@ -68,7 +68,7 @@ def post_posting():
     post_pic = request.files["pic_give"]
 
     # 새로운 날짜 이름 만들기
-    today = datetime.now()
+    today = datetime.datetime.now()
     mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
 
     filename = f'post_pic-{mytime}'
