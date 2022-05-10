@@ -64,7 +64,6 @@ def user_page(user_email):
 
     # print(token_receive)
     try:
-
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         status_email = (user_email == payload["email"])  # 내 프로필이면 True, 다른 사람 프로필 페이지면 False
 
@@ -237,6 +236,7 @@ def post_posting():
         post_picture.save(save_to)
 
         doc = {
+            "email" : user_info["email"],
             "usernick": user_info["nick"],
             "post_hashtag": hashtag_receive,
             "post_comment": comment_receive,
@@ -279,8 +279,7 @@ def post_listing():
             post["_id"] = str(post["_id"])
 
             post["count_heart"] = db.likes.count_documents({"post_id": post["_id"], "type": "heart"})
-            post["heart_by_me"] = bool(
-                db.likes.find_one({"post_id": post["_id"], "type": "heart", "email": my_usereamil}))
+            post["heart_by_me"] = bool(db.likes.find_one({"post_id": post["_id"], "type": "heart", "email": my_usereamil}))
 
         return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다.", "posts": posts})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
@@ -308,7 +307,8 @@ def update_like():
         doc = {
             "post_id": post_id_receive,
             "usernick": user_info["nick"],
-            "type": type_receive
+            "type": type_receive,
+            "email": user_info["email"]
         }
         if action_receive == "like":
             db.likes.insert_one(doc)
