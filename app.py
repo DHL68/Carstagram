@@ -3,11 +3,13 @@ from pymongo import MongoClient
 import jwt
 # 토큰에 만료시간을 줘야하기 때문에, datetime 모듈도 사용합니다.
 import datetime
-# 회원가입 시엔, 비밀번호를 암호화하여 DB에 저장해두는 게 좋습니다.
-# 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 import hashlib
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
+from werkzeug.utils import secure_filename
 from bson.json_util import dumps
+from datetime import datetime, timedelta
+# 회원가입 시엔, 비밀번호를 암호화하여 DB에 저장해두는 게 좋습니다.
+# 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -145,7 +147,7 @@ def api_login():
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
             'email': email_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=60 * 60 * 24)
+            'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
@@ -212,7 +214,7 @@ def post_posting():
         extension = post_picture.filename.split('.')[-1]
 
         # 새로운 이름으로 저장하기
-        save_to = f'static/{filename}.{extension}'
+        save_to = f'static/image/{filename}.{extension}'
         post_picture.save(save_to)
 
         doc = {
@@ -233,9 +235,79 @@ def post_posting():
 #
 @app.route('/listing', methods=['GET'])
 def post_listing():
-    posts = dumps(list(db.posts.find({})))
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 포스팅 목록 받아오기
 
-    return jsonify({'posts': posts})
+        # 서버에서는 DB에서 최근 20개의 포스트를 받아와 리스트로 넘겨줍니다.
+        # 나중에 좋아요 기능을 쓸 때 각 포스트를 구분하기 위해서 MongoDB가 자동으로 만들어주는 _id 값을 이용할 것인데요,
+        # ObjectID라는 자료형이라 문자열로 변환해주어야합니다.
+        my_usereamil = payload["email"]
+        usernick_receive = request.args.get("nickname_give")
+        if usernick_receive == "":
+            posts = list(db.posts.find({}).sort("date", -1).limit(20))
+        else:
+            posts = list(db.posts.find({"usernick": usernick_receive}).sort("date", -1).limit(20))
+
+        # 우선 서버에서 포스트 목록을 보내줄 때 그 포스트에 달린 하트가 몇 개인지, 내가 단 하트도 있는지 같이 세어 보내줍니다.
+        for post in posts:
+            post["_id"] = str(post["_id"])
+
+            post["count_heart"] = db.likes.count_documents({"post_id": post["_id"], "type": "heart"})
+            post["heart_by_me"] = bool(
+                db.likes.find_one({"post_id": post["_id"], "type": "heart", "username": my_usereamil}))
+
+            # post["count_star"] = db.likes.count_documents({"post_id": post["_id"], "type": "star"})
+            # post["star_by_me"] = bool(
+            #     db.likes.find_one({"post_id": post["_id"], "type": "star", "username": my_username}))
+            #
+            # post["count_like"] = db.likes.count_documents({"post_id": post["_id"], "type": "like"})
+            # post["like_by_me"] = bool(
+            #     db.likes.find_one({"post_id": post["_id"], "type": "like", "username": my_username}))
+
+        return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다.", "posts": posts})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+    # return jsonify({'posts': posts})
+
+
+#
+# 좋아요요
+#
+@app.route('/update_like', methods=['POST'])
+def update_like():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 좋아요 수 변경
+
+        # DB에 저장할 때는 1) 누가 2) 어떤 포스트에 3) 어떤 반응을 남겼는지 세 정보만 넣으면 되고,
+        # 좋아요인지, 취소인지에 따라 해당 도큐먼트를 insert_one()을 할지 delete_one()을 할지 결정해주어야합니다.
+        user_info = db.users.find_one({"email": payload["email"]})
+        post_id_receive = request.form["post_id_give"]
+        type_receive = request.form["type_give"]
+        action_receive = request.form["action_give"]
+        doc = {
+            "post_id": post_id_receive,
+            "usernick": user_info["nick"],
+            "type": type_receive
+        }
+        if action_receive == "like":
+            db.likes.insert_one(doc)
+        else:
+            db.likes.delete_one(doc)
+
+        # 좋아요 컬렉션을 업데이트한 이후에는 해당 포스트에 해당 타입의 반응이 몇 개인지를 세서 보내주어야합니다.
+        count = db.likes.count_documents({"post_id": post_id_receive, "type": type_receive})
+
+        print(count)
+        return jsonify({"result": "success", 'msg': 'updated', "count": count})
+
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
 
 
 # post 댓글작성

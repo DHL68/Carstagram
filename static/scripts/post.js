@@ -18,7 +18,6 @@ $(document).ready(function () {
     // 페이지 로드 시 post_listing 에 대한 값을 불러온다
     // bsCustomFileInput.init()
     post_listing('bs-custom-file-input')
-    alert('안녕')
 })
 // 포스팅 시간 나타내기
 
@@ -83,11 +82,13 @@ function post_listing() {
                 let post = posts[i]
                 let time_post = new Date(post["date"])
                 let time_before = time2str(time_post)
-                let post_picture = posts[i]['post_pictures']
-                let post_comment = posts[i]['post_comments']
-                let post_pic = posts[i]['post_pic']
+                let post_hashtag = posts[i]['post_hashtag']
+                let post_comment = posts[i]['post_comment']
+                let post_picture = posts[i]['post_picture']
                 let post_id = posts[i]['_id']['$oid']
+                let post_nick = posts[i]['usernick']
 
+                let class_heart = post['heart_by_me'] ? "fa-heart" : "fa-heart-o"
 
                 let temp_html =`
                             <div class="feed-box" id="feed_box">
@@ -99,7 +100,7 @@ function post_listing() {
                                                             src="http://kaihuastudio.com/common/img/default_profile.png"></a>
                                         </div>
                                         <div style="margin-left: 10px">
-                                            user_id
+                                            ${post_nick}
                                         </div>
                                     </div>
                                     <div>
@@ -113,7 +114,7 @@ function post_listing() {
                                      data-bs-interval="false" style="height: 600px;">
                                     <div class="carousel-inner">
                                         <div class="carousel-item active">
-                                            <img src="../static/${post_pic}"
+                                            <img src="../static/image/${post_picture}"
                                                  class="d-block w-100 feed-picture" alt="...">
                                         </div>
                                     </div>
@@ -130,11 +131,19 @@ function post_listing() {
                                 </div>
                                 <!--                사진 아래 아이콘--------------------------------------------------------------------->
                                 <div style="margin-top: 2%; display: flex; flex-direction: row; justify-content: space-between;">
-                                    <div style="margin-left: 10px;">
-                                        <button class="like-btn" onclick="like()"><span class="material-icons-outlined">favorite_border</span></button>
-                                        <span class="material-icons-outlined">mode_comment</span>
-                                        <span class="material-icons-outlined">send</span>
+<!--                                    <div style="margin-left: 10px;">-->
+<!--                                        <button class="like-btn" onclick="like()"><span class="material-icons-outlined">favorite_border</span></button>-->
+<!--                                        <span class="material-icons-outlined">mode_comment</span>-->
+<!--                                        <span class="material-icons-outlined">send</span>-->
+<!--                                    </div>-->
+                                    <nav class="level is-mobile">
+                                    <div class="level-left">
+                                        <a class="level-item is-sparta" aria-label="heart" onclick="toggle_like('${post['_id']}', 'heart')">
+                                            <span class="icon is-small"><i class="fa ${class_heart}"
+                                                                           aria-hidden="true"></i></span>&nbsp;<span class="like-num">${num2str(post["count_heart"])}</span>
+                                        </a>
                                     </div>
+                                    </nav>
                                     <div style="margin-right: 10px;">
                                         <span class="material-icons-outlined">bookmark_border</span>
                                     </div>
@@ -144,9 +153,9 @@ function post_listing() {
                                     <div>좋아요 1개</div>
                                     <!--                    게시자 글-->
                                     <div>
-                                        <div><a href='#' class="name">IlikeCar</a>
+                                        <div><a href='#' class="name">${post_nick}</a>
                                         <span style="font-weight: lighter; color: dodgerblue;">
-                                        ${post_picture}
+                                        ${post_hashtag}
                                         </span>
                                         <span style="font-weight: lighter">${post_comment}</span>
                                         <span style="color: #c7c7c7">더보기</span>
@@ -179,4 +188,55 @@ function post_listing() {
     })
 }
 
+function toggle_like(post_id, type) {
+    console.log(post_id, type)
+    let $a_like = $(`#${post_id} a[aria-label='${type}']`)
+    let $i_like = $a_like.find("i")
+    let class_s = {"heart": "fa-heart"}
+    let class_o = {"heart": "fa-heart-o"}
+    if ($i_like.hasClass(class_s[type])) {
+        $.ajax({
+            type: "POST",
+            url: "/update_like",
+            data: {
+                post_id_give: post_id,
+                type_give: type,
+                action_give: "unlike"
+            },
+            success: function (response) {
+                console.log("unlike")
+                $i_like.addClass(class_o[type]).removeClass(class_s[type])
+                $a_like.find("span.like-num").text(num2str(response["count"]))
+            }
+        })
+    } else {
+        $.ajax({
+            type: "POST",
+            url: "/update_like",
+            data: {
+                post_id_give: post_id,
+                type_give: type,
+                action_give: "like"
+            },
+            success: function (response) {
+                console.log("like")
+                $i_like.addClass(class_s[type]).removeClass(class_o[type])
+                $a_like.find("span.like-num").text(num2str(response["count"]))
+            }
+        })
 
+    }
+}
+
+function num2str(count) {
+    if (count > 10000) {
+        return parseInt(count / 1000) + "k"
+    }
+    if (count > 500) {
+        return parseInt(count / 100) / 10 + "k"
+    }
+    if (count == 0) {
+        return ""
+    }
+    return count
+}
