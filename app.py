@@ -2,16 +2,23 @@ from pymongo import MongoClient
 # JWT 패키지를 사용합니다. (설치해야할 패키지 이름: PyJWT)
 import jwt
 # 토큰에 만료시간을 줘야하기 때문에, datetime 모듈도 사용합니다.
+<<<<<<< HEAD
 from _datetime import datetime, timedelta
 # 회원가입 시엔, 비밀번호를 암호화하여 DB에 저장해두는 게 좋습니다.
 # 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
+=======
+import datetime
+>>>>>>> origin/personal_branch_DH_2
 import hashlib
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
+from werkzeug.utils import secure_filename
 from bson.json_util import dumps
+from datetime import datetime, timedelta
+# 회원가입 시엔, 비밀번호를 암호화하여 DB에 저장해두는 게 좋습니다.
+# 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 
 client = MongoClient('localhost', 27017)
 db = client.Carstagram
@@ -29,12 +36,20 @@ headers = {
 def home():
     # 현재 이용자의 컴퓨터에 저장된 cookie 에서 mytoken 을 가져옵니다.
     token_receive = request.cookies.get('mytoken')
+<<<<<<< HEAD
 
+=======
+    # print(token_receive)
+>>>>>>> origin/personal_branch_DH_2
     try:
         # 암호화되어있는 token의 값을 우리가 사용할 수 있도록 디코딩(암호화 풀기)해줍니다!
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({"email": payload['email']})
 
+<<<<<<< HEAD
+=======
+        # print(user_info)
+>>>>>>> origin/personal_branch_DH_2
 
         return render_template('main.html', email=user_info["email"])
 
@@ -54,10 +69,11 @@ def main():
 
 # 개인페이지 불러오기
 
-@app.route('/user/<email>')
-def user_page(email):
+@app.route('/user/<user_email>')
+def user_page(user_email):
     # 각 사용자의 프로필과 글을 모아볼 수 있는 공간
     token_receive = request.cookies.get('mytoken')
+<<<<<<< HEAD
     # print(token_receive)
     try:
 
@@ -73,6 +89,26 @@ def user_page(email):
         print(user_info)
 
         return render_template('self.html', user_info=user_info, status=status)
+=======
+
+    print(token_receive)
+    # print(token_receive)
+    try:
+
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        status_email = (user_email == payload["email"])  # 내 프로필이면 True, 다른 사람 프로필 페이지면 False
+
+        print(user_email)
+        print(payload)
+        print(status_email)
+
+        user_email = db.users.find_one({"email": payload["email"]}, {"_id": False})
+
+        print(user_email)
+
+        return render_template('self.html', user_email=user_email, status_email=status_email)
+
+>>>>>>> origin/personal_branch_DH_2
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
@@ -180,12 +216,38 @@ def user_info():
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+<<<<<<< HEAD
         user_info = db.users.find_one({"email": payload['email']}, {'_id': False})
         print()
         return jsonify({'users': user_info})
+=======
+        # print(payload)
+
+        # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
+        # 여기에선 그 예로 닉네임을 보내주겠습니다.
+        userinfo = db.users.find_one({'id': payload['id']}, {'_id': 0})
+        return jsonify({'result': 'success', 'nickname': userinfo['nick']})
+    except jwt.ExpiredSignatureError:
+        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
+        return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
+>>>>>>> origin/personal_branch_DH_2
     except jwt.exceptions.DecodeError:
         return jsonify({'msg': '회원 정보가 존재하지 않습니다.'})
 
+# 유저 정보 불러오기 메인,개인페이지
+
+@app.route("/info", methods=["GET"])
+def user_info():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"email": payload['email']}, {'_id': False})
+
+        # print(user_info)
+
+        return jsonify({'users': user_info})
+    except jwt.exceptions.DecodeError:
+        return jsonify({'msg': '회원 정보가 존재하지 않습니다.'})
 
 # get 회원 추천
 
@@ -219,6 +281,10 @@ def post_posting():
         hashtag_receive = request.form["hashtag_give"]
         comment_receive = request.form["comment_give"]
         date_receive = request.form["date_give"]
+<<<<<<< HEAD
+=======
+        # print(type(date_receive))
+>>>>>>> origin/personal_branch_DH_2
 
         post_picture = request.files["picture_give"]
 
@@ -254,9 +320,75 @@ def post_posting():
 
 @app.route('/listing', methods=['GET'])
 def post_listing():
-    posts = dumps(list(db.posts.find({})))
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 포스팅 목록 받아오기
 
-    return jsonify({'posts': posts})
+        # 서버에서는 DB에서 최근 20개의 포스트를 받아와 리스트로 넘겨줍니다.
+        # 나중에 좋아요 기능을 쓸 때 각 포스트를 구분하기 위해서 MongoDB가 자동으로 만들어주는 _id 값을 이용할 것인데요,
+        # ObjectID라는 자료형이라 문자열로 변환해주어야합니다.
+        my_usereamil = payload["email"]
+        # usernick_receive = request.args.get("nickname_give")
+        email_receive = request.args.get("email_give")
+
+        print(email_receive)
+
+        if email_receive == "":
+            posts = list(db.posts.find({}).sort("date", -1).limit(20))
+        else:
+            posts = list(db.posts.find({"email": email_receive}).sort("date", -1).limit(20))
+
+        # 우선 서버에서 포스트 목록을 보내줄 때 그 포스트에 달린 하트가 몇 개인지, 내가 단 하트도 있는지 같이 세어 보내줍니다.
+        for post in posts:
+            post["_id"] = str(post["_id"])
+
+            post["count_heart"] = db.likes.count_documents({"post_id": post["_id"], "type": "heart"})
+            post["heart_by_me"] = bool(
+                db.likes.find_one({"post_id": post["_id"], "type": "heart", "email": my_usereamil}))
+
+        return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다.", "posts": posts})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+    # return jsonify({'posts': posts})
+
+
+#
+# 좋아요요
+#
+@app.route('/update_like', methods=['POST'])
+def update_like():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 좋아요 수 변경
+
+        # DB에 저장할 때는 1) 누가 2) 어떤 포스트에 3) 어떤 반응을 남겼는지 세 정보만 넣으면 되고,
+        # 좋아요인지, 취소인지에 따라 해당 도큐먼트를 insert_one()을 할지 delete_one()을 할지 결정해주어야합니다.
+        user_info = db.users.find_one({"email": payload["email"]})
+        post_id_receive = request.form["post_id_give"]
+        type_receive = request.form["type_give"]
+        action_receive = request.form["action_give"]
+        doc = {
+            "post_id": post_id_receive,
+            "usernick": user_info["nick"],
+            "type": type_receive
+        }
+        if action_receive == "like":
+            db.likes.insert_one(doc)
+        else:
+            db.likes.delete_one(doc)
+
+        # 좋아요 컬렉션을 업데이트한 이후에는 해당 포스트에 해당 타입의 반응이 몇 개인지를 세서 보내주어야합니다.
+        count = db.likes.count_documents({"post_id": post_id_receive, "type": type_receive})
+
+        # print(count)
+        return jsonify({"result": "success", 'msg': 'updated', "count": count})
+
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
 
 
 

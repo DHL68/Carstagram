@@ -11,10 +11,10 @@
 
     <!-- Jquery -->
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-    <!-- CSS -->
-    <link rel="stylesheet" href="../static/style/login_style.css" type="text/css">
+{#    <!-- CSS -->#}
+{#    <link rel="stylesheet" href="../static/style/login_style.css" type="text/css">#}
     <!-- @media 나중에 -->
-    <link rel="stylesheet" media="screen and (max-width: 768px)" href="/style/login_style.css"/>
+    <link rel="stylesheet" media="screen and (max-width: 768px)" href="../static/style/login_style.css"/>
     <!-- JS -->
     <script src="../static/scripts/login.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -53,6 +53,15 @@
         <div> 계정이 없으신가요? <a href="/sign_up">회원가입</a></div>
     </div>
 </div>
+
+{#<nav class="level is-mobile">#}
+{#<div class="level-left">#}
+{#    <a class="level-item is-sparta" aria-label="heart" onclick="toggle_like('${post['_id']}', 'heart')">#}
+{#        <span class="icon is-small"><i class="fa ${class_heart}"#}
+{#                                       aria-hidden="true"></i></span>&nbsp;<span class="like-num">${num2str(post["count_heart"])}</span>#}
+{#    </a>#}
+{#</div>#}
+{#</nav>#}
 
 </script>
 <!-- Option 1: Bootstrap Bundle with Popper -->

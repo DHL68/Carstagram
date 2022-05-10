@@ -47,13 +47,14 @@ $(document).ready(function () {
 
 function add_comment(post_id) {
     let comment = $(`#${post_id}`).val()
-
+    console.log(comment)
     $.ajax({
         type: 'POST',
         url: '/comment',
         data: {comment_give: comment, post_give: post_id},
         success: function (response) {
             alert(response['msg'])
+            // console.log(post_id)
             window.location.reload()
         }
     })
@@ -79,7 +80,11 @@ function show_comment() {
                 let comment = rows[i]['comments']
                 let post_id = rows[i]['post_id']
                 let usernick = rows[i]['usernick']
+<<<<<<< HEAD
                 console.log(post_id)
+=======
+                // console.log(post_id)
+>>>>>>> origin/personal_branch_DH_2
 
                 let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">${usernick}</span> ${comment}</p>`
 
@@ -89,8 +94,17 @@ function show_comment() {
     });
 }
 
+<<<<<<< HEAD
 function my_info() {
 
+=======
+// 로그인한 유저정보 불러오기
+$(document).ready(function () {
+    my_info()
+})
+
+function my_info() {
+>>>>>>> origin/personal_branch_DH_2
     $.ajax({
         type: "GET",
         url: "/info",
@@ -100,6 +114,11 @@ function my_info() {
             let usernick = row['nick']
             let username = row['name']
 
+<<<<<<< HEAD
+=======
+            // console.log(usernick, username)
+
+>>>>>>> origin/personal_branch_DH_2
             let temp_html = `
                             <div class="left-profile">
                                 <a href="/user/<email>"><img class="profile"
@@ -109,11 +128,18 @@ function my_info() {
                                 ${usernick}<br>
                                 <p style="font-size: 13px; color: #dbdbdb; font-weight: lighter;">${username}</p>
                             </div>
+<<<<<<< HEAD
                             `
+=======
+                            <div style="margin-left: 44.1%; font-size: 12px;">
+                                <button style="background: none; border: none; color: cornflowerblue">전환</button>
+                            </div>`
+>>>>>>> origin/personal_branch_DH_2
 
             $('#user-info').append(temp_html)
         }
     });
+<<<<<<< HEAD
 };
 
 function rec_user() {
@@ -149,3 +175,6 @@ function rec_user() {
         }
     });
 };
+=======
+};
+>>>>>>> origin/personal_branch_DH_2

@@ -41,7 +41,6 @@ function add_comment1(post_id) {
 }
 
 function show_comment() {
-
     $.ajax({
         type: "GET",
         url: "/comment",
@@ -68,7 +67,10 @@ function show_comment() {
 }
 
 function my_info() {
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/personal_branch_DH_2
     $.ajax({
         type: "GET",
         url: "/info",
