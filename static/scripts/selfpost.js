@@ -96,9 +96,6 @@ function post_posting() {
 
 /* GET 요청 ajax 코드 */
 function post_listing(email) {
-    if (username == undefined) {
-        username = ""
-    }
 
     console.log(email)
 
