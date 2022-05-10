@@ -20,6 +20,54 @@ $(document).ready(function () {
     post_listing('bs-custom-file-input')
     alert('안녕')
 })
+// 포스팅 시간 나타내기
+
+function time2str(date) {
+    let today = new Date()
+    let time = (today - date) / 1000 / 60  // 분
+
+    if (time < 60) {
+        return parseInt(time) + "분 전"
+    }
+    time = time / 60  // 시간
+    if (time < 24) {
+        return parseInt(time) + "시간 전"
+    }
+    time = time / 24
+    if (time < 7) {
+        return parseInt(time) + "일 전"
+    }
+    return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`
+}
+
+/* POST 요청 ajax 코드 */
+function post_posting() {
+    // 고유 id let 함수로 정의
+    let hashtag = $('#post_hashtag').val()
+    let comment = $('#post_comment').val()
+    let today = new Date().toISOString()
+
+    let picture = $('#customFile')[0].files[0]
+    let form_data = new FormData()
+
+    form_data.append("hashtag_give", hashtag)
+    form_data.append("picture_give", picture)
+    form_data.append("comment_give", comment)
+    form_data.append("date_give", today)
+
+    $.ajax({
+        type: "POST",
+        url: "/posting",
+        data: form_data,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            alert(response['msg'])
+            window.location.reload()
+        }
+    })
+}
 
 
 /* GET 요청 ajax 코드 */
@@ -32,6 +80,9 @@ function post_listing() {
             let posts = JSON.parse(response['posts'])
 
             for (let i = 0; i < posts.length; i++) {
+                let post = posts[i]
+                let time_post = new Date(post["date"])
+                let time_before = time2str(time_post)
                 let post_picture = posts[i]['post_pictures']
                 let post_comment = posts[i]['post_comments']
                 let post_pic = posts[i]['post_pic']
@@ -108,7 +159,7 @@ function post_listing() {
                     
                                     </div>
                                     <!--                몇일,시간,분전-->
-                                    <div style="font-weight: lighter; font-size: 10px;">3시간전</div>
+                                    <div style="font-weight: lighter; font-size: 10px;">${time_before}</div>
                                     <!--                댓글달기-->
                                     <div style="display:flex; flex-direction: row; justify-content: center; margin-left: -10px; margin-top: 10px; border-top: solid 1px #dbdbdb;">
                                         <span style="margin-left: 8px; margin-top: 7px;" class="material-symbols-outlined">mood</span>
@@ -129,29 +180,3 @@ function post_listing() {
 }
 
 
-/* POST 요청 ajax 코드 */
-function post_posting() {
-    // 고유 id let 함수로 정의
-    let picture = $('#post_picture').val()
-    let comment = $('#post_comment').val()
-
-    let pic = $('#customFile')[0].files[0]
-    let form_data = new FormData()
-
-    form_data.append("picture_give", picture)
-    form_data.append("pic_give", pic)
-    form_data.append("comment_give", comment)
-
-    $.ajax({
-        type: "POST",
-        url: "/posting",
-        data: form_data,
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            alert(response['msg'])
-            window.location.reload()
-        }
-    })
-}

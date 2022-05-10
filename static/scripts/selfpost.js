@@ -48,6 +48,31 @@ $(document).ready(function () {
     alert('안녕')
 })
 
+/* POST 요청 ajax 코드 */
+function post_posting() {
+    // 고유 id let 함수로 정의
+    let picture = $('#post_picture').val()
+    let comment = $('#post_comment').val()
+    let pic = $('#customFile')[0].files[0]
+    let form_data = new FormData()
+
+    form_data.append("picture_give", picture)
+    form_data.append("pic_give", pic)
+    form_data.append("comment_give", comment)
+
+    $.ajax({
+        type: "POST",
+        url: "/posting",
+        data: form_data,
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            alert(response['msg'])
+            window.location.reload()
+        }
+    })
+}
 
 /* GET 요청 ajax 코드 */
 function post_listing() {
@@ -138,28 +163,3 @@ function post_listing() {
 }
 
 
-/* POST 요청 ajax 코드 */
-function post_posting() {
-    // 고유 id let 함수로 정의
-    let picture = $('#post_picture').val()
-    let comment = $('#post_comment').val()
-    let pic = $('#customFile')[0].files[0]
-    let form_data = new FormData()
-
-    form_data.append("picture_give", picture)
-    form_data.append("pic_give", pic)
-    form_data.append("comment_give", comment)
-
-    $.ajax({
-        type: "POST",
-        url: "/posting",
-        data: form_data,
-        cache: false,
-        contentType: false,
-        processData: false,
-        success: function (response) {
-            alert(response['msg'])
-            window.location.reload()
-        }
-    })
-}

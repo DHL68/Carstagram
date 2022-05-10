@@ -15,82 +15,11 @@ app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 
 client = MongoClient('localhost', 27017)
 db = client.Carstagram
+SECRET_KEY = 'SPARTA'
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 
-
-# post 댓글작성
-
-@app.route("/comment", methods=["POST"])
-def new_comment():
-    comment_receive = request.form['comment_give']
-    post_receive = request.form['post_give']
-    # id_receive = request.form['id_give']
-
-    doc = {
-        'comments': comment_receive,
-        'post_id': post_receive
-        # 'user_id' : id_receive
-    }
-    db.comments.insert_one(doc)
-
-    return jsonify({'msg': '댓글작성완료!'})
-
-
-# get 댓글 불러오기
-
-@app.route("/comment", methods=["GET"])
-def comment():
-    comment_list = list(db.comments.find({}, {'_id': False}))
-
-    return jsonify({'comments': comment_list})
-
-
-#
-# post 리스팅 메서드
-#
-@app.route('/listing', methods=['GET'])
-def post_listing():
-    posts = dumps(list(db.posts.find({})))
-
-    return jsonify({'posts': posts})
-
-
-#
-# post 업로드 메서드
-#
-@app.route('/posting', methods=['POST'])
-def post_posting():
-    picture_receive = request.form["picture_give"]
-    comment_receive = request.form["comment_give"]
-
-    post_pic = request.files["pic_give"]
-
-    # 새로운 날짜 이름 만들기
-    today = datetime.now()
-    mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
-
-    filename = f'post_pic-{mytime}'
-
-    # 확장자 뺴기
-    extension = post_pic.filename.split('.')[-1]
-
-    # 새로운 이름으로 저장하기
-    save_to = f'static/{filename}.{extension}'
-    post_pic.save(save_to)
-
-    doc = {
-        'post_pictures': picture_receive,
-        'post_comments': comment_receive,
-        'post_pic': f'{filename}.{extension}'
-    }
-    db.posts.insert_one(doc)
-
-    return jsonify({'msg': '업로드 완료!'})
-
-
-SECRET_KEY = 'SPARTA'
 
 
 #################################
@@ -102,12 +31,16 @@ SECRET_KEY = 'SPARTA'
 def home():
     # 현재 이용자의 컴퓨터에 저장된 cookie 에서 mytoken 을 가져옵니다.
     token_receive = request.cookies.get('mytoken')
+    print(token_receive)
     try:
         # 암호화되어있는 token의 값을 우리가 사용할 수 있도록 디코딩(암호화 풀기)해줍니다!
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.users.find_one({"id": payload['id']})
+        user_info = db.users.find_one({"email": payload['email']})
 
-        return render_template('main.html', nickname=user_info["nick"])
+        print(user_info)
+
+        return render_template('main.html', email=user_info["email"])
+
     # 만약 해당 token의 로그인 시간이 만료되었다면, 아래와 같은 코드를 실행합니다.
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
@@ -116,11 +49,6 @@ def home():
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 
-@app.route('/login')
-def login():
-    msg = request.args.get("msg")
-    return render_template('login.html', msg=msg)
-
 
 # 메인페이지 불러오기
 @app.route('/main')
@@ -128,12 +56,24 @@ def main():
     return render_template('main.html')
 
 
-# 개인페이지 불러오기
+@app.route('/user/<email>')
+def user_page(email):
+    # 각 사용자의 프로필과 글을 모아볼 수 있는 공간
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        status = (email == payload["email"])  # 내 프로필이면 True, 다른 사람 프로필 페이지면 False
 
-@app.route('/user')
-def user():
-    return render_template('self.html')
+        user_info = db.users.find_one({"email": email}, {"_id": False})
+        return render_template('self.html', user_info=user_info, status=status)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
+
+@app.route('/login')
+def login():
+    msg = request.args.get("msg")
+    return render_template('login.html', msg=msg)
 
 @app.route('/sign_up')
 def sign_up_page():
@@ -174,7 +114,7 @@ def check_dub1():
     email_receive = request.form['email_give']
     exist = bool(db.users.find_one({"email": email_receive}))
 
-    return jsonify({'result': 'success','exist': exist})
+    return jsonify({'result': 'success', 'exist': exist})
 
 
 @app.route('/check_nick', methods=['POST'])
@@ -183,7 +123,6 @@ def check_dub2():
     exists = bool(db.users.find_one({"nick": nickname_receive}))
 
     return jsonify({'result': 'success', 'exists': exists})
-
 
 # [로그인 API]
 # id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
@@ -206,7 +145,7 @@ def api_login():
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
             'email': email_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=5)
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=60 * 60 * 24)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
@@ -215,6 +154,7 @@ def api_login():
     # 찾지 못하면
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
+
 
 
 # [유저 정보 확인 API]
@@ -245,6 +185,93 @@ def api_valid():
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
 
 
+#
+# post 업로드 메서드
+#
+@app.route('/posting', methods=['POST'])
+def post_posting():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+
+        user_info = db.users.find_one({"email": payload["email"]})
+        hashtag_receive = request.form["hashtag_give"]
+        comment_receive = request.form["comment_give"]
+        date_receive = request.form["date_give"]
+        print(type(date_receive))
+
+        post_picture = request.files["picture_give"]
+
+        # 새로운 날짜 이름 만들기
+        today = datetime.now()
+        mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
+
+        filename = f'post_pic-{mytime}'
+
+        # 확장자 뺴기
+        extension = post_picture.filename.split('.')[-1]
+
+        # 새로운 이름으로 저장하기
+        save_to = f'static/{filename}.{extension}'
+        post_picture.save(save_to)
+
+        doc = {
+            "usernick": user_info["nick"],
+            "post_hashtag": hashtag_receive,
+            "post_comment": comment_receive,
+            "post_picture": f'{filename}.{extension}',
+            "date": date_receive
+        }
+        db.posts.insert_one(doc)
+
+        return jsonify({'msg': '업로드 완료!'})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+#
+# post 리스팅 메서드
+#
+@app.route('/listing', methods=['GET'])
+def post_listing():
+    posts = dumps(list(db.posts.find({})))
+
+    return jsonify({'posts': posts})
+
+
+# post 댓글작성
+
+@app.route("/comment", methods=["POST"])
+def new_comment():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+
+        user_info = db.users.find_one({"email": payload['email']})
+        comment_receive = request.form['comment_give']
+        post_receive = request.form['post_give']
+
+        doc = {
+            "usernick": user_info["nick"],
+            'comments': comment_receive,
+            'post_id': post_receive
+        }
+        db.comments.insert_one(doc)
+
+        return jsonify({'msg': '댓글작성완료!'})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+
+# get 댓글 불러오기
+
+@app.route("/comment", methods=["GET"])
+def comment():
+    comment_list = list(db.comments.find({}, {'_id': False}))
+
+    return jsonify({'comments': comment_list})
+
+
+
+
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
-
