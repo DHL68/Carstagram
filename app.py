@@ -244,6 +244,42 @@ def api_valid():
     except jwt.exceptions.DecodeError:
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
 
+#
+# post 리스팅 메서드
+#
+#
+# post 리스팅 메서드
+#
+@app.route('/listing', methods=['GET'])
+def post_listings():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 포스팅 목록 받아오기
+
+        # 서버에서는 DB에서 최근 20개의 포스트를 받아와 리스트로 넘겨줍니다.
+        # 나중에 좋아요 기능을 쓸 때 각 포스트를 구분하기 위해서 MongoDB가 자동으로 만들어주는 _id 값을 이용할 것인데요,
+        # ObjectID라는 자료형이라 문자열로 변환해주어야합니다.
+        my_usereamil = payload["email"]
+        usernick_receive = request.args.get("nickname_give")
+        if usernick_receive == "":
+            posts = list(db.posts.find({}).sort("date", -1).limit(20))
+        else:
+            posts = list(db.posts.find({"usernick": usernick_receive}).sort("date", -1).limit(20))
+
+        # 우선 서버에서 포스트 목록을 보내줄 때 그 포스트에 달린 하트가 몇 개인지, 내가 단 하트도 있는지 같이 세어 보내줍니다.
+        for post in posts:
+            post["_id"] = str(post["_id"])
+
+            post["count_heart"] = db.likes.count_documents({"post_id": post["_id"], "type": "heart"})
+            post["heart_by_me"] = bool(
+                db.likes.find_one({"post_id": post["_id"], "type": "heart", "email": my_usereamil}))
+
+        return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다.", "posts": posts})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+    # return jsonify({'posts': posts})
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

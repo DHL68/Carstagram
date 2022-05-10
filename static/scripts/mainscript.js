@@ -73,10 +73,10 @@ function show_comment() {
             for (let i = 0; i < rows.length; i++) {
                 let comment = rows[i]['comments']
                 let post_id = rows[i]['post_id']
-                // let user_id = rows[i]['user_id']
+                let usernick = rows[i]['usernick']
                 console.log(post_id)
 
-                let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">${post_id}</span> ${comment}</p>`
+                let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">${usernick}</span> ${comment}</p>`
 
                 $(`.${post_id}`).append(temp_html)
             }

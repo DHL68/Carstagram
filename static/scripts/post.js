@@ -23,20 +23,19 @@ $(document).ready(function () {
 
 
 /* GET 요청 ajax 코드 */
-function post_listing() {
+function post_listing(usernick) {
+    if (usernick == undefined) {
+        usernick = ""
+    }
+    // $("#post-feed-box").empty()
     $.ajax({
         type: "GET",
-        url: "/listing",
+        url: `/listing?nickname_give=${usernick}`,
         data: {},
         success: function (response) {
-            let posts = JSON.parse(response['posts'])
+            let posts = response['posts']
 
-            for (let i = 0; i < posts.length; i++) {
-                let post_picture = posts[i]['post_pictures']
-                let post_comment = posts[i]['post_comments']
-                let post_pic = posts[i]['post_pic']
-                let post_id = posts[i]['_id']['$oid']
-
+            console.log(posts)
 
                 let temp_html =`
                             <div class="feed-box" id="feed_box">
@@ -124,7 +123,6 @@ function post_listing() {
                                 </div>`
                 $('#post-feed-box').append(temp_html)
             }
-        }
     })
 }
 
