@@ -41,7 +41,6 @@ function add_comment1(post_id) {
 }
 
 function show_comment() {
-
     $.ajax({
         type: "GET",
         url: "/comment",
@@ -69,7 +68,6 @@ function show_comment() {
 
 
 function my_info() {
-
     $.ajax({
         type: "GET",
         url: "/info",

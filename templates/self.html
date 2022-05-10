@@ -20,8 +20,20 @@
     <!--    <link rel="stylesheet" href="{{ url_for('static', filename ='style/selfstyle.css') }}" type="text/css">-->
     <link rel="stylesheet" href="../static/style/selfstyle.css" type="text/css">
 
+    <script src="../static/scripts/selfscript.js" rel="stylesheet" type="text/javascript"></script>
+    <script src="../static/scripts/selfpost.js" rel="stylesheet" type="text/javascript"></script>
+
 
     <title>Carstagram</title>
+
+    <script>
+        $(document).ready(function () {
+            // 페이지 로드 시 post_listing 에 대한 값을 불러온다
+            // bsCustomFileInput.init()
+            post_listing("{{ user_email.email }}")
+        })
+    </script>
+
 </head>
 
 <body>
@@ -32,7 +44,7 @@
         <div class="container-fluid" style="justify-content: space-between; flex-wrap: nowrap; max-width: 940px;">
             <!--        instagram 이미지-------------------------------------------------------------------------------->
             <a class="navbar-brand" href="/main"><img style="width: 100px;"
-                                                  src="../static/image/Carstagram_rogo4.png">
+                                                      src="../static/image/Carstagram_rogo4.png">
             </a>
             <!--            검색창-------------------------------------------------------------------------------------->
             <input class="form-control me-2" style="max-width: 300px;" type="search" placeholder="검색"
@@ -40,7 +52,7 @@
             <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
                 <!--            아이콘---------------------------------------------------------------------------------->
                 <a href="/main"><span style="margin: 6px 12px 0 12px;"
-                                  class="material-icons">home</span></a>
+                                      class="material-icons">home</span></a>
                 <span style="margin: 0 12px 0 12px;" class="material-icons-outlined">send</span>
                 <button id="open-post-modal" style="background-color: #c7c7c7; border: none; margin-top: 7px;">
                     <span style="margin: 0 12px 0 12px;" class="material-icons-outlined">add_box</span>
@@ -114,66 +126,62 @@
             </div>
         </div>
         <!------------------     게시글---------------------------------------------------------------------------------------->
-        <div class="my-posts">
+        <div id="my-posts">
 
         </div>
     </div>
+        <!-----------모달 게시물 상세창------------------------------------------------------------------------------------------------------>
+        <div class="modal-post">
 
-    <!-----------모달 게시물 상세창------------------------------------------------------------------------------------------------------>
-    <div class="modal-post">
-
-    </div>
-    <!-- 모달 댓글창 속 모달 -->
-    <div id="modal-option" class="modal-overlay1">
-        <div id="modal-script" class="modal_body1">
-            <button style="color:red; font-weight: bold; background-color: white; margin-top: -20px; border: none; border-radius: 10px;">
-                신고
-            </button>
-            <button class="modal-text1" style="color: red; font-weight: bold;">
-                팔로우 취소
-            </button>
-            <button class="modal-text1">
-                게시물로 이동
-            </button>
-            <button class="modal-text1">
-                공유 대상...
-            </button>
-            <button class="modal-text1">
-                링크 복사
-            </button>
-            <button class="modal-text1" style="border-bottom: 1px solid #dbdbdb;">
-                퍼가기
-            </button>
-            <button id="close-modal" class="close-area"
-                    style="background-color: white; border: none; border-radius: 10px;">
-                <span>취소</span>
-            </button>
         </div>
-    </div>
+        <!-- 모달 댓글창 속 모달 -->
+        <div id="modal-option" class="modal-overlay1">
+            <div id="modal-script" class="modal_body1">
+                <button style="color:red; font-weight: bold; background-color: white; margin-top: -20px; border: none; border-radius: 10px;">
+                    신고
+                </button>
+                <button class="modal-text1" style="color: red; font-weight: bold;">
+                    팔로우 취소
+                </button>
+                <button class="modal-text1">
+                    게시물로 이동
+                </button>
+                <button class="modal-text1">
+                    공유 대상...
+                </button>
+                <button class="modal-text1">
+                    링크 복사
+                </button>
+                <button class="modal-text1" style="border-bottom: 1px solid #dbdbdb;">
+                    퍼가기
+                </button>
+                <button id="close-modal" class="close-area"
+                        style="background-color: white; border: none; border-radius: 10px;">
+                    <span>취소</span>
+                </button>
+            </div>
+        </div>
 
-    <!-- 게시글 작성 버튼 클릭시 일기장 작성 팝업 -->
-    <div id="post-modal" class="modal-overlay2">
-        <div class="jumbotron jumbotron-fluid">
-            <div class="container">
-                <div class="posting-box">
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="customFile">
-                        <label class="custom-file-label" for="file">사진 선택하기</label>
+        <!-- 게시글 작성 버튼 클릭시 일기장 작성 팝업 -->
+        <div id="post-modal" class="modal-overlay2">
+            <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                    <div class="posting-box">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" id="customFile">
+                            <label class="custom-file-label" for="file">사진 선택하기</label>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="post_picture" placeholder="사진 제목">
+                        </div>
+                        <div class="form-group">
+                            <textarea placeholder="내용 입력" class="form-control" id="post_comment" rows="3"></textarea>
+                        </div>
+                        <button onclick="post_posting()" type="submit" class="btn btn-primary">저장하기</button>
                     </div>
-                    <div class="form-group">
-                        <input type="text" class="form-control" id="post_picture" placeholder="사진 제목">
-                    </div>
-                    <div class="form-group">
-                        <textarea placeholder="내용 입력" class="form-control" id="post_comment" rows="3"></textarea>
-                    </div>
-                    <button onclick="post_posting()" type="submit" class="btn btn-primary">저장하기</button>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-<script src="../static/scripts/selfscript.js" rel="stylesheet" type="text/javascript"></script>
-<script src="../static/scripts/selfpost.js" rel="stylesheet" type="text/javascript"></script>
+        </div>
 </body>
 </html>
