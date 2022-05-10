@@ -68,7 +68,7 @@ def post_posting():
     post_pic = request.files["pic_give"]
 
     # 새로운 날짜 이름 만들기
-    today = datetime.now()
+    today = datetime.datetime.now()
     mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
 
     filename = f'post_pic-{mytime}'
@@ -135,10 +135,10 @@ def user():
 
 
 @app.route('/sign_up')
-def sign_up_page(a):
+def sign_up_page():
     # if request.method == 'POST':
     #     return redirect(url_for('test'))
-    return render_template('a,sign_up.html')
+    return render_template('sign_up.html')
 
 
 #################################
@@ -168,6 +168,7 @@ def register():
     db.users.insert_one(doc)
 
     return jsonify({'result': 'success'})
+
 
 
 
@@ -267,6 +268,25 @@ def api_valid():
         return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
     except jwt.exceptions.DecodeError:
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
+
+# 팔로우 콜렉션 생성
+@app.route('/follow', methods=['POST'])
+def follow_function():
+    following_receive = request.form['following_give']
+    follower_receive = request.form['follower_give']
+
+
+    doc = {
+        'following': following_receive,
+        'follower': follower_receive,
+    }
+
+
+    db.follow.insert_one(doc) # 팔로우 콜렉션 생성
+
+    return jsonify({'result': 'success'})
+
+
 
 
 #

@@ -24,11 +24,78 @@ $(document).on('click', function () {
     $('.follow-btn').click(function () {
         if ($(this).html() == '팔로우') {
             $(this).html('팔로잉');
+
+
         } else {
             $(this).html('팔로우');
         }
     });
 });
+
+function follow() {
+
+    let userfollowing = $("#userfollowing").val()
+    let userfollower = $("#userfollower").val()
+
+    $.ajax({
+        type: "POST",
+        url: "/follow",
+        data: {
+            following_give: userfollowing,
+            follower_give: userfollower
+        },
+        success: function (response) {
+        console.log(response)
+            if (response["exist"]) {
+                alert("중복된 이메일입니다.")
+            } else if (useremail == "") {
+                alert("이메일을 입력해주세요.")
+            } else {
+                alert("사용가능한 정보입니다.")
+            }
+        }
+    });
+}
+// 팔로우기능
+//   function follow(eim,n) {
+//       $.ajax({
+//         url: "{% url 'instagram:follow' 1 %}". replace('1',n),
+//         data : {'csrfmiddlewaretoken': '{{ csrf_token }}', 'current_url': window.location.href },
+//         dataType: "json",
+//         type: "POST",
+//         success: function(response) {
+//           if (response.is_follow == 0) {
+//             $(eim).attr("class", "btn btn-light");
+//             $(eim).attr("onclick", "follow(this, '" + n + "')");
+//             $(eim).text("팔로잉");
+//             if (eim.id == "follow_btn_list"){
+//               $("#followerCounter").text(response.followerCount);
+//             }
+//             else if (eim.id == "follow_btn"){
+//               if (response.list_page_user == response.user){
+//                 $("#followingCounter").text(response.followingCount);
+//               }
+//             }
+//           }
+//           else if (response.is_follow == 1) {
+//             $(eim).attr("class", "btn btn-primary");
+//             $(eim).attr("onclick", "follow(this, '" + n + "')");
+//             $(eim).text("팔로우");
+//             if (eim.id == "follow_btn_list"){
+//               $("#followerCounter").text(response.followerCount);
+//             }
+//             else if (eim.id == "follow_btn"){
+//               if (response.list_page_user == response.user){
+//                 $("#followingCounter").text(response.followingCount);
+//               }
+//             }
+//           }
+//         },
+//         error: function(xhr) {
+//           alert("팔로우를 하는 과정에서 에러가 발생하였습니다.");
+//         }
+//       });
+//     }
 
 
 // 댓글 달기
