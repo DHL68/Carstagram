@@ -62,6 +62,9 @@ function time2str(date) {
 
 
 
+
+
+
 /* POST 요청 ajax 코드 */
 function post_posting() {
     // 고유 id let 함수로 정의
@@ -93,6 +96,9 @@ function post_posting() {
 
 /* GET 요청 ajax 코드 */
 function post_listing(email) {
+    if (username == undefined) {
+        username = ""
+    }
 
     console.log(email)
 

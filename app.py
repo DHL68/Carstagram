@@ -62,7 +62,6 @@ def user_page(user_email):
     # 각 사용자의 프로필과 글을 모아볼 수 있는 공간
     token_receive = request.cookies.get('mytoken')
 
-    print(token_receive)
     # print(token_receive)
     try:
 
@@ -73,7 +72,7 @@ def user_page(user_email):
         print(payload)
         print(status_email)
 
-        user_email = db.users.find_one({"email": payload["email"]}, {"_id": False})
+        user_email = db.users.find_one({"email": user_email}, {"_id": False})
 
         print(user_email)
 
