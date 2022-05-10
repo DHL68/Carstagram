@@ -140,13 +140,48 @@ function show_comment() {
             for (let i = 0; i < rows.length; i++) {
                 let comment = rows[i]['comments']
                 let post_id = rows[i]['post_id']
-                // let user_id = rows[i]['user_id']
+                let usernick = rows[i]['usernick']
                 console.log(post_id)
 
-                let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">${post_id}</span> ${comment}</p>`
+                let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">${usernick}</span> ${comment}</p>`
 
                 $(`.${post_id}`).append(temp_html)
             }
         }
     });
 }
+
+// 로그인한 유저정보 불러오기
+$(document).ready(function () {
+    my_info()
+})
+
+function my_info() {
+    $.ajax({
+        type: "GET",
+        url: "/info",
+        data: {},
+        success: function (response) {
+            let row = response['users']
+            let usernick = row['nick']
+            let username = row['name']
+
+            console.log(usernick, username)
+
+            let temp_html = `
+                            <div class="left-profile">
+                                <a href="/user/<email>"><img class="profile"
+                                                             src="http://kaihuastudio.com/common/img/default_profile.png"></a>
+                            </div>
+                            <div style="color: white; margin-left: 10px; font-weight: bold; font-size: 12px; margin-top: 10px;">
+                                ${usernick}<br>
+                                <p style="font-size: 13px; color: #dbdbdb; font-weight: lighter;">${username}</p>
+                            </div>
+                            <div style="margin-left: 44.1%; font-size: 12px;">
+                                <button style="background: none; border: none; color: cornflowerblue">전환</button>
+                            </div>`
+
+            $('#user-info').append(temp_html)
+        }
+    });
+};
