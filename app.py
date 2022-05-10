@@ -94,6 +94,8 @@ def post_posting():
 
 SECRET_KEY = 'SPARTA'
 
+
+
 #################################
 ##  HTML을 주는 부분             ##
 #################################
@@ -107,11 +109,13 @@ def home():
     try:
         # 암호화되어있는 token의 값을 우리가 사용할 수 있도록 디코딩(암호화 풀기)해줍니다!
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+
         user_info = db.users.find_one({"email": payload['email']})
 
         print(user_info)
 
         return render_template('main.html', email=user_info["email"])
+
 
     # 만약 해당 token의 로그인 시간이 만료되었다면, 아래와 같은 코드를 실행합니다.
     except jwt.ExpiredSignatureError:
@@ -169,6 +173,7 @@ def register():
     email_receive = request.form['email_give']
 
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
+
     doc = {
         'name': name_receive,
         'pw': pw_hash,
@@ -176,17 +181,35 @@ def register():
         'email': email_receive
     }
 
+
     db.users.insert_one(doc)
 
     return jsonify({'result': 'success'})
 
 
+
+
+
+# 아이디 중복확인 서버
+@app.route('/sign_up/check_dup', methods=['POST'])
+def check_dup():
+    username_receive = request.form['username_give']
+    exists = bool(db.users.find_one({"username": username_receive}))
+    return jsonify({'result': 'success', 'exists': exists})
+
+@app.route('/check_dup', methods=['POST'])
+def check_info():
+    nickname_receive = request.form['nickname_give']
+
 @app.route('/check_email', methods=['POST'])
 def check_dub1():
+
     email_receive = request.form['email_give']
     exist = bool(db.users.find_one({"email": email_receive}))
 
+
     return jsonify({'result': 'success', 'exist': exist})
+
 
 
 @app.route('/check_nick', methods=['POST'])
@@ -200,13 +223,19 @@ def check_dub2():
 # id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
 @app.route('/api/login', methods=['POST'])
 def api_login():
+
     email_receive = request.form['useremail_give']
+
     pw_receive = request.form['password_give']
     # 회원가입 때와 같은 방법으로 pw를 암호화합니다.
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
     # id, 암호화된pw을 가지고 해당 유저를 찾습니다.
 
+
+
+
     result = db.users.find_one({'email': email_receive, 'pw': pw_hash})
+
 
     # 찾으면 JWT 토큰을 만들어 발급합니다.
 
@@ -216,8 +245,11 @@ def api_login():
         # 아래에선 id와 exp를 담았습니다. 즉, JWT 토큰을 풀면 유저ID 값을 알 수 있습니다.
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
+
             'email': email_receive,
+
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)
+
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
@@ -257,9 +289,105 @@ def api_valid():
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
 
 
+<<<<<<< HEAD
 #
 # post 리스팅 메서드
 #
+=======
+# 팔로우 콜렉션 생성
+@app.route('/follow', methods=['POST'])
+def follow_function():
+    following_receive = request.form['following_give']
+    follower_receive = request.form['follower_give']
+
+
+    doc = {
+        'following': following_receive,
+        'follower': follower_receive,
+    }
+
+
+    db.follow.insert_one(doc) # 팔로우 콜렉션 생성
+
+    return jsonify({'result': 'success'})
+
+
+@app.route('/follow', methods=['POST'])
+def follow_function():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 좋아요 수 변경
+
+        # DB에 저장할 때는 1) 누가 2) 어떤 포스트에 3) 어떤 반응을 남겼는지 세 정보만 넣으면 되고,
+        # 좋아요인지, 취소인지에 따라 해당 도큐먼트를 insert_one()을 할지 delete_one()을 할지 결정해주어야합니다.
+        user_info = db.users.find_one({"email": payload["email"]})
+        user_id_receive = request.form["user_id_give"]
+        type_receive = request.form["type_give"]
+        action_receive = request.form["action_give"]
+        doc = {
+            "post_id": post_id_receive,
+            "usernick": user_info["nick"],
+            "type": type_receive
+        }
+        if action_receive == "like":
+            db.likes.insert_one(doc)
+        else:
+            db.likes.delete_one(doc)
+
+        # 좋아요 컬렉션을 업데이트한 이후에는 해당 포스트에 해당 타입의 반응이 몇 개인지를 세서 보내주어야합니다.
+        count = db.likes.count_documents({"post_id": post_id_receive, "type": type_receive})
+
+        print(count)
+        return jsonify({"result": "success", 'msg': 'updated', "count": count})
+
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
+
+#
+# # 회원가입 서버
+# @app.route('/sign_up/save', methods=['POST'])
+# def sign_up():
+#     useremail_receive = request.form['useremail_give']
+#     password_receive = request.form['password_give']
+#     password_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+#     doc = {
+#         "useremail": useremail_receive,  # 아이디
+#         "password": password_hash,  # 비밀번호
+#         "profile_name": useremail_receive,  # 프로필 이름 기본값은 아이디
+#         "profile_pic": "",  # 프로필 사진 파일 이름
+#         "profile_pic_real": "profile_pics/profile_placeholder.png",  # 프로필 사진 기본 이미지
+#         "profile_info": ""  # 프로필 한 마디
+#     }
+#     db.users.insert_one(doc)
+#     return jsonify({'result': 'success'})
+
+
+# # 로그인서버
+# @app.route('/sign_in', methods=['POST'])
+# def sign_in():
+#     # 로그인
+#
+#     useremail_receive = request.form['useremail_give']
+#     password_receive = request.form['password_give']
+#     print(useremail_receive)
+#
+#     pw_hash = hashlib.sha256(password_receive.encode('utf-8')).hexdigest()
+#     result = db.users.find_one({'useremail': useremail_receive, 'password': pw_hash})
+#     # result = db.user.find({})
+#
+#     if result is not None:
+#         payload = {
+#             'id': useremail_receive,
+#             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)  # 로그인 24시간 유지
+#         }
+#         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+#
+#         return jsonify({'result': 'success', 'token': token})
+#     # 찾지 못하면
+#     else:
+#         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
+>>>>>>> a8da85e6c1664d55c959ffbc8e6c056db4466f7e
 
 # 유저 정보 불러오기 메인,개인페이지
 
@@ -429,5 +557,11 @@ def comment():
     return jsonify({'comments': comment_list})
 
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> a8da85e6c1664d55c959ffbc8e6c056db4466f7e
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
