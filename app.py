@@ -22,8 +22,6 @@ SECRET_KEY = 'SPARTA'
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 
-
-<<<<<<< HEAD
 # post 댓글작성
 
 @app.route("/comment", methods=["POST"])
@@ -95,9 +93,6 @@ def post_posting():
 
 
 SECRET_KEY = 'SPARTA'
-
-=======
->>>>>>> 2b7893b3799e70a3cdec6f000d481b90fcba8ffb
 
 #################################
 ##  HTML을 주는 부분             ##
@@ -261,11 +256,11 @@ def api_valid():
     except jwt.exceptions.DecodeError:
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
 
-<<<<<<< HEAD
+
 #
 # post 리스팅 메서드
 #
-=======
+
 # 유저 정보 불러오기 메인,개인페이지
 
 @app.route("/info", methods=["GET"])
@@ -324,16 +319,14 @@ def post_posting():
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
->>>>>>> 2b7893b3799e70a3cdec6f000d481b90fcba8ffb
+
 #
 # post 리스팅 메서드
 #
 @app.route('/listing', methods=['GET'])
-<<<<<<< HEAD
-def post_listings():
-=======
+
 def post_listing():
->>>>>>> 2b7893b3799e70a3cdec6f000d481b90fcba8ffb
+
     token_receive = request.cookies.get('mytoken')
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
@@ -344,10 +337,7 @@ def post_listing():
         # ObjectID라는 자료형이라 문자열로 변환해주어야합니다.
         my_usereamil = payload["email"]
         usernick_receive = request.args.get("nickname_give")
-<<<<<<< HEAD
-=======
 
->>>>>>> 2b7893b3799e70a3cdec6f000d481b90fcba8ffb
         if usernick_receive == "":
             posts = list(db.posts.find({}).sort("date", -1).limit(20))
         else:
@@ -366,8 +356,7 @@ def post_listing():
         return redirect(url_for("home"))
 
     # return jsonify({'posts': posts})
-<<<<<<< HEAD
-=======
+
 
 
 #
@@ -439,9 +428,6 @@ def comment():
 
     return jsonify({'comments': comment_list})
 
-
-
->>>>>>> 2b7893b3799e70a3cdec6f000d481b90fcba8ffb
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

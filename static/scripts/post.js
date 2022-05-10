@@ -1,24 +1,24 @@
-
 // 게시글 업로드 모달
 $("#open-post-modal").on('click', function () {
     $(".modal-overlay2").fadeIn();
     $('body').css("overflow", "hidden");
 });
 
-$(document).on('click',function (e) {
-    if( $(".modal-overlay2").is(e.target)) {
+$(document).on('click', function (e) {
+    if ($(".modal-overlay2").is(e.target)) {
         $(".modal-overlay2").fadeOut();
         $('body').css("overflowY", "scroll");
-    };
+    }
+    ;
 });
-
 
 
 $(document).ready(function () {
     // 페이지 로드 시 post_listing 에 대한 값을 불러온다
     // bsCustomFileInput.init()
-    post_listing()
+    post_listings()
 })
+
 // 포스팅 시간 나타내기
 
 function time2str(date) {
@@ -40,7 +40,7 @@ function time2str(date) {
 }
 
 /* POST 요청 ajax 코드 */
-function post_posting() {
+function post_postings() {
     // 고유 id let 함수로 정의
     let hashtag = $('#post_hashtag').val()
     let comment = $('#post_comment').val()
@@ -70,7 +70,7 @@ function post_posting() {
 
 
 /* GET 요청 ajax 코드 */
-function post_listing(usernick) {
+function post_listings(usernick) {
     if (usernick == undefined) {
         usernick = ""
     }
@@ -80,11 +80,6 @@ function post_listing(usernick) {
         url: `/listing?nickname_give=${usernick}`,
         data: {},
         success: function (response) {
-<<<<<<< HEAD
-            let posts = response['posts']
-
-            console.log(posts)
-=======
             let posts = Object(response['posts'])
 
             console.log(posts)
@@ -100,9 +95,8 @@ function post_listing(usernick) {
                 let post_nick = posts[i]['usernick']
 
                 let class_heart = posts[i]['heart_by_me'] ? "fa-heart" : "fa-heart-o"
->>>>>>> 2b7893b3799e70a3cdec6f000d481b90fcba8ffb
 
-                let temp_html =`
+                let temp_html = `
                             <div class="feed-box" id="feed_box">
                                 <!--                상단의 이미지와 이름 그리고 ''' 아이콘-------------------------------------------------->
                                 <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 2%; margin-left: 1%; margin-bottom: 2%;">
@@ -143,12 +137,19 @@ function post_listing(usernick) {
                                 </div>
                                 <!--                사진 아래 아이콘--------------------------------------------------------------------->
                                 <div style="margin-top: 2%; display: flex; flex-direction: row; justify-content: space-between;">
-                                    <div stylee="margin-left: 10px;">
-                                        <button class="like-btn" onclick="toggle_like('${post['_id']}', 'heart')"><span class="material-icons-outlined fa ${class_heart}">${num2str(post["count_heart"])}</span></button>
-                                        <span class="material-icons-outlined">mode_comment</span>
-                                        <span class="material-icons-outlined">send</span>
+<!--                                    <div style="margin-left: 10px;">-->
+<!--                                        <button class="like-btn" onclick="toggle_like('${post['_id']}', 'heart')"><span class="material-icons-outlined">favorite_border</span></button>-->
+<!--                                        <span class="material-icons-outlined">mode_comment</span>-->
+<!--                                        <span class="material-icons-outlined">send</span>-->
+<!--                                    </div>-->
+                                    <nav class="level is-mobile">
+                                    <div class="level-left">
+                                        <a class="level-item is-sparta" aria-label="heart" onclick="toggle_like('${post['_id']}', 'heart')">
+                                            <span class="icon is-small"><i class="fa ${class_heart}"
+                                                                           aria-hidden="true"></i></span>&nbsp;<span class="like-num">${num2str(post["count_heart"])}</span>
+                                        </a>
                                     </div>
-
+                                    </nav>
                                     <div style="margin-right: 10px;">
                                         <span class="material-icons-outlined">bookmark_border</span>
                                     </div>
@@ -189,6 +190,7 @@ function post_listing(usernick) {
                                 </div>`
                 $('#post-feed-box').append(temp_html)
             }
+        }
     })
 }
 
