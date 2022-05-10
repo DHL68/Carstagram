@@ -186,6 +186,20 @@ def api_valid():
     except jwt.exceptions.DecodeError:
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
 
+# 유저 정보 불러오기 메인,개인페이지
+
+@app.route("/info", methods=["GET"])
+def user_info():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"email": payload['email']}, {'_id': False})
+
+        # print(user_info)
+
+        return jsonify({'users': user_info})
+    except jwt.exceptions.DecodeError:
+        return jsonify({'msg': '회원 정보가 존재하지 않습니다.'})
 
 #
 # post 업로드 메서드
@@ -245,6 +259,7 @@ def post_listing():
         # ObjectID라는 자료형이라 문자열로 변환해주어야합니다.
         my_usereamil = payload["email"]
         usernick_receive = request.args.get("nickname_give")
+
         if usernick_receive == "":
             posts = list(db.posts.find({}).sort("date", -1).limit(20))
         else:
@@ -256,15 +271,7 @@ def post_listing():
 
             post["count_heart"] = db.likes.count_documents({"post_id": post["_id"], "type": "heart"})
             post["heart_by_me"] = bool(
-                db.likes.find_one({"post_id": post["_id"], "type": "heart", "username": my_usereamil}))
-
-            # post["count_star"] = db.likes.count_documents({"post_id": post["_id"], "type": "star"})
-            # post["star_by_me"] = bool(
-            #     db.likes.find_one({"post_id": post["_id"], "type": "star", "username": my_username}))
-            #
-            # post["count_like"] = db.likes.count_documents({"post_id": post["_id"], "type": "like"})
-            # post["like_by_me"] = bool(
-            #     db.likes.find_one({"post_id": post["_id"], "type": "like", "username": my_username}))
+                db.likes.find_one({"post_id": post["_id"], "type": "heart", "email": my_usereamil}))
 
         return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다.", "posts": posts})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):

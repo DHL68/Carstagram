@@ -17,7 +17,7 @@ $(document).on('click',function (e) {
 $(document).ready(function () {
     // 페이지 로드 시 post_listing 에 대한 값을 불러온다
     // bsCustomFileInput.init()
-    post_listing('bs-custom-file-input')
+    post_listing()
 })
 // 포스팅 시간 나타내기
 
@@ -70,13 +70,19 @@ function post_posting() {
 
 
 /* GET 요청 ajax 코드 */
-function post_listing() {
+function post_listing(usernick) {
+    if (usernick == undefined) {
+        usernick = ""
+    }
+    // $("#post-feed-box").empty()
     $.ajax({
         type: "GET",
-        url: "/listing",
+        url: `/listing?nickname_give=${usernick}`,
         data: {},
         success: function (response) {
-            let posts = JSON.parse(response['posts'])
+            let posts = Object(response['posts'])
+
+            console.log(posts)
 
             for (let i = 0; i < posts.length; i++) {
                 let post = posts[i]
@@ -88,7 +94,7 @@ function post_listing() {
                 let post_id = posts[i]['_id']['$oid']
                 let post_nick = posts[i]['usernick']
 
-                let class_heart = post['heart_by_me'] ? "fa-heart" : "fa-heart-o"
+                let class_heart = posts[i]['heart_by_me'] ? "fa-heart" : "fa-heart-o"
 
                 let temp_html =`
                             <div class="feed-box" id="feed_box">
@@ -131,19 +137,12 @@ function post_listing() {
                                 </div>
                                 <!--                사진 아래 아이콘--------------------------------------------------------------------->
                                 <div style="margin-top: 2%; display: flex; flex-direction: row; justify-content: space-between;">
-<!--                                    <div style="margin-left: 10px;">-->
-<!--                                        <button class="like-btn" onclick="like()"><span class="material-icons-outlined">favorite_border</span></button>-->
-<!--                                        <span class="material-icons-outlined">mode_comment</span>-->
-<!--                                        <span class="material-icons-outlined">send</span>-->
-<!--                                    </div>-->
-                                    <nav class="level is-mobile">
-                                    <div class="level-left">
-                                        <a class="level-item is-sparta" aria-label="heart" onclick="toggle_like('${post['_id']}', 'heart')">
-                                            <span class="icon is-small"><i class="fa ${class_heart}"
-                                                                           aria-hidden="true"></i></span>&nbsp;<span class="like-num">${num2str(post["count_heart"])}</span>
-                                        </a>
+                                    <div stylee="margin-left: 10px;">
+                                        <button class="like-btn" onclick="toggle_like('${post['_id']}', 'heart')"><span class="material-icons-outlined fa ${class_heart}">${num2str(post["count_heart"])}</span></button>
+                                        <span class="material-icons-outlined">mode_comment</span>
+                                        <span class="material-icons-outlined">send</span>
                                     </div>
-                                    </nav>
+
                                     <div style="margin-right: 10px;">
                                         <span class="material-icons-outlined">bookmark_border</span>
                                     </div>
