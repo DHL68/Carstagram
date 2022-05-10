@@ -41,17 +41,11 @@ $(document).on('click', function (e) {
 });
 
 
-$(document).ready(function () {
-    // 페이지 로드 시 post_listing 에 대한 값을 불러온다
-    // bsCustomFileInput.init()
-    post_listing()
-})
 
 // 포스트시간 나타내기
 function time2str(date) {
     let today = new Date()
     let time = (today - date) / 1000 / 60  // 분
-
     if (time < 60) {
         return parseInt(time) + "분 전"
     }
@@ -64,7 +58,9 @@ function time2str(date) {
         return parseInt(time) + "일 전"
     }
     return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일`
-}
+};
+
+
 
 /* POST 요청 ajax 코드 */
 function post_posting() {
@@ -92,18 +88,17 @@ function post_posting() {
             alert(response['msg'])
             window.location.reload()
         }
-    })
-}
+    });
+};
 
 /* GET 요청 ajax 코드 */
-/* GET 요청 ajax 코드 */
-function post_listing(usernick) {
-    if (usernick == undefined) {
-        usernick = ""
-    }
-    // $("#post-feed-box").empty()
+function post_listing(email) {
+
+    console.log(email)
+
     $.ajax({
         type: "GET",
+<<<<<<< HEAD
 <<<<<<< HEAD
         url: "/listing",
         data: {},
@@ -111,28 +106,36 @@ function post_listing(usernick) {
             let posts = JSON.parse(response['posts'])
 =======
         url: `/listing?nickname_give=${usernick}`,
+=======
+        url: `/listing?email_give=${email}`,
+>>>>>>> 679f43b05133379727eb92b84aa22025002a2471
         data: {},
         success: function (response) {
-            let posts = response['posts']
+            if (response["result"] == "success") {
+                let posts = response['posts']
 
+<<<<<<< HEAD
             console.log(posts)
 >>>>>>> 2b7893b3799e70a3cdec6f000d481b90fcba8ffb
+=======
+                console.log(posts)
+>>>>>>> 679f43b05133379727eb92b84aa22025002a2471
 
-            for (let i = 0; i < posts.length; i++) {
-                let post = posts[i]
-                let time_post = new Date(post["date"])
-                let time_before = time2str(time_post)
-                let post_hashtag = posts[i]['post_hashtag']
-                let post_comment = posts[i]['post_comment']
-                let post_picture = posts[i]['post_picture']
-                let post_id = posts[i]['_id']['$oid']
-                let post_nick = posts[i]['usernick']
+                for (let i = 0; i < posts.length; i++) {
+                    let post = posts[i]
+                    let time_post = new Date(post["date"])
+                    let time_before = time2str(time_post)
+                    let post_hashtag = posts[i]['post_hashtag']
+                    let post_comment = posts[i]['post_comment']
+                    let post_picture = posts[i]['post_picture']
+                    let post_id = posts[i]['_id']['$oid']
+                    let post_nick = posts[i]['usernick']
 
 
-                let temp_html = `<button class="open-modal-${i}" onclick="openModal(${i})" style=" border: none; background: none;">
+                    let temp_html = `<button class="open-modal-${i}" onclick="openModal(${i})" style=" border: none; background: none;">
                                  <img class="profilepage-image" src="../static/image/${post_picture}">
                                  </button>`
-                let temp2_html = `
+                    let temp2_html = `
                             <div class="modal-overlay-${i} comment-modal" style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;display: none;z-index: 1;background-color: rgba(0, 0, 0, 0.4);">
                                 <div id="modal-script" class="modal_body" style="">
                                     <div style="display: flex; flex-direction: row;">
@@ -168,26 +171,27 @@ function post_listing(usernick) {
                                             <!--                하단 댓글창-->
                                             <div>
                                                 <div style="display: flex; flex-direction: row; justify-content: space-between; border-top: 1px solid #edebeb; height: 30px;">
-                                                    <div style="margin-left: 10px;">
-                                                        <span class="material-icons-outlined">favorite_border</span>
-                                                        <span class="material-icons-outlined">mode_comment</span>
-                                                        <span class="material-icons-outlined">send</span>
-                                                    </div>
+                                                        <div style="margin-left: 10px;">
+                                                            <button class="like-btn" onclick="toggle_like('${post['_id']}', 'heart')"><span class="material-icons-outlined fa ${class_heart}">favorite_border</span></button>
+                                                            <span class="material-icons-outlined">mode_comment</span>
+                                                            <span class="material-icons-outlined">send</span>
+                                                        </div>
                                                     <div style="margin-right: 10px;">
                                                         <span class="material-icons-outlined">bookmark_border</span>
                                                     </div>
                                                 </div>
                                                 <div style="text-align: left; margin-left: 10px; height: 30px;"><span style="font-weight: bold">좋아요</span>
-                                                    <span style="font-weight: bold">62,364</span>개
+                                                    <!--                좋아요-->
+                                                <div class="like_reset">좋아요 ${num2str(post["count_heart"])}개</div>
                                                 </div>
                                                 <div style="font-weight: lighter; font-size: 10px; text-align: left; margin-left: 10px;">${time_before}</div>
                                                 <!--댓글달기-->
                                                 <div style="display:flex; flex-direction: row; align-items: center; height: 45px; margin-top: 10px; border-top: solid 1px #dbdbdb;">
                                                     <span style="margin-left: 8px; margin-top: 7px;" class="material-symbols-outlined">mood</span>
                                                     <input type="text" class="form-control"
-                                                           style="box-shadow: none; border: none; border-radius: 0px;  height: 45px; margin-top: 1px;" id="${post_id}"
+                                                           style="box-shadow: none; border: none; border-radius: 0px;  height: 45px; margin-top: 1px;" id="${post['_id']}"
                                                            placeholder="댓글 달기 ..."/>
-                                                    <button id="comment-1" onclick="add_comment1('${post_id}')"
+                                                    <button id="comment-1" onclick="add_comment1('${post['_id']}')"
                                                             style="background-color: white; border: none; width: 50px;  height: 39px; margin-right: 8px; text-decoration: none; color: cornflowerblue; font-weight: bold;">
                                                         <p>게시</p>
                                                     </button>
@@ -197,9 +201,10 @@ function post_listing(usernick) {
                                     </div>
                                 </div>
                             </div>`
-                $('.my-posts').append(temp_html)
-                $('.modal-post').append(temp2_html)
+                    $("#my-posts").append(temp_html)
+                    $('.modal-post').append(temp2_html)
+                }
             }
         }
-    })
-}
+    });
+};

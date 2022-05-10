@@ -32,6 +32,7 @@ $(document).on('click', function () {
     });
 });
 
+<<<<<<< HEAD
 function follow() {
 
     let userfollowing = $("#userfollowing").val()
@@ -97,6 +98,13 @@ function follow() {
 //       });
 //     }
 
+=======
+// 로그인한 유저정보 불러오기
+$(document).ready(function () {
+    my_info()
+    rec_user()
+})
+>>>>>>> 679f43b05133379727eb92b84aa22025002a2471
 
 // 댓글 달기
 // 수정 필요 ready
@@ -109,13 +117,14 @@ $(document).ready(function () {
 
 function add_comment(post_id) {
     let comment = $(`#${post_id}`).val()
-
+    console.log(comment)
     $.ajax({
         type: 'POST',
         url: '/comment',
         data: {comment_give: comment, post_give: post_id},
         success: function (response) {
             alert(response['msg'])
+            // console.log(post_id)
             window.location.reload()
         }
     })
@@ -141,7 +150,8 @@ function show_comment() {
                 let comment = rows[i]['comments']
                 let post_id = rows[i]['post_id']
                 let usernick = rows[i]['usernick']
-                console.log(post_id)
+
+                // console.log(post_id)
 
                 let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">${usernick}</span> ${comment}</p>`
 
@@ -154,12 +164,8 @@ function show_comment() {
 =======
 }
 
-// 로그인한 유저정보 불러오기
-$(document).ready(function () {
-    my_info()
-})
-
 function my_info() {
+
     $.ajax({
         type: "GET",
         url: "/info",
@@ -169,7 +175,9 @@ function my_info() {
             let usernick = row['nick']
             let username = row['name']
 
-            console.log(usernick, username)
+
+            // console.log(usernick, username)
+
 
             let temp_html = `
                             <div class="left-profile">
@@ -180,12 +188,47 @@ function my_info() {
                                 ${usernick}<br>
                                 <p style="font-size: 13px; color: #dbdbdb; font-weight: lighter;">${username}</p>
                             </div>
-                            <div style="margin-left: 44.1%; font-size: 12px;">
-                                <button style="background: none; border: none; color: cornflowerblue">전환</button>
-                            </div>`
 
+                            `
             $('#user-info').append(temp_html)
         }
     });
+<<<<<<< HEAD
 };
 >>>>>>> 2b7893b3799e70a3cdec6f000d481b90fcba8ffb
+=======
+}
+
+
+function rec_user() {
+
+    $.ajax({
+        type: "GET",
+        url: "/recommend",
+        data: {},
+        success: function (response) {
+            let rows = response['users']
+
+            for (let i = 0; i < rows.length; i++) {
+                let usernick = rows[i]['nick']
+
+                let temp_html = `
+                        <div class="rec-member">
+                            <div class="left-mini-profile">
+                                <a href=""><img class="profile"
+                                                src="http://kaihuastudio.com/common/img/default_profile.png"></a>
+                            </div>
+                            <div style="color: white; margin-left: 10px; font-size: 12px; margin-top: 10px; font-weight: bold;">
+                                ${usernick}<br>
+                                <p style="font-size: 12px; color: #dbdbdb; font-weight: lighter">회원님을 위한 추천</p>
+                            </div>
+                            <div style="margin-left: 32%; font-size: 12px;">
+                                <button class="follow-btn">팔로우</button>
+                            </div>
+                        </div>`
+                $('#recommend-user').append(temp_html)
+            }
+        }
+    });
+};
+>>>>>>> 679f43b05133379727eb92b84aa22025002a2471
