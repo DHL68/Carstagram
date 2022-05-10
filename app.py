@@ -117,7 +117,7 @@ def register():
         'pw': pw_hash,
         'nick': nickname_receive,
         'email': email_receive,
-        "date" : date_receive
+        "date": date_receive
     }
 
     db.users.insert_one(doc)

@@ -118,6 +118,7 @@ function post_listing(email) {
                     let post_picture = posts[i]['post_picture']
                     let post_id = posts[i]['_id']['$oid']
                     let post_nick = posts[i]['usernick']
+                    let class_heart = post['heart_by_me'] ? "fa-heart" : "fa-heart-o"
 
 
                     let temp_html = `<button class="open-modal-${i}" onclick="openModal(${i})" style=" border: none; background: none;">
@@ -146,7 +147,7 @@ function post_listing(email) {
                                             <!--                댓글창 상단 아래 피드설명란-->
                             
                                             <!--                댓글들-->
-                                            <div class="comment-area ${post_id}" style="display: flex; flex-direction: column;">
+                                            <div class="comment-area ${post['_id']}" style="display: flex; flex-direction: column;">
                                                 <div style="display: flex; flex-direction: row;">
                                                     <a href=""><img class="box-profile"
                                                                     src="http://kaihuastudio.com/common/img/default_profile.png"></a>
@@ -168,9 +169,9 @@ function post_listing(email) {
                                                         <span class="material-icons-outlined">bookmark_border</span>
                                                     </div>
                                                 </div>
-                                                <div style="text-align: left; margin-left: 10px; height: 30px;"><span style="font-weight: bold">좋아요</span>
+                                                <div style="text-align: left; margin-left: 10px; height: 30px;"><span style="font-weight: bold">좋아요</span>${num2str(post["count_heart"])}<span style="font-weight: bold">개</span>
                                                     <!--                좋아요-->
-                                                <div class="like_reset">좋아요 ${num2str(post["count_heart"])}개</div>
+                                                
                                                 </div>
                                                 <div style="font-weight: lighter; font-size: 10px; text-align: left; margin-left: 10px;">${time_before}</div>
                                                 <!--댓글달기-->
@@ -196,3 +197,58 @@ function post_listing(email) {
         }
     });
 };
+
+function toggle_like(post_id, type) {
+    console.log(post_id, type)
+    let $a_like = $(`#${post_id} a[aria-label='${type}']`)
+    let $i_like = $a_like.find("i")
+    let class_s = {"heart": "fa-heart"}
+    let class_o = {"heart": "fa-heart-o"}
+    if ($i_like.hasClass(class_s[type])) {
+        $.ajax({
+            type: "POST",
+            url: "/update_like",
+            data: {
+                post_id_give: post_id,
+                type_give: type,
+                action_give: "unlike"
+            },
+            success: function (response) {
+                console.log("unlike")
+                $i_like.addClass(class_o[type]).removeClass(class_s[type])
+                $a_like.find("span.like-num").text(num2str(response["count"]))
+                window.location.reload()
+            }
+        })
+    } else {
+        $.ajax({
+            type: "POST",
+            url: "/update_like",
+            data: {
+                post_id_give: post_id,
+                type_give: type,
+                action_give: "like"
+            },
+            success: function (response) {
+                console.log("like")
+                $i_like.addClass(class_s[type]).removeClass(class_o[type])
+                $a_like.find("span.like-num").text(num2str(response["count"]))
+                window.location.reload()
+            }
+        })
+
+    }
+}
+
+function num2str(count) {
+    if (count > 10000) {
+        return parseInt(count / 1000) + "k"
+    }
+    if (count > 500) {
+        return parseInt(count / 100) / 10 + "k"
+    }
+    if (count == 0) {
+        return ""
+    }
+    return count
+}
