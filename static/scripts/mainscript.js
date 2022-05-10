@@ -116,54 +116,6 @@ function my_info() {
     });
 };
 
-// function rec_user() {
-//
-//     $.ajax({
-//         type: "GET",
-//         url: "/recommend",
-//         data: {},
-//         success: function (response) {
-//             let rows = response['users']
-//             let raws = response['user']
-//
-//
-//             for (let i = 0; i < rows.length; i++) {
-//                 let usernick = rows[i]['nick']
-//
-//                 let users = [];
-//                 usernick.forEach((element) => {
-//                     if (!raws.includes(element)) {
-//                         raws.set(element);
-//                     }
-//                 })
-//             console.log(rows)
-//
-//
-//
-//
-//                 let temp_html = `
-//                             <div class="rec-member">
-//                                 <div class="left-mini-profile">
-//                                     <a href=""><img class="profile"
-//                                                     src="http://kaihuastudio.com/common/img/default_profile.png"></a>
-//                                 </div>
-//                                 <div style="color: white; margin-left: 10px; font-size: 12px; margin-top: 10px; font-weight: bold;">
-//                                     ${users}<br>
-//                                     <p style="font-size: 12px; color: #dbdbdb; font-weight: lighter">회원님을 위한 추천</p>
-//                                 </div>
-//                                 <div style="margin-left: 32%; font-size: 12px;">
-//                                     <button class="follow-btn">팔로우</button>
-//                                 </div>
-//                             </div>
-//                             `
-//
-//                 $('#recommend-user').append(temp_html)
-//             }
-//             console.log(usernick)
-//         }
-//     });
-// };
-
 function rec_user() {
 
     $.ajax({
@@ -172,14 +124,9 @@ function rec_user() {
         data: {},
         success: function (response) {
             let rows = response['users']
-            let raws = response['user']
-
 
             for (let i = 0; i < rows.length; i++) {
                 let usernick = rows[i]['nick']
-
-
-        console.log(raws['nick'])
 
                 let temp_html = `
                             <div class="rec-member">
@@ -199,7 +146,6 @@ function rec_user() {
 
                 $('#recommend-user').append(temp_html)
             }
-            console.log(usernick)
         }
     });
 };
