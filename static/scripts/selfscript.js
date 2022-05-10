@@ -67,6 +67,10 @@ function show_comment() {
 }
 
 function my_info() {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2b83cc1017ccce525b25fe5a976616645e2813d3
     $.ajax({
         type: "GET",
         url: "/info",
