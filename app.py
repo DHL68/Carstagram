@@ -1,14 +1,15 @@
 from pymongo import MongoClient
 # JWT 패키지를 사용합니다. (설치해야할 패키지 이름: PyJWT)
 import jwt
-# 토큰에 만료시간을 줘야하기 때문에, datetime 모듈도 사용합니다.
-import datetime
+
 # 회원가입 시엔, 비밀번호를 암호화하여 DB에 저장해두는 게 좋습니다.
 # 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 import hashlib
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 from bson.json_util import dumps
-from datetime import datetime, timedelta
+
+# 토큰에 만료시간을 줘야하기 때문에, datetime 모듈도 사용합니다.
+import datetime
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -72,9 +73,7 @@ def post_posting():
         picture_receive = request.form["picture_give"]
         comment_receive = request.form["comment_give"]
         date_receive = request.form["date_give"]
-
-        user_info = db.users.find_one({"username": payload["id"]})
-
+        user_info = db.users.find_one({"email": payload["email"]})
         post_pic = request.files["pic_give"]
 
         # 새로운 날짜 이름 만들기
@@ -87,12 +86,11 @@ def post_posting():
         extension = post_pic.filename.split('.')[-1]
 
         # 새로운 이름으로 저장하기
-        save_to = f'static/{filename}.{extension}'
+        save_to = f'static/image/{filename}.{extension}'
         post_pic.save(save_to)
 
-<<<<<<< HEAD
         doc = {
-            "post_username": user_info["id"],
+            "usernick": user_info["nick"],
             "post_pictures": picture_receive,
             "post_comments": comment_receive,
             "post_pic": f'{filename}.{extension}',
@@ -102,10 +100,6 @@ def post_posting():
         return jsonify({"result": "success", 'msg': '포스팅 성공'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return jsonify({'msg': '업로드 완료!'})
-=======
-
-SECRET_KEY = 'SPARTA'
->>>>>>> origin/personal_branch
 
 
 #################################
@@ -120,15 +114,30 @@ def home():
     try:
         # 암호화되어있는 token의 값을 우리가 사용할 수 있도록 디코딩(암호화 풀기)해줍니다!
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        user_info = db.users.find_one({"id": payload['id']})
+        user_info = db.users.find_one({"email": payload['email']})
 
-        return render_template('main.html', nickname=user_info["nick"])
+        return render_template('main.html', email=user_info["email"])
+
     # 만약 해당 token의 로그인 시간이 만료되었다면, 아래와 같은 코드를 실행합니다.
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
     except jwt.exceptions.DecodeError:
         # 만약 해당 token이 올바르게 디코딩되지 않는다면, 아래와 같은 코드를 실행합니다.
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
+
+
+@app.route('/user/<email>')
+def user(email):
+    # 각 사용자의 프로필과 글을 모아볼 수 있는 공간
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        status = (email == payload["email"])  # 내 프로필이면 True, 다른 사람 프로필 페이지면 False
+
+        user_info = db.users.find_one({"email": email}, {"_id": False})
+        return render_template('self.html', user_info=user_info, status=status)
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 
 @app.route('/login')
@@ -141,13 +150,6 @@ def login():
 @app.route('/main')
 def main():
     return render_template('main.html')
-
-
-# 개인페이지 불러오기
-
-@app.route('/user')
-def user():
-    return render_template('self.html')
 
 
 @app.route('/sign_up')
@@ -183,9 +185,6 @@ def register():
 
     return jsonify({'result': 'success'})
 
-
-<<<<<<< HEAD
-=======
 @app.route('/check_email', methods=['POST'])
 def check_dub1():
     email_receive = request.form['email_give']
@@ -202,7 +201,6 @@ def check_dub2():
     return jsonify({'result': 'success', 'exists': exists})
 
 
->>>>>>> origin/personal_branch
 # [로그인 API]
 # id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
 @app.route('/api/login', methods=['POST'])
@@ -212,13 +210,9 @@ def api_login():
     # 회원가입 때와 같은 방법으로 pw를 암호화합니다.
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
     # id, 암호화된pw을 가지고 해당 유저를 찾습니다.
-<<<<<<< HEAD
-    result = db.users.find_one({'email': id_receive, 'pw': pw_hash})
-=======
 
     result = db.users.find_one({'email': email_receive, 'pw': pw_hash})
 
->>>>>>> origin/personal_branch
     # 찾으면 JWT 토큰을 만들어 발급합니다.
 
     if result is not None:
@@ -227,13 +221,8 @@ def api_login():
         # 아래에선 id와 exp를 담았습니다. 즉, JWT 토큰을 풀면 유저ID 값을 알 수 있습니다.
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
-<<<<<<< HEAD
-            'id': id_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=10000)
-=======
             'email': email_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=5)
->>>>>>> origin/personal_branch
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=60 * 60 * 24)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 

@@ -43,9 +43,5 @@ function sign_in() {
             }
         }
     });
-<<<<<<< HEAD
-}
-=======
 }
 
->>>>>>> origin/personal_branch
