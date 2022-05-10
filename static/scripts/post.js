@@ -1,9 +1,3 @@
-$(document).ready(function () {
-    // 페이지 로드 시 post_listing 에 대한 값을 불러온다
-    // bsCustomFileInput.init()
-    post_listing()
-})
-
 
 // 게시글 업로드 모달
 $("#open-post-modal").on('click', function () {
@@ -19,6 +13,10 @@ $(document).on('click',function (e) {
 });
 
 
+
+$(document).ready(function () {
+    post_listing()
+})
 // 포스팅 시간 나타내기
 
 function time2str(date) {
@@ -94,8 +92,8 @@ function post_listing(email) {
                 let post_picture = post['post_picture']
                 let post_id = post['_id']['$oid']
                 let post_nick = post['usernick']
-
                 let class_heart = post['heart_by_me'] ? "fa-heart" : "fa-heart-o"
+
 
                 let temp_html =`
                             <div class="feed-box" id="feed_box">

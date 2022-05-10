@@ -2,7 +2,10 @@ from pymongo import MongoClient
 # JWT 패키지를 사용합니다. (설치해야할 패키지 이름: PyJWT)
 import jwt
 # 토큰에 만료시간을 줘야하기 때문에, datetime 모듈도 사용합니다.
-import datetime
+
+from _datetime import datetime, timedelta
+# 회원가입 시엔, 비밀번호를 암호화하여 DB에 저장해두는 게 좋습니다.
+# 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 import hashlib
 from flask import Flask, render_template, jsonify, request, session, redirect, url_for
 from werkzeug.utils import secure_filename
@@ -22,26 +25,26 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> origin/personal_branch
 #################################
 ##  HTML을 주는 부분             ##
 #################################
-
 
 @app.route('/')
 def home():
     # 현재 이용자의 컴퓨터에 저장된 cookie 에서 mytoken 을 가져옵니다.
     token_receive = request.cookies.get('mytoken')
-    # print(token_receive)
+
     try:
         # 암호화되어있는 token의 값을 우리가 사용할 수 있도록 디코딩(암호화 풀기)해줍니다!
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
 
         user_info = db.users.find_one({"email": payload['email']})
-
-        # print(user_info)
 
         return render_template('main.html', email=user_info["email"])
 
@@ -54,22 +57,21 @@ def home():
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
 
 
-
 # 메인페이지 불러오기
+
 @app.route('/main')
 def main():
     return render_template('main.html')
 
+# 개인페이지 불러오기
 
 @app.route('/user/<user_email>')
 def user_page(user_email):
     # 각 사용자의 프로필과 글을 모아볼 수 있는 공간
     token_receive = request.cookies.get('mytoken')
 
-    print(token_receive)
     # print(token_receive)
     try:
-
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         status_email = (user_email == payload["email"])  # 내 프로필이면 True, 다른 사람 프로필 페이지면 False
 
@@ -77,25 +79,26 @@ def user_page(user_email):
         print(payload)
         print(status_email)
 
-        user_email = db.users.find_one({"email": payload["email"]}, {"_id": False})
+        user_email = db.users.find_one({"email": user_email}, {"_id": False})
 
         print(user_email)
 
         return render_template('self.html', user_email=user_email, status_email=status_email)
-
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
+#로그인 페이지 불러오기
 
 @app.route('/login')
 def login():
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
 
+#회원가입 페이지 불러오기
+
 @app.route('/sign_up')
 def sign_up_page():
-    # if request.method == 'POST':
-    #     return redirect(url_for('test'))
+
     return render_template('sign_up.html')
 
 
@@ -106,12 +109,15 @@ def sign_up_page():
 # [회원가입 API]
 # id, pw, nickname을 받아서, mongoDB에 저장합니다.
 # 저장하기 전에, pw를 sha256 방법(=단방향 암호화. 풀어볼 수 없음)으로 암호화해서 저장합니다.
+
 @app.route('/sign_up', methods=['POST'])
 def register():
     name_receive = request.form['name_give']
     pw_receive = request.form['pw_give']
     nickname_receive = request.form['nickname_give']
     email_receive = request.form['email_give']
+    date_receive = request.form['date_give']
+
 
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
 
@@ -119,7 +125,8 @@ def register():
         'name': name_receive,
         'pw': pw_hash,
         'nick': nickname_receive,
-        'email': email_receive
+        'email': email_receive,
+        "date": date_receive
     }
 
 
@@ -127,6 +134,7 @@ def register():
 
     return jsonify({'result': 'success'})
 
+# post 이메일 중복확인
 
 
 
@@ -151,6 +159,7 @@ def check_dub1():
 
     return jsonify({'result': 'success', 'exist': exist})
 
+# post 닉네임 중복확인
 
 
 @app.route('/check_nick', methods=['POST'])
@@ -160,8 +169,10 @@ def check_dub2():
 
     return jsonify({'result': 'success', 'exists': exists})
 
+
 # [로그인 API]
-# id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
+# post id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
+
 @app.route('/api/login', methods=['POST'])
 def api_login():
 
@@ -201,6 +212,7 @@ def api_login():
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
 
+<<<<<<< HEAD
 
 # [유저 정보 확인 API]
 # 로그인된 유저만 call 할 수 있는 API입니다.
@@ -325,6 +337,9 @@ def follow_function():
 #         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
 # 유저 정보 불러오기 메인,개인페이지
+=======
+# get 유저 정보 불러오기 메인,개인페이지
+>>>>>>> origin/personal_branch
 
 @app.route("/info", methods=["GET"])
 def user_info():
@@ -332,16 +347,31 @@ def user_info():
     try:
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({"email": payload['email']}, {'_id': False})
-
-        # print(user_info)
-
+        print()
         return jsonify({'users': user_info})
     except jwt.exceptions.DecodeError:
         return jsonify({'msg': '회원 정보가 존재하지 않습니다.'})
 
-#
-# post 업로드 메서드
-#
+# get 회원 추천
+
+@app.route('/recommend', methods=['GET'])
+def recommend_user():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"email": payload['email']}, {'_id': False})
+
+        user_list = list(db.users.find({}, {'_id': False}).limit(5).sort("date", -1))
+        print(user_list)
+
+
+        return jsonify({'users': user_list, 'user': user_info})
+    except jwt.exceptions.DecodeError:
+        return jsonify({'msg': '회원 정보가 존재하지 않습니다.'})
+
+
+# post 게시물 저장
+
 @app.route('/posting', methods=['POST'])
 def post_posting():
     token_receive = request.cookies.get('mytoken')
@@ -352,7 +382,6 @@ def post_posting():
         hashtag_receive = request.form["hashtag_give"]
         comment_receive = request.form["comment_give"]
         date_receive = request.form["date_give"]
-        # print(type(date_receive))
 
         post_picture = request.files["picture_give"]
 
@@ -370,6 +399,7 @@ def post_posting():
         post_picture.save(save_to)
 
         doc = {
+            "email" : user_info["email"],
             "usernick": user_info["nick"],
             "post_hashtag": hashtag_receive,
             "post_comment": comment_receive,
@@ -382,9 +412,10 @@ def post_posting():
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
-#
-# post 리스팅 메서드
-#
+
+
+# get 게시물 불러오기
+
 @app.route('/listing', methods=['GET'])
 def post_listing():
     token_receive = request.cookies.get('mytoken')
@@ -411,8 +442,7 @@ def post_listing():
             post["_id"] = str(post["_id"])
 
             post["count_heart"] = db.likes.count_documents({"post_id": post["_id"], "type": "heart"})
-            post["heart_by_me"] = bool(
-                db.likes.find_one({"post_id": post["_id"], "type": "heart", "email": my_usereamil}))
+            post["heart_by_me"] = bool(db.likes.find_one({"post_id": post["_id"], "type": "heart", "email": my_usereamil}))
 
         return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다.", "posts": posts})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
@@ -440,7 +470,8 @@ def update_like():
         doc = {
             "post_id": post_id_receive,
             "usernick": user_info["nick"],
-            "type": type_receive
+            "type": type_receive,
+            "email": user_info["email"]
         }
         if action_receive == "like":
             db.likes.insert_one(doc)
@@ -455,7 +486,6 @@ def update_like():
 
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
-
 
 
 # post 댓글작성
@@ -491,8 +521,11 @@ def comment():
     return jsonify({'comments': comment_list})
 
 
+<<<<<<< HEAD
 
 
 
+=======
+>>>>>>> origin/personal_branch
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

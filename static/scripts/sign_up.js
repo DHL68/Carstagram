@@ -1,11 +1,12 @@
+
 // 간단한 회원가입 함수입니다.
 // 아이디, 비밀번호, 닉네임을 받아 DB에 저장합니다.
 function sign_up() {
-
     let useremail = $("#useremail").val()
     let username = $("#username").val()
     let usernick = $("#usernick").val()
     let userpw = $("#userpw").val()
+    let today = new Date().toISOString()
 
     if (useremail == "") {
         alert("이메일을 입력해주세요.")
@@ -29,8 +30,13 @@ function sign_up() {
             name_give: username,
             pw_give: userpw,
             nickname_give: usernick,
+<<<<<<< HEAD
             email_give: useremail
 
+=======
+            email_give: useremail,
+            date_give: today
+>>>>>>> origin/personal_branch
         },
         success: function (response) {
 
@@ -144,10 +150,6 @@ function check_nick() {
         }
     });
 }
-// $("#help-email-exist").text("중복된 이메일입니다.");
-//                 $("#useremail").focus()
-// $("#help-nick-exist").text("중복된 닉네임입니다.")
-//                 $("#usernick").focus()
 
 
 

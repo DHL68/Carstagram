@@ -68,6 +68,7 @@ function show_comment() {
 
 
 function my_info() {
+
     $.ajax({
         type: "GET",
         url: "/info",

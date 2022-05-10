@@ -28,9 +28,7 @@
 
     <script>
         $(document).ready(function () {
-            // 페이지 로드 시 post_listing 에 대한 값을 불러온다
-            // bsCustomFileInput.init()
-            post_listing("{{ user_email.email }}")
+            post_listing("{{user_email.email}}")
         })
     </script>
 
@@ -78,7 +76,9 @@
         <!-----------------------    프로필 정보----------------------------------------------------------------------------->
         <div style="display: flex; flex-direction: row; margin-left: 80px;">
             <div style="margin-left: 10px; color: #fafafa;">
-                <h2 style="font-weight: lighter;">Car_sta</h2>
+                <div id ="my-nick">
+
+                </div>
                 <div style="display: flex; flex-direction: row; margin-top: 20px;">
                     <div>
                         게시물 <span style="font-weight: bold">0</span>
@@ -90,8 +90,8 @@
                         팔로우 <span style="font-weight: bold">0</span>
                     </div>
                 </div>
-                <div style="display: flex; margin-top: 20px; font-weight: bold;">
-                    김삼이일
+                <div id ="my-name"style="display: flex; margin-top: 20px; font-weight: bold;">
+
                 </div>
             </div>
             <!--    -------------     프로필 편집 세팅 버튼------------------------------------------------------------------->
