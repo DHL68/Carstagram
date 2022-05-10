@@ -68,15 +68,15 @@ function post_posting() {
 
 
 /* GET 요청 ajax 코드 */
-function post_listing(email) {
-    if (email == undefined) {
-        email = ""
-    }
-    console.log(email)
+function post_listing() {
+    // if ( == undefined) {
+    //      = ""
+    // }
+    // console.log()
     // $("#post-feed-box").empty()
     $.ajax({
         type: "GET",
-        url: `/listing?email_give=${email}`,
+        url: '/listing',
         data: {},
         success: function (response) {
             let posts = Object(response['posts'])

@@ -96,8 +96,8 @@ function post_posting() {
 
 /* GET 요청 ajax 코드 */
 function post_listing(email) {
-    if (username == undefined) {
-        username = ""
+    if (email == undefined) {
+        email = ""
     }
 
     console.log(email)
@@ -108,7 +108,7 @@ function post_listing(email) {
         data: {},
         success: function (response) {
             if (response["result"] == "success") {
-                let posts = response['posts']
+                let posts = Object(response['posts'])
 
                 console.log(posts)
 
@@ -121,6 +121,8 @@ function post_listing(email) {
                     let post_picture = posts[i]['post_picture']
                     let post_id = posts[i]['_id']['$oid']
                     let post_nick = posts[i]['usernick']
+
+                    let class_heart = post['heart_by_me'] ? "fa-heart" : "fa-heart-o"
 
 
                     let temp_html = `<button class="open-modal-${i}" onclick="openModal(${i})" style=" border: none; background: none;">

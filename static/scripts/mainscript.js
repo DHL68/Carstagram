@@ -92,7 +92,6 @@ function show_comment() {
 }
 
 function my_info() {
-
     $.ajax({
         type: "GET",
         url: "/info",
@@ -101,14 +100,13 @@ function my_info() {
             let row = response['users']
             let usernick = row['nick']
             let username = row['name']
-
+            let useremail = row['email']
 
             // console.log(usernick, username)
 
-
             let temp_html = `
                             <div class="left-profile">
-                                <a href="/user/<email>"><img class="profile"
+                                <a href="/user/${useremail}"><img class="profile"
                                                              src="http://kaihuastudio.com/common/img/default_profile.png"></a>
                             </div>
                             <div style="color: white; margin-left: 10px; font-weight: bold; font-size: 12px; margin-top: 10px;">

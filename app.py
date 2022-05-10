@@ -64,7 +64,6 @@ def user_page(user_email):
 
     # print(token_receive)
     try:
-
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         status_email = (user_email == payload["email"])  # 내 프로필이면 True, 다른 사람 프로필 페이지면 False
 
@@ -237,6 +236,7 @@ def post_posting():
         post_picture.save(save_to)
 
         doc = {
+            "email": user_info["email"],
             "usernick": user_info["nick"],
             "post_hashtag": hashtag_receive,
             "post_comment": comment_receive,
@@ -273,6 +273,8 @@ def post_listing():
             posts = list(db.posts.find({}).sort("date", -1).limit(20))
         else:
             posts = list(db.posts.find({"email": email_receive}).sort("date", -1).limit(20))
+
+        print(posts, "asdasdzzz")
 
         # 우선 서버에서 포스트 목록을 보내줄 때 그 포스트에 달린 하트가 몇 개인지, 내가 단 하트도 있는지 같이 세어 보내줍니다.
         for post in posts:
