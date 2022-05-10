@@ -2,7 +2,7 @@ from pymongo import MongoClient
 # JWT 패키지를 사용합니다. (설치해야할 패키지 이름: PyJWT)
 import jwt
 # 토큰에 만료시간을 줘야하기 때문에, datetime 모듈도 사용합니다.
-import datetime
+from _datetime import datetime, timedelta
 # 회원가입 시엔, 비밀번호를 암호화하여 DB에 저장해두는 게 좋습니다.
 # 그렇지 않으면, 개발자(=나)가 회원들의 비밀번호를 볼 수 있으니까요.^^;
 import hashlib
@@ -21,7 +21,6 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 
 
-
 #################################
 ##  HTML을 주는 부분             ##
 #################################
@@ -31,13 +30,12 @@ headers = {
 def home():
     # 현재 이용자의 컴퓨터에 저장된 cookie 에서 mytoken 을 가져옵니다.
     token_receive = request.cookies.get('mytoken')
-    print(token_receive)
+
     try:
         # 암호화되어있는 token의 값을 우리가 사용할 수 있도록 디코딩(암호화 풀기)해줍니다!
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({"email": payload['email']})
 
-        print(user_info)
 
         return render_template('main.html', email=user_info["email"])
 
@@ -47,7 +45,6 @@ def home():
     except jwt.exceptions.DecodeError:
         # 만약 해당 token이 올바르게 디코딩되지 않는다면, 아래와 같은 코드를 실행합니다.
         return redirect(url_for("login", msg="로그인 정보가 존재하지 않습니다."))
-
 
 
 # 메인페이지 불러오기
@@ -74,6 +71,7 @@ def user_page(email):
 def login():
     msg = request.args.get("msg")
     return render_template('login.html', msg=msg)
+
 
 @app.route('/sign_up')
 def sign_up_page():
@@ -124,6 +122,7 @@ def check_dub2():
 
     return jsonify({'result': 'success', 'exists': exists})
 
+
 # [로그인 API]
 # id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
 @app.route('/api/login', methods=['POST'])
@@ -145,7 +144,7 @@ def api_login():
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
             'email': email_receive,
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=60 * 60 * 24)
+            'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
@@ -154,7 +153,6 @@ def api_login():
     # 찾지 못하면
     else:
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
-
 
 
 # [유저 정보 확인 API]
@@ -172,7 +170,6 @@ def api_valid():
         # token을 시크릿키로 디코딩합니다.
         # 보실 수 있도록 payload를 print 해두었습니다. 우리가 로그인 시 넣은 그 payload와 같은 것이 나옵니다.
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        print(payload)
 
         # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
         # 여기에선 그 예로 닉네임을 보내주겠습니다.
@@ -183,6 +180,22 @@ def api_valid():
         return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
     except jwt.exceptions.DecodeError:
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
+
+
+# 유저 정보 불러오기 메인,개인페이지
+
+@app.route("/info", methods=["GET"])
+def user_info():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"email": payload['email']}, {'_id': False})
+
+        print(user_info)
+
+        return jsonify({'users': user_info})
+    except jwt.exceptions.DecodeError:
+        return jsonify({'msg': '회원 정보가 존재하지 않습니다.'})
 
 
 #
@@ -198,7 +211,6 @@ def post_posting():
         hashtag_receive = request.form["hashtag_give"]
         comment_receive = request.form["comment_give"]
         date_receive = request.form["date_give"]
-        print(type(date_receive))
 
         post_picture = request.files["picture_give"]
 
@@ -212,7 +224,7 @@ def post_posting():
         extension = post_picture.filename.split('.')[-1]
 
         # 새로운 이름으로 저장하기
-        save_to = f'static/{filename}.{extension}'
+        save_to = f'static/image/{filename}.{extension}'
         post_picture.save(save_to)
 
         doc = {
@@ -227,6 +239,7 @@ def post_posting():
         return jsonify({'msg': '업로드 완료!'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+
 
 #
 # post 리스팅 메서드
@@ -269,8 +282,6 @@ def comment():
     comment_list = list(db.comments.find({}, {'_id': False}))
 
     return jsonify({'comments': comment_list})
-
-
 
 
 if __name__ == '__main__':

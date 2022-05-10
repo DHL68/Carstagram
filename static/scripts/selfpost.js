@@ -45,7 +45,6 @@ $(document).ready(function () {
     // 페이지 로드 시 post_listing 에 대한 값을 불러온다
     // bsCustomFileInput.init()
     post_listing()
-    alert('안녕')
 })
 
 /* POST 요청 ajax 코드 */

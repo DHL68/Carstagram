@@ -18,7 +18,6 @@ $(document).ready(function () {
     // 페이지 로드 시 post_listing 에 대한 값을 불러온다
     // bsCustomFileInput.init()
     post_listing('bs-custom-file-input')
-    alert('안녕')
 })
 // 포스팅 시간 나타내기
 
@@ -83,10 +82,11 @@ function post_listing() {
                 let post = posts[i]
                 let time_post = new Date(post["date"])
                 let time_before = time2str(time_post)
-                let post_picture = posts[i]['post_pictures']
-                let post_comment = posts[i]['post_comments']
-                let post_pic = posts[i]['post_pic']
+                let post_hashtag = posts[i]['post_hashtag']
+                let post_comment = posts[i]['post_comment']
+                let post_picture = posts[i]['post_picture']
                 let post_id = posts[i]['_id']['$oid']
+                let post_nick = posts[i]['usernick']
 
 
                 let temp_html =`
@@ -99,7 +99,7 @@ function post_listing() {
                                                             src="http://kaihuastudio.com/common/img/default_profile.png"></a>
                                         </div>
                                         <div style="margin-left: 10px">
-                                            user_id
+                                            ${post_nick}
                                         </div>
                                     </div>
                                     <div>
@@ -113,7 +113,7 @@ function post_listing() {
                                      data-bs-interval="false" style="height: 600px;">
                                     <div class="carousel-inner">
                                         <div class="carousel-item active">
-                                            <img src="../static/${post_pic}"
+                                            <img src="../static/image/${post_picture}"
                                                  class="d-block w-100 feed-picture" alt="...">
                                         </div>
                                     </div>
@@ -144,9 +144,9 @@ function post_listing() {
                                     <div>좋아요 1개</div>
                                     <!--                    게시자 글-->
                                     <div>
-                                        <div><a href='#' class="name">IlikeCar</a>
+                                        <div><a href='#' class="name">${post_nick}</a>
                                         <span style="font-weight: lighter; color: dodgerblue;">
-                                        ${post_picture}
+                                        ${post_hashtag}
                                         </span>
                                         <span style="font-weight: lighter">${post_comment}</span>
                                         <span style="color: #c7c7c7">더보기</span>
