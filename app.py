@@ -90,6 +90,7 @@ def post_posting():
         save_to = f'static/{filename}.{extension}'
         post_pic.save(save_to)
 
+<<<<<<< HEAD
         doc = {
             "post_username": user_info["id"],
             "post_pictures": picture_receive,
@@ -101,6 +102,10 @@ def post_posting():
         return jsonify({"result": "success", 'msg': '포스팅 성공'})
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return jsonify({'msg': '업로드 완료!'})
+=======
+
+SECRET_KEY = 'SPARTA'
+>>>>>>> origin/personal_branch
 
 
 #################################
@@ -166,27 +171,54 @@ def register():
     nickname_receive = request.form['nickname_give']
     email_receive = request.form['email_give']
 
-    exists = bool(db.users.find_one({"nick": nickname_receive}))
-    exist = bool(db.users.find_one({"email": email_receive}))
-
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
-    doc = {'name': name_receive, 'pw': pw_hash, 'nick': nickname_receive, 'email': email_receive}
+    doc = {
+        'name': name_receive,
+        'pw': pw_hash,
+        'nick': nickname_receive,
+        'email': email_receive
+    }
 
     db.users.insert_one(doc)
 
-    return jsonify({'result': 'success', 'exists': exists, 'exist': exist})
+    return jsonify({'result': 'success'})
 
 
+<<<<<<< HEAD
+=======
+@app.route('/check_email', methods=['POST'])
+def check_dub1():
+    email_receive = request.form['email_give']
+    exist = bool(db.users.find_one({"email": email_receive}))
+
+    return jsonify({'result': 'success','exist': exist})
+
+
+@app.route('/check_nick', methods=['POST'])
+def check_dub2():
+    nickname_receive = request.form['nickname_give']
+    exists = bool(db.users.find_one({"nick": nickname_receive}))
+
+    return jsonify({'result': 'success', 'exists': exists})
+
+
+>>>>>>> origin/personal_branch
 # [로그인 API]
 # id, pw를 받아서 맞춰보고, 토큰을 만들어 발급합니다.
 @app.route('/api/login', methods=['POST'])
 def api_login():
-    id_receive = request.form['useremail_give']
+    email_receive = request.form['useremail_give']
     pw_receive = request.form['password_give']
     # 회원가입 때와 같은 방법으로 pw를 암호화합니다.
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
     # id, 암호화된pw을 가지고 해당 유저를 찾습니다.
+<<<<<<< HEAD
     result = db.users.find_one({'email': id_receive, 'pw': pw_hash})
+=======
+
+    result = db.users.find_one({'email': email_receive, 'pw': pw_hash})
+
+>>>>>>> origin/personal_branch
     # 찾으면 JWT 토큰을 만들어 발급합니다.
 
     if result is not None:
@@ -195,8 +227,13 @@ def api_login():
         # 아래에선 id와 exp를 담았습니다. 즉, JWT 토큰을 풀면 유저ID 값을 알 수 있습니다.
         # exp에는 만료시간을 넣어줍니다. 만료시간이 지나면, 시크릿키로 토큰을 풀 때 만료되었다고 에러가 납니다.
         payload = {
+<<<<<<< HEAD
             'id': id_receive,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=10000)
+=======
+            'email': email_receive,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=5)
+>>>>>>> origin/personal_branch
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
@@ -271,3 +308,4 @@ def update_like():
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)
+

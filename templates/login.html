@@ -29,15 +29,16 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.js"></script>
 
     <title>Carstagram</title>
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/personal_branch
 </head>
 <!--body 레이아웃-->
 <body style="background-image: linear-gradient(70deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)),url(/static/image/background.jpg);">
 <div style="display: flex; flex-direction: column; align-items: center; width: 100%; animation: showText 2s;">
     <div style="padding: 20px ;text-align: center; width: 350px; height: 400px; margin-top: 200px; opacity:0.8; background: white">
-        <div style="padding-top: 30px; padding-bottom: 40px"><img style="width: 190px; height: 70px"
-                                                                  src="/static/image/Carstagram_rogo.png">
-        </div>
+        <div style="padding-top: 30px; padding-bottom: 40px"><img style="width: 190px; height: 70px" src="/static/image/Carstagram_rogo.png"></div>
         <!--로그인 폼 레이아웃-->
         <div style="font-weight: bold; color: gray;padding-bottom: 20px"> 친구들의 사진과 동영상을 보려면 로그인하세요.</div>
         <div>
@@ -59,7 +60,7 @@
                 <p class="help-password-login" id="help-password-login"></p>
             </div>
         </div>
-        <button id="" class="btn btn-primary" style="width: 258px; height: 36px; padding: 4px 10px" onclick="sign_in()">
+        <button id="login" class="btn btn-primary" style="width: 258px; height: 36px; padding: 4px 10px" onclick="sign_in()">
             로그인
         </button>
     </div>
@@ -67,37 +68,6 @@
         <div> 계정이 없으신가요? <a href="/sign_up">회원가입</a></div>
     </div>
 </div>
-
-
-<!-- Optional JavaScript; choose one of the two! -->
-<!--<script>-->
-<!--    $('#login_button').click(function () {-->
-
-<!--        let email = $('#input_email').val();-->
-<!--        let password = $('#input_password').val();-->
-
-<!--        $.ajax({-->
-<!--            url: "/user/login",-->
-<!--            data: {-->
-<!--                email: email,-->
-<!--                password: password-->
-<!--            },-->
-<!--            method: "POST",-->
-<!--            success: function (data) {-->
-<!--                console.log("성공");-->
-<!--                alert("로그인 성공");-->
-<!--                location.replace('/main');-->
-
-<!--            },-->
-<!--            error: function (request, status, error) {-->
-<!--                console.log("에러");-->
-<!--            },-->
-<!--            complete: function () {-->
-<!--                console.log("완료");-->
-<!--            }-->
-<!--        });-->
-<!--    });-->
-
 
 </script>
 <!-- Option 1: Bootstrap Bundle with Popper -->
