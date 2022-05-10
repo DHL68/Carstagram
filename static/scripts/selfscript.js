@@ -67,10 +67,7 @@ function show_comment() {
 }
 
 function my_info() {
-<<<<<<< HEAD
 
-=======
->>>>>>> origin/personal_branch_DH_2
     $.ajax({
         type: "GET",
         url: "/info",

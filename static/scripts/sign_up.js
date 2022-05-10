@@ -89,9 +89,5 @@ function check_nick() {
         }
     });
 }
-// $("#help-email-exist").text("중복된 이메일입니다.");
-//                 $("#useremail").focus()
-// $("#help-nick-exist").text("중복된 닉네임입니다.")
-//                 $("#usernick").focus()
 
 

@@ -1,9 +1,3 @@
-$(document).ready(function () {
-    // 페이지 로드 시 post_listing 에 대한 값을 불러온다
-    // bsCustomFileInput.init()
-    post_listing()
-})
-
 
 // 게시글 업로드 모달
 $("#open-post-modal").on('click', function () {
@@ -19,15 +13,10 @@ $(document).on('click',function (e) {
 });
 
 
-<<<<<<< HEAD
 
 $(document).ready(function () {
-    // 페이지 로드 시 post_listing 에 대한 값을 불러온다
-    // bsCustomFileInput.init()
-    post_listing('bs-custom-file-input')
+    post_listing()
 })
-=======
->>>>>>> origin/personal_branch_DH_2
 // 포스팅 시간 나타내기
 
 function time2str(date) {
@@ -98,19 +87,12 @@ function post_listing(email) {
                 let post = posts[i]
                 let time_post = new Date(post["date"])
                 let time_before = time2str(time_post)
-<<<<<<< HEAD
-                let post_hashtag = posts[i]['post_hashtag']
-                let post_comment = posts[i]['post_comment']
-                let post_picture = posts[i]['post_picture']
-                let post_id = posts[i]['_id']['$oid']
-                let post_nick = posts[i]['usernick']
-=======
                 let post_hashtag = post['post_hashtag']
                 let post_comment = post['post_comment']
                 let post_picture = post['post_picture']
                 let post_id = post['_id']['$oid']
                 let post_nick = post['usernick']
->>>>>>> origin/personal_branch_DH_2
+
 
                 let class_heart = post['heart_by_me'] ? "fa-heart" : "fa-heart-o"
 
