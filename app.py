@@ -62,9 +62,11 @@ def user_page(email):
         status = (email == payload["email"])  # 내 프로필이면 True, 다른 사람 프로필 페이지면 False
 
         user_info = db.users.find_one({"email": email}, {"_id": False})
+
         return render_template('self.html', user_info=user_info, status=status)
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
+
 
 
 @app.route('/login')
@@ -93,13 +95,16 @@ def register():
     pw_receive = request.form['pw_give']
     nickname_receive = request.form['nickname_give']
     email_receive = request.form['email_give']
+    num_receive = request.form['num_give']
+
 
     pw_hash = hashlib.sha256(pw_receive.encode('utf-8')).hexdigest()
     doc = {
         'name': name_receive,
         'pw': pw_hash,
         'nick': nickname_receive,
-        'email': email_receive
+        'email': email_receive,
+        "num" : num_receive
     }
 
     db.users.insert_one(doc)
@@ -155,33 +160,6 @@ def api_login():
         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
 
 
-# [유저 정보 확인 API]
-# 로그인된 유저만 call 할 수 있는 API입니다.
-# 유효한 토큰을 줘야 올바른 결과를 얻어갈 수 있습니다.
-# (그렇지 않으면 남의 장바구니라든가, 정보를 누구나 볼 수 있겠죠?)
-@app.route('/api/nick', methods=['GET'])
-def api_valid():
-    token_receive = request.cookies.get('mytoken')
-
-    # try / catch 문?
-    # try 아래를 실행했다가, 에러가 있으면 except 구분으로 가란 얘기입니다.
-
-    try:
-        # token을 시크릿키로 디코딩합니다.
-        # 보실 수 있도록 payload를 print 해두었습니다. 우리가 로그인 시 넣은 그 payload와 같은 것이 나옵니다.
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-
-        # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
-        # 여기에선 그 예로 닉네임을 보내주겠습니다.
-        userinfo = db.users.find_one({'id': payload['id']}, {'_id': 0})
-        return jsonify({'result': 'success', 'nickname': userinfo['nick']})
-    except jwt.ExpiredSignatureError:
-        # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
-        return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
-    except jwt.exceptions.DecodeError:
-        return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
-
-
 # 유저 정보 불러오기 메인,개인페이지
 
 @app.route("/info", methods=["GET"])
@@ -191,11 +169,30 @@ def user_info():
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({"email": payload['email']}, {'_id': False})
 
-        print(user_info)
+        # print(user_info)
 
         return jsonify({'users': user_info})
     except jwt.exceptions.DecodeError:
         return jsonify({'msg': '회원 정보가 존재하지 않습니다.'})
+
+
+
+@app.route('/recommend', methods=['GET'])
+def recommend_user():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        user_info = db.users.find_one({"email": payload['email']}, {'_id': False})
+
+
+        user_list = list(db.users.find({}, {'_id': False}).limit(5).sort("num", -1))
+        print(user_list)
+
+
+        return jsonify({'users': user_list, 'user': user_info})
+    except jwt.exceptions.DecodeError:
+        return jsonify({'msg': '회원 정보가 존재하지 않습니다.'})
+
 
 
 #
@@ -249,6 +246,40 @@ def post_listing():
     posts = dumps(list(db.posts.find({})))
 
     return jsonify({'posts': posts})
+
+
+#
+# post 리스팅 메서드
+#
+@app.route('/listing', methods=['GET'])
+def post_listin():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 포스팅 목록 받아오기
+
+        # 서버에서는 DB에서 최근 20개의 포스트를 받아와 리스트로 넘겨줍니다.
+        # 나중에 좋아요 기능을 쓸 때 각 포스트를 구분하기 위해서 MongoDB가 자동으로 만들어주는 _id 값을 이용할 것인데요,
+        # ObjectID라는 자료형이라 문자열로 변환해주어야합니다.
+        my_usereamil = payload["email"]
+        usernick_receive = request.args.get("nickname_give")
+        # 값이 들어가있으면..
+        if usernick_receive == "":
+            posts = dumps(list(db.posts.find({}).sort("date", -1).limit(20)))
+        else:
+            posts = list(db.posts.find({"usernick": usernick_receive}).sort("date", -1).limit(20))
+
+        # 우선 서버에서 포스트 목록을 보내줄 때 그 포스트에 달린 하트가 몇 개인지, 내가 단 하트도 있는지 같이 세어 보내줍니다.
+        for post in posts:
+            post["_id"] = str(post["_id"])
+
+            post["count_heart"] = db.likes.count_documents({"post_id": post["_id"], "type": "heart"})
+            post["heart_by_me"] = bool(
+                db.likes.find_one({"post_id": post["_id"], "type": "heart", "email": my_usereamil}))
+
+        return jsonify({"result": "success", "msg": "포스팅을 가져왔습니다.", "posts": posts})
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 
 # post 댓글작성
