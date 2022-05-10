@@ -12,6 +12,10 @@ $(document).on('click', function () {
     });
 });
 
+// 로그인한 유저정보 불러오기
+$(document).ready(function () {
+    my_info()
+})
 
 // 댓글 달기
 // 수정 필요 ready
@@ -63,3 +67,26 @@ function show_comment() {
         }
     });
 }
+
+function my_info() {
+
+    $.ajax({
+        type: "GET",
+        url: "/info",
+        data: {},
+        success: function (response) {
+            let row = response['users']
+            let usernick = row['nick']
+            let username = row['name']
+
+            console.log(usernick, username)
+
+            let temp_html = `<h2 style="font-weight: lighter;">${usernick}</h2>`
+            let temp_html2 = `<p>${username}</p>`
+
+            $('#my-nick').append(temp_html)
+            $('#my-name').append(temp_html2)
+
+        }
+    });
+};
