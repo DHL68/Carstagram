@@ -1,0 +1,16 @@
+diff a/app.py b/app.py	(rejected hunks)
+@@ -226,8 +226,13 @@
+     except jwt.ExpiredSignatureError:
+         # 위를 실행했는데 만료시간이 지났으면 에러가 납니다.
+         return jsonify({'result': 'fail', 'msg': '로그인 시간이 만료되었습니다.'})
++=======
++        user_info = db.users.find_one({"email": payload['email']}, {'_id': False})
++        print()
++        return jsonify({'users': user_info})
++>>>>>>> 2b83cc1017ccce525b25fe5a976616645e2813d3
+     except jwt.exceptions.DecodeError:
+-        return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
++        return jsonify({'msg': '회원 정보가 존재하지 않습니다.'})
+ 
+ # 유저 정보 불러오기 메인,개인페이지
+ 
