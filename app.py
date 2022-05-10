@@ -23,81 +23,8 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36'}
 
 
-<<<<<<< HEAD
-# post 댓글작성
-
-@app.route("/comment", methods=["POST"])
-def new_comment():
-    comment_receive = request.form['comment_give']
-    post_receive = request.form['post_give']
-    # id_receive = request.form['id_give']
-
-    doc = {
-        'comments': comment_receive,
-        'post_id': post_receive
-        # 'user_id' : id_receive
-    }
-    db.comments.insert_one(doc)
-
-    return jsonify({'msg': '댓글작성완료!'})
 
 
-# get 댓글 불러오기
-
-@app.route("/comment", methods=["GET"])
-def comment():
-    comment_list = list(db.comments.find({}, {'_id': False}))
-
-    return jsonify({'comments': comment_list})
-
-
-#
-# post 리스팅 메서드
-#
-@app.route('/listing', methods=['GET'])
-def post_listing():
-    posts = dumps(list(db.posts.find({})))
-
-    return jsonify({'posts': posts})
-
-
-#
-# post 업로드 메서드
-#
-@app.route('/posting', methods=['POST'])
-def post_posting():
-    picture_receive = request.form["picture_give"]
-    comment_receive = request.form["comment_give"]
-
-    post_pic = request.files["pic_give"]
-
-    # 새로운 날짜 이름 만들기
-    today = datetime.datetime.now()
-    mytime = today.strftime('%Y-%m-%d-%H-%M-%S')
-
-    filename = f'post_pic-{mytime}'
-
-    # 확장자 뺴기
-    extension = post_pic.filename.split('.')[-1]
-
-    # 새로운 이름으로 저장하기
-    save_to = f'static/{filename}.{extension}'
-    post_pic.save(save_to)
-
-    doc = {
-        'post_pictures': picture_receive,
-        'post_comments': comment_receive,
-        'post_pic': f'{filename}.{extension}'
-    }
-    db.posts.insert_one(doc)
-
-    return jsonify({'msg': '업로드 완료!'})
-
-
-SECRET_KEY = 'SPARTA'
-
-=======
->>>>>>> 2b7893b3799e70a3cdec6f000d481b90fcba8ffb
 
 #################################
 ##  HTML을 주는 부분             ##
@@ -112,17 +39,14 @@ def home():
     try:
         # 암호화되어있는 token의 값을 우리가 사용할 수 있도록 디코딩(암호화 풀기)해줍니다!
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-<<<<<<< HEAD
-        user_info = db.users.find_one({"id": payload['id']})
-        return render_template('main.html', nickname=user_info["nick"])
-=======
+
         user_info = db.users.find_one({"email": payload['email']})
 
         print(user_info)
 
         return render_template('main.html', email=user_info["email"])
 
->>>>>>> 2b7893b3799e70a3cdec6f000d481b90fcba8ffb
+
     # 만약 해당 token의 로그인 시간이 만료되었다면, 아래와 같은 코드를 실행합니다.
     except jwt.ExpiredSignatureError:
         return redirect(url_for("login", msg="로그인 시간이 만료되었습니다."))
@@ -213,12 +137,9 @@ def check_dub1():
     email_receive = request.form['email_give']
     exist = bool(db.users.find_one({"email": email_receive}))
 
-<<<<<<< HEAD
 
-    return jsonify({'result': 'success','exist': exist})
-=======
     return jsonify({'result': 'success', 'exist': exist})
->>>>>>> 2b7893b3799e70a3cdec6f000d481b90fcba8ffb
+
 
 
 @app.route('/check_nick', methods=['POST'])
@@ -256,12 +177,9 @@ def api_login():
         payload = {
 
             'email': email_receive,
-<<<<<<< HEAD
 
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=5)
-=======
             'exp': datetime.utcnow() + timedelta(seconds=60 * 60 * 24)
->>>>>>> 2b7893b3799e70a3cdec6f000d481b90fcba8ffb
+
         }
         token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
@@ -300,7 +218,7 @@ def api_valid():
     except jwt.exceptions.DecodeError:
         return jsonify({'result': 'fail', 'msg': '로그인 정보가 존재하지 않습니다.'})
 
-<<<<<<< HEAD
+
 # 팔로우 콜렉션 생성
 @app.route('/follow', methods=['POST'])
 def follow_function():
@@ -319,7 +237,37 @@ def follow_function():
     return jsonify({'result': 'success'})
 
 
+@app.route('/follow', methods=['POST'])
+def follow_function():
+    token_receive = request.cookies.get('mytoken')
+    try:
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        # 좋아요 수 변경
 
+        # DB에 저장할 때는 1) 누가 2) 어떤 포스트에 3) 어떤 반응을 남겼는지 세 정보만 넣으면 되고,
+        # 좋아요인지, 취소인지에 따라 해당 도큐먼트를 insert_one()을 할지 delete_one()을 할지 결정해주어야합니다.
+        user_info = db.users.find_one({"email": payload["email"]})
+        user_id_receive = request.form["user_id_give"]
+        type_receive = request.form["type_give"]
+        action_receive = request.form["action_give"]
+        doc = {
+            "post_id": post_id_receive,
+            "usernick": user_info["nick"],
+            "type": type_receive
+        }
+        if action_receive == "like":
+            db.likes.insert_one(doc)
+        else:
+            db.likes.delete_one(doc)
+
+        # 좋아요 컬렉션을 업데이트한 이후에는 해당 포스트에 해당 타입의 반응이 몇 개인지를 세서 보내주어야합니다.
+        count = db.likes.count_documents({"post_id": post_id_receive, "type": type_receive})
+
+        print(count)
+        return jsonify({"result": "success", 'msg': 'updated', "count": count})
+
+    except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
+        return redirect(url_for("home"))
 
 #
 # # 회원가입 서버
@@ -364,7 +312,7 @@ def follow_function():
 #     # 찾지 못하면
 #     else:
 #         return jsonify({'result': 'fail', 'msg': '아이디/비밀번호가 일치하지 않습니다.'})
-=======
+
 # 유저 정보 불러오기 메인,개인페이지
 
 @app.route("/info", methods=["GET"])
@@ -529,7 +477,7 @@ def comment():
     return jsonify({'comments': comment_list})
 
 
->>>>>>> 2b7893b3799e70a3cdec6f000d481b90fcba8ffb
+
 
 
 if __name__ == '__main__':

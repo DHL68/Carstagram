@@ -67,8 +67,7 @@ function show_comment() {
     });
 }
 
-<<<<<<< HEAD
-=======
+
 function my_info() {
 
     $.ajax({
@@ -91,4 +90,4 @@ function my_info() {
         }
     });
 };
->>>>>>> 2b7893b3799e70a3cdec6f000d481b90fcba8ffb
+
