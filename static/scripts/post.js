@@ -1,3 +1,9 @@
+$(document).ready(function () {
+    // 페이지 로드 시 post_listing 에 대한 값을 불러온다
+    // bsCustomFileInput.init()
+    post_listing()
+})
+
 
 // 게시글 업로드 모달
 $("#open-post-modal").on('click', function () {
@@ -13,12 +19,6 @@ $(document).on('click',function (e) {
 });
 
 
-
-$(document).ready(function () {
-    // 페이지 로드 시 post_listing 에 대한 값을 불러온다
-    // bsCustomFileInput.init()
-    post_listing()
-})
 // 포스팅 시간 나타내기
 
 function time2str(date) {
@@ -70,31 +70,32 @@ function post_posting() {
 
 
 /* GET 요청 ajax 코드 */
-function post_listing(usernick) {
-    if (usernick == undefined) {
-        usernick = ""
+function post_listing(email) {
+    if (email == undefined) {
+        email = ""
     }
+    console.log(email)
     // $("#post-feed-box").empty()
     $.ajax({
         type: "GET",
-        url: `/listing?nickname_give=${usernick}`,
+        url: `/listing?email_give=${email}`,
         data: {},
         success: function (response) {
             let posts = Object(response['posts'])
 
-            console.log(posts)
+            // console.log(posts)
 
             for (let i = 0; i < posts.length; i++) {
                 let post = posts[i]
                 let time_post = new Date(post["date"])
                 let time_before = time2str(time_post)
-                let post_hashtag = posts[i]['post_hashtag']
-                let post_comment = posts[i]['post_comment']
-                let post_picture = posts[i]['post_picture']
-                let post_id = posts[i]['_id']['$oid']
-                let post_nick = posts[i]['usernick']
+                let post_hashtag = post['post_hashtag']
+                let post_comment = post['post_comment']
+                let post_picture = post['post_picture']
+                let post_id = post['_id']['$oid']
+                let post_nick = post['usernick']
 
-                let class_heart = posts[i]['heart_by_me'] ? "fa-heart" : "fa-heart-o"
+                let class_heart = post['heart_by_me'] ? "fa-heart" : "fa-heart-o"
 
                 let temp_html =`
                             <div class="feed-box" id="feed_box">
@@ -137,19 +138,18 @@ function post_listing(usernick) {
                                 </div>
                                 <!--                사진 아래 아이콘--------------------------------------------------------------------->
                                 <div style="margin-top: 2%; display: flex; flex-direction: row; justify-content: space-between;">
-                                    <div stylee="margin-left: 10px;">
-                                        <button class="like-btn" onclick="toggle_like('${post['_id']}', 'heart')"><span class="material-icons-outlined fa ${class_heart}">${num2str(post["count_heart"])}</span></button>
+                                    <div style="margin-left: 10px;">
+                                        <button class="like-btn" onclick="toggle_like('${post['_id']}', 'heart')"><span class="material-icons-outlined fa ${class_heart}">favorite_border</span></button>
                                         <span class="material-icons-outlined">mode_comment</span>
                                         <span class="material-icons-outlined">send</span>
                                     </div>
-
                                     <div style="margin-right: 10px;">
                                         <span class="material-icons-outlined">bookmark_border</span>
                                     </div>
                                 </div>
                                 <div style="margin-left: 10px;">
                                     <!--                좋아요-->
-                                    <div>좋아요 1개</div>
+                                    <div class="like_reset">좋아요 ${num2str(post["count_heart"])}개</div>
                                     <!--                    게시자 글-->
                                     <div>
                                         <div><a href='#' class="name">${post_nick}</a>
@@ -163,7 +163,7 @@ function post_listing(usernick) {
                                     <!--                댓글모두보기-->
                                     <!--<div style="font-weight: lighter; color: grey">댓글 3,243개 모두보기</div>-->
                                     <!--                댓글-->
-                                    <div id="" class="${post_id}">
+                                    <div class="${post['_id']}">
                     
                                     </div>
                                     <!--                몇일,시간,분전-->
@@ -172,9 +172,9 @@ function post_listing(usernick) {
                                     <div style="display:flex; flex-direction: row; justify-content: center; margin-left: -10px; margin-top: 10px; border-top: solid 1px #dbdbdb;">
                                         <span style="margin-left: 8px; margin-top: 7px;" class="material-symbols-outlined">mood</span>
                                         <input type="text" class="form-control"
-                                               style="box-shadow: none; border: none; border-radius: 0px;" id="${post_id}"
+                                               style="box-shadow: none; border: none; border-radius: 0px;" id="${post['_id']}"
                                                placeholder="댓글 달기 ..."/>
-                                        <button id = "comment-1"onclick="add_comment('${post_id}')"
+                                        <button id = "comment-1"onclick="add_comment('${post['_id']}')"
                                                 style="background-color: white; border: none; width: 50px; margin-right: 8px; text-decoration: none; color: cornflowerblue; font-weight: bold">
                                             게시
                                         </button>
@@ -206,6 +206,7 @@ function toggle_like(post_id, type) {
                 console.log("unlike")
                 $i_like.addClass(class_o[type]).removeClass(class_s[type])
                 $a_like.find("span.like-num").text(num2str(response["count"]))
+                window.location.reload()
             }
         })
     } else {
@@ -221,6 +222,7 @@ function toggle_like(post_id, type) {
                 console.log("like")
                 $i_like.addClass(class_s[type]).removeClass(class_o[type])
                 $a_like.find("span.like-num").text(num2str(response["count"]))
+                window.location.reload()
             }
         })
 

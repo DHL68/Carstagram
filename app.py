@@ -13,7 +13,6 @@ from datetime import datetime, timedelta
 
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-app.config['UPLOAD_FOLDER'] = "./static/profile_pics"
 
 client = MongoClient('localhost', 27017)
 db = client.Carstagram
@@ -33,13 +32,13 @@ headers = {
 def home():
     # 현재 이용자의 컴퓨터에 저장된 cookie 에서 mytoken 을 가져옵니다.
     token_receive = request.cookies.get('mytoken')
-    print(token_receive)
+    # print(token_receive)
     try:
         # 암호화되어있는 token의 값을 우리가 사용할 수 있도록 디코딩(암호화 풀기)해줍니다!
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         user_info = db.users.find_one({"email": payload['email']})
 
-        print(user_info)
+        # print(user_info)
 
         return render_template('main.html', email=user_info["email"])
 
@@ -58,16 +57,28 @@ def main():
     return render_template('main.html')
 
 
-@app.route('/user/<email>')
-def user_page(email):
+@app.route('/user/<user_email>')
+def user_page(user_email):
     # 각 사용자의 프로필과 글을 모아볼 수 있는 공간
     token_receive = request.cookies.get('mytoken')
-    try:
-        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        status = (email == payload["email"])  # 내 프로필이면 True, 다른 사람 프로필 페이지면 False
 
-        user_info = db.users.find_one({"email": email}, {"_id": False})
-        return render_template('self.html', user_info=user_info, status=status)
+    print(token_receive)
+    # print(token_receive)
+    try:
+
+        payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
+        status_email = (user_email == payload["email"])  # 내 프로필이면 True, 다른 사람 프로필 페이지면 False
+
+        print(user_email)
+        print(payload)
+        print(status_email)
+
+        user_email = db.users.find_one({"email": payload["email"]}, {"_id": False})
+
+        print(user_email)
+
+        return render_template('self.html', user_email=user_email, status_email=status_email)
+
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):
         return redirect(url_for("home"))
 
@@ -174,7 +185,7 @@ def api_valid():
         # token을 시크릿키로 디코딩합니다.
         # 보실 수 있도록 payload를 print 해두었습니다. 우리가 로그인 시 넣은 그 payload와 같은 것이 나옵니다.
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
-        print(payload)
+        # print(payload)
 
         # payload 안에 id가 들어있습니다. 이 id로 유저정보를 찾습니다.
         # 여기에선 그 예로 닉네임을 보내주겠습니다.
@@ -214,7 +225,7 @@ def post_posting():
         hashtag_receive = request.form["hashtag_give"]
         comment_receive = request.form["comment_give"]
         date_receive = request.form["date_give"]
-        print(type(date_receive))
+        # print(type(date_receive))
 
         post_picture = request.files["picture_give"]
 
@@ -258,12 +269,15 @@ def post_listing():
         # 나중에 좋아요 기능을 쓸 때 각 포스트를 구분하기 위해서 MongoDB가 자동으로 만들어주는 _id 값을 이용할 것인데요,
         # ObjectID라는 자료형이라 문자열로 변환해주어야합니다.
         my_usereamil = payload["email"]
-        usernick_receive = request.args.get("nickname_give")
+        # usernick_receive = request.args.get("nickname_give")
+        email_receive = request.args.get("email_give")
 
-        if usernick_receive == "":
+        print(email_receive)
+
+        if email_receive == "":
             posts = list(db.posts.find({}).sort("date", -1).limit(20))
         else:
-            posts = list(db.posts.find({"usernick": usernick_receive}).sort("date", -1).limit(20))
+            posts = list(db.posts.find({"email": email_receive}).sort("date", -1).limit(20))
 
         # 우선 서버에서 포스트 목록을 보내줄 때 그 포스트에 달린 하트가 몇 개인지, 내가 단 하트도 있는지 같이 세어 보내줍니다.
         for post in posts:
@@ -309,7 +323,7 @@ def update_like():
         # 좋아요 컬렉션을 업데이트한 이후에는 해당 포스트에 해당 타입의 반응이 몇 개인지를 세서 보내주어야합니다.
         count = db.likes.count_documents({"post_id": post_id_receive, "type": type_receive})
 
-        print(count)
+        # print(count)
         return jsonify({"result": "success", 'msg': 'updated', "count": count})
 
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):

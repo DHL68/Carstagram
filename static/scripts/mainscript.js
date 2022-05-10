@@ -42,13 +42,14 @@ $(document).ready(function () {
 
 function add_comment(post_id) {
     let comment = $(`#${post_id}`).val()
-
+    console.log(comment)
     $.ajax({
         type: 'POST',
         url: '/comment',
         data: {comment_give: comment, post_give: post_id},
         success: function (response) {
             alert(response['msg'])
+            // console.log(post_id)
             window.location.reload()
         }
     })
@@ -74,7 +75,7 @@ function show_comment() {
                 let comment = rows[i]['comments']
                 let post_id = rows[i]['post_id']
                 let usernick = rows[i]['usernick']
-                console.log(post_id)
+                // console.log(post_id)
 
                 let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">${usernick}</span> ${comment}</p>`
 
@@ -99,7 +100,7 @@ function my_info() {
             let usernick = row['nick']
             let username = row['name']
 
-            console.log(usernick, username)
+            // console.log(usernick, username)
 
             let temp_html = `
                             <div class="left-profile">
