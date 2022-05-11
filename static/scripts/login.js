@@ -6,6 +6,7 @@ function sign_in() {
 
     } else {
         alert('이메일이 아닙니다.')
+        return;
     }
 
     let password = $("#userpw").val()
