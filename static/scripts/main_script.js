@@ -41,7 +41,7 @@ $(document).ready(function () {
 $(document).ready(function () {
     setTimeout(function () {
         show_comment();
-    }, 500);
+    }, 900);
 });
 
 
