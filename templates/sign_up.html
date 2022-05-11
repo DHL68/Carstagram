@@ -4,8 +4,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bulma CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+
     <!-- Font Awesome CSS -->
     <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Bootstrap CSS -->
@@ -25,7 +24,7 @@
     <title>회원 가입</title>
 </head>
 <!--바디 레이아웃-->
-<body style="background-image: linear-gradient(70deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)), url(/static/image/backgroundimg.jpg);">
+<body style="background-size: cover; background-image: linear-gradient(70deg, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.4)), url(/static/image/backgroundimg.jpg);">
 
 
 <div style="display: flex; flex-direction: column; align-items: center; width: 100%; animation: showText 2s;">
@@ -48,7 +47,7 @@
                            placeholder="name@example.com">
                     <label for="useremail" style="font-size: 14px;padding: 4px 10px">이메일 주소</label>
                     <div id="btn-check-dup" class="control">
-                        <button class="button is-sparta" style="height: 34px;" onclick="check_email()">중복확인</button>
+                        <button class="btn btn-primary" style="height: 34px;" onclick="check_email()">중복확인</button>
                     </div>
                 </div>
                 <p class="help-email" id="help-email-exist"></p>
@@ -59,7 +58,7 @@
                            placeholder="nickname..">
                     <label for="usernick" style="font-size: 14px;padding: 4px 10px">닉네임</label>
                     <div id="btn-check-dup" class="control">
-                        <button class="button is-sparta" style="height: 34px;" onclick="check_nick()">중복확인</button>
+                        <button class="btn btn-primary" style="height: 34px;" onclick="check_nick()">중복확인</button>
                     </div>
                 </div>
                 <p class="help-nick" id="help-nick-exist"></p>

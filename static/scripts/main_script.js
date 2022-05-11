@@ -104,9 +104,6 @@ function my_info() {
             let useremail = row['email']
 
 
-            // console.log(usernick, username)
-
-
             let temp_html = `
                             <div class="left-profile">
                                 <a href="/user/${useremail}"><img class="profile"
