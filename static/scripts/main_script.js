@@ -77,11 +77,12 @@ function show_comment() {
         success: function (response) {
             let rows = response['comments']
             for (let i = 0; i < rows.length; i++) {
+                // let post = posts[i]
                 let comment = rows[i]['comments']
                 let post_id = rows[i]['post_id']
                 let usernick = rows[i]['usernick']
 
-                // console.log(post_id)
+                console.log(post_id)
 
                 let temp_html = `<p style="font-weight: lighter"><span style="font-weight: bold">${usernick}</span> ${comment}</p>`
 
