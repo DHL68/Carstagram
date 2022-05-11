@@ -1,4 +1,3 @@
-
 // 간단한 회원가입 함수입니다.
 // 아이디, 비밀번호, 닉네임을 받아 DB에 저장합니다.
 function sign_up() {
@@ -53,6 +52,13 @@ function check_email() {
 
     let useremail = $("#useremail").val()
 
+    if (useremail.includes('@') == true) {
+
+    } else {
+        alert('이메일 형식으로 입력해주세요!')
+        return;
+    }
+
     $.ajax({
         type: "POST",
         url: "/check_email",
@@ -60,7 +66,7 @@ function check_email() {
             email_give: useremail
         },
         success: function (response) {
-        console.log(response)
+            console.log(response)
             if (response["exist"]) {
                 alert("중복된 이메일입니다.")
             } else if (useremail == "") {
