@@ -56,7 +56,6 @@ def main():
     return render_template('main.html')
 
 # 개인페이지 불러오기
-
 @app.route('/user/<user_email>')
 def user_page(user_email):
     # 각 사용자의 프로필과 글을 모아볼 수 있는 공간
@@ -67,13 +66,7 @@ def user_page(user_email):
         payload = jwt.decode(token_receive, SECRET_KEY, algorithms=['HS256'])
         status_email = (user_email == payload["email"])  # 내 프로필이면 True, 다른 사람 프로필 페이지면 False
 
-        print(user_email)
-        print(payload)
-        print(status_email)
-
         user_email = db.users.find_one({"email": user_email}, {"_id": False})
-
-        print(user_email)
 
         return render_template('self.html', user_email=user_email, status_email=status_email)
     except (jwt.ExpiredSignatureError, jwt.exceptions.DecodeError):

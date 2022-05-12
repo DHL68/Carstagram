@@ -1,11 +1,15 @@
 // 로그인 클라이언트
 function sign_in() {
+    var box = document.getElementById('useremail');
     let useremail = $("#useremail").val()
 
     if (useremail.includes('@') == true) {
 
     } else {
         alert('이메일이 아닙니다.')
+        box.addEventListener('click', function (){
+            box.setAttribute('class', 'hvr-wobble-horizontal')
+        })
     }
 
     let password = $("#userpw").val()

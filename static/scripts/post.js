@@ -90,9 +90,8 @@ function post_listing(email) {
                 let post_hashtag = post['post_hashtag']
                 let post_comment = post['post_comment']
                 let post_picture = post['post_picture']
-                let post_id = post['_id']['$oid']
                 let post_nick = post['usernick']
-                let class_heart = post['heart_by_me'] ? "fa-heart" : "fa-heart-o"
+                let class_heart = post['heart_by_me']
 
 
                 let temp_html =`

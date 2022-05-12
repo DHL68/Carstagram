@@ -11,6 +11,10 @@ function sign_up() {
     if (useremail == "") {
         alert("이메일을 입력해주세요.")
         return;
+        $(useremail).next('label').addClass('warning');
+        setTimeout(function () {
+            $('label').removeClass('warning')
+        }, 1500);
     } else if (username == "") {
         alert("이름을 입력해주세요.")
         return;
